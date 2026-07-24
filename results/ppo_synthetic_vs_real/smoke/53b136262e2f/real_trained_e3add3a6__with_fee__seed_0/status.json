@@ -1,0 +1,15 @@
+{
+  "completed": true,
+  "experiment_id": "53b136262e2f",
+  "run_id": "real_trained_e3add3a6__with_fee__seed_0",
+  "run_mode": "smoke",
+  "group": "real_trained",
+  "model_name": null,
+  "commission_name": "with_fee",
+  "commission": 0.0025,
+  "seed": 0,
+  "total_timesteps": 4096,
+  "best_timestep": 0,
+  "best_real_validation_reward": 0.12364860692174766,
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL/results/ppo_synthetic_vs_real/smoke/53b136262e2f/real_trained_e3add3a6__with_fee__seed_0/best_model"
+}

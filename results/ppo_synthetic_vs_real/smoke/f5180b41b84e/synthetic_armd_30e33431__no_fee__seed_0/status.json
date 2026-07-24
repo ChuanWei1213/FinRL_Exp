@@ -1,0 +1,15 @@
+{
+  "completed": true,
+  "experiment_id": "f5180b41b84e",
+  "run_id": "synthetic_armd_30e33431__no_fee__seed_0",
+  "run_mode": "smoke",
+  "group": "synthetic::armd",
+  "model_name": "armd",
+  "commission_name": "no_fee",
+  "commission": 0.0,
+  "seed": 0,
+  "total_timesteps": 4096,
+  "best_timestep": 4096,
+  "best_real_validation_reward": 0.1265981314767444,
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL/results/ppo_synthetic_vs_real/smoke/f5180b41b84e/synthetic_armd_30e33431__no_fee__seed_0/best_model"
+}
