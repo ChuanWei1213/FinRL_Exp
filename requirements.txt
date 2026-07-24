@@ -55,3 +55,6 @@ wrds
 
 # market data & paper trading API
 yfinance
+
+quantstats
+gym
