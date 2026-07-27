@@ -150,4 +150,18 @@ alpaca_processor_test.py
 
 venv/
 data/
-results/
+
+# Share immutable, hash-addressed PPO training caches across machines.
+# Keep smoke runs and other generated results local.
+
+# results/
+# └── ppo_synthetic_vs_real/
+#     ├── smoke/       ignored
+#     ├── full/        ignored
+#     └── train_cache/ tracked
+
+results/*
+!results/ppo_synthetic_vs_real/
+results/ppo_synthetic_vs_real/*
+!results/ppo_synthetic_vs_real/train_cache/
+!results/ppo_synthetic_vs_real/train_cache/**
