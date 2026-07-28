@@ -1,0 +1,253 @@
+{
+  "artifact_cache_key": "4375985e0150d868fd39e52abf382a5080b2e7b300444a17f67265e94ffd84dd",
+  "artifact_semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0025,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "eval_freq": 20000,
+    "group": "synthetic::armd",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 2,
+    "tickers": [
+      "AAPL",
+      "AMZN",
+      "GOOGL",
+      "MSFT",
+      "NVDA"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2024-01-01",
+      "2024-10-01"
+    ],
+    "training_data_fingerprint": "152574bd322f9f48c35b6577b81e945544bab2f60671dccbab2b4e8e029fc61e",
+    "validation": [
+      "2024-10-01",
+      "2025-01-01"
+    ]
+  },
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_armd_30e33431__with_fee__seed_2__f52ee5aab316/best_model",
+  "best_real_validation_reward": 0.17456791168085858,
+  "best_timestep": 160000,
+  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_armd_30e33431__with_fee__seed_2__f52ee5aab316",
+  "cache_hit": true,
+  "cache_key": "f52ee5aab316ba4f6b673274168e5ef18de088c36b3647bb3528a344990d27c2",
+  "cache_reuse_override": {
+    "artifact_training_data_fingerprint": "152574bd322f9f48c35b6577b81e945544bab2f60671dccbab2b4e8e029fc61e",
+    "current_training_data_fingerprint": "f0243f31a7532c5c050c6bbad98e2df5d243ee290621c8511d09830b1709898f",
+    "reason": "User-approved reuse of completed full-run artifacts"
+  },
+  "cache_schema": "ppo_eiie_training_cache_v2",
+  "commission": 0.0025,
+  "commission_name": "with_fee",
+  "completed": true,
+  "experiment_id": "15c4d7eb93eb",
+  "group": "synthetic::armd",
+  "last_reuse_runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0"
+    },
+    "python": "3.10.20"
+  },
+  "legacy_cache_key": "18d65a150ac0c94aa1bc6915539acf15b5b3b244becb65dc84df16c47a2736df",
+  "migrated_from_cache_schema": "ppo_eiie_training_cache_v1",
+  "model_name": "armd",
+  "run_id": "synthetic_armd_30e33431__with_fee__seed_2",
+  "run_mode": "full",
+  "runtime_fingerprint": "265278b67a7fd0bc30983002dc4551140c30027e8eee6f6fde8e42d03b8187fd",
+  "runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0+cu130"
+    }
+  },
+  "seed": 2,
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0025,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "eval_freq": 20000,
+    "group": "synthetic::armd",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 2,
+    "tickers": [
+      "AAPL",
+      "AMZN",
+      "GOOGL",
+      "MSFT",
+      "NVDA"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2024-01-01",
+      "2024-10-01"
+    ],
+    "training_data_fingerprint": "f0243f31a7532c5c050c6bbad98e2df5d243ee290621c8511d09830b1709898f",
+    "validation": [
+      "2024-10-01",
+      "2025-01-01"
+    ]
+  },
+  "storage_id": "f52ee5aab316",
+  "total_timesteps": 200000,
+  "training_cache_config": {
+    "commission": 0.0025,
+    "commission_name": "with_fee",
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "plot_on_terminal": false,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "eval_freq": 20000,
+    "group": "synthetic::armd",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0+cu130"
+    },
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "ppo": {
+      "batch_size": 256,
+      "device": "cpu",
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "__main__.EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      },
+      "verbose": 0
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "schema": "ppo_eiie_training_cache_v1",
+    "seed": 2,
+    "tickers": [
+      "AAPL",
+      "AMZN",
+      "GOOGL",
+      "MSFT",
+      "NVDA"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2024-01-01",
+      "2024-10-01"
+    ],
+    "training_data_fingerprint": "152574bd322f9f48c35b6577b81e945544bab2f60671dccbab2b4e8e029fc61e",
+    "validation": [
+      "2024-10-01",
+      "2025-01-01"
+    ]
+  },
+  "training_data_fingerprint": "152574bd322f9f48c35b6577b81e945544bab2f60671dccbab2b4e8e029fc61e"
+}

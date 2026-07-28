@@ -149,7 +149,10 @@ alpaca_processor_test.py
 .history/
 
 venv/
-data/
+
+# Version the datasets required by the synthetic-vs-real notebook.
+# CSV files elsewhere remain ignored by the repository-wide *.csv rule.
+!data/**/*.csv
 
 # Share immutable, hash-addressed PPO training caches across machines.
 # Keep smoke runs and other generated results local.

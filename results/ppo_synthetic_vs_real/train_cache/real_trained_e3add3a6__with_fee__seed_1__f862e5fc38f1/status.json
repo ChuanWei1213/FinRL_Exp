@@ -1,0 +1,94 @@
+{
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__with_fee__seed_1__f862e5fc38f1/best_model",
+  "best_real_validation_reward": 0.12298541727353209,
+  "best_timestep": 0,
+  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__with_fee__seed_1__f862e5fc38f1",
+  "cache_hit": false,
+  "cache_key": "f862e5fc38f14d31024a0044343d5e9f2d5288fc5b5b7f10823f5a771683dd8d",
+  "cache_schema": "ppo_eiie_training_cache_v1",
+  "commission": 0.0025,
+  "commission_name": "with_fee",
+  "completed": true,
+  "experiment_id": "5d3b4e18e713",
+  "group": "real_trained",
+  "model_name": null,
+  "run_id": "real_trained_e3add3a6__with_fee__seed_1",
+  "run_mode": "smoke",
+  "seed": 1,
+  "total_timesteps": 4096,
+  "training_cache_config": {
+    "commission": 0.0025,
+    "commission_name": "with_fee",
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "plot_on_terminal": false,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "eval_freq": 2048,
+    "group": "real_trained",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0"
+    },
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "ppo": {
+      "batch_size": 256,
+      "device": "cpu",
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "__main__.EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      },
+      "verbose": 0
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "schema": "ppo_eiie_training_cache_v1",
+    "seed": 1,
+    "tickers": [
+      "AAPL",
+      "AMZN",
+      "GOOGL",
+      "MSFT",
+      "NVDA"
+    ],
+    "time_window": 50,
+    "total_timesteps": 4096,
+    "train": [
+      "2024-01-01",
+      "2024-10-01"
+    ],
+    "training_data_fingerprint": "6f733ca743674acde5011f722c5ae19964b5fd9b91a26d3c0dfeb0ecf86724ed",
+    "validation": [
+      "2024-10-01",
+      "2025-01-01"
+    ]
+  },
+  "training_data_fingerprint": "6f733ca743674acde5011f722c5ae19964b5fd9b91a26d3c0dfeb0ecf86724ed"
+}
