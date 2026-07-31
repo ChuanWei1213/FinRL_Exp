@@ -1,20 +1,106 @@
 {
-  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__with_fee__seed_0__c2e14f322c6b/best_model",
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__with_fee__seed_0__c2e14f322c6b/best_model",
   "best_real_validation_reward": 0.12364860692174766,
   "best_timestep": 0,
-  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__with_fee__seed_0__c2e14f322c6b",
-  "cache_hit": false,
-  "cache_key": "c2e14f322c6b2fe20ca1af1d6a1356fdb0d959b1bb26a60d469fd55b09480427",
-  "cache_schema": "ppo_eiie_training_cache_v1",
+  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__with_fee__seed_0__c2e14f322c6b",
+  "cache_hit": true,
+  "cache_key": "345384a757406f7ad47f5b9cf935b3f96c16963bdb1ae82bf098a6b5ae9630b5",
+  "cache_schema": "ppo_eiie_training_cache_v2",
   "commission": 0.0025,
   "commission_name": "with_fee",
   "completed": true,
   "experiment_id": "0dee5008a0d0",
   "group": "real_trained",
+  "last_reuse_runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0"
+    },
+    "python": "3.10.20"
+  },
+  "legacy_cache_key": "c2e14f322c6b2fe20ca1af1d6a1356fdb0d959b1bb26a60d469fd55b09480427",
   "model_name": null,
   "run_id": "real_trained_e3add3a6__with_fee__seed_0",
   "run_mode": "smoke",
+  "runtime_fingerprint": "67133dee0dd0dbbe809d32c780e0526515feebc2344ed778353b05b7ab7f615f",
+  "runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0"
+    }
+  },
   "seed": 0,
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0025,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "eval_freq": 2048,
+    "group": "real_trained",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 0,
+    "tickers": [
+      "AAPL",
+      "AMZN",
+      "GOOGL",
+      "MSFT",
+      "NVDA"
+    ],
+    "time_window": 50,
+    "total_timesteps": 4096,
+    "train": [
+      "2024-01-01",
+      "2024-10-01"
+    ],
+    "training_data_fingerprint": "6f733ca743674acde5011f722c5ae19964b5fd9b91a26d3c0dfeb0ecf86724ed",
+    "validation": [
+      "2024-10-01",
+      "2025-01-01"
+    ]
+  },
   "total_timesteps": 4096,
   "training_cache_config": {
     "commission": 0.0025,

@@ -1,44 +1,39 @@
 {
-  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__no_fee__seed_0__2ef3a18a75a2/best_model",
-  "best_real_validation_reward": 0.12561463646733625,
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__mean_of_50_paths_eb38f0e4__with_fee__seed_1__7aae6bad6b47/best_model",
+  "best_real_validation_reward": 0.12297503683459718,
   "best_timestep": 0,
-  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__no_fee__seed_0__2ef3a18a75a2",
-  "cache_hit": true,
-  "cache_key": "53187a6aa9e753f6ebf09a5f56264588e00a923b7ad8a380492e22be58b2ecb8",
+  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__mean_of_50_paths_eb38f0e4__with_fee__seed_1__7aae6bad6b47",
+  "cache_hit": false,
+  "cache_key": "7aae6bad6b479573cb1783c78138bf58f32c50479b322ef070a7a4da8a5ed696",
+  "cache_name_migration": {
+    "from_artifact_cache_key": null,
+    "from_cache_key": "5dc1c0a149cd3c4f25bf1e8409d24942ff6ccc737b759622092cd1cbe24be023",
+    "from_group": "synthetic::dva",
+    "from_model_name": "dva",
+    "from_run_id": "synthetic_dva_c3a3276b__with_fee__seed_1",
+    "migrated_at": "2026-07-31T02:29:18.530098+00:00",
+    "physical_directory_renamed": true,
+    "schema": "synthetic_dataset_slug_v1",
+    "source_schema": "derived_legacy",
+    "to_artifact_cache_key": null,
+    "to_cache_key": "7aae6bad6b479573cb1783c78138bf58f32c50479b322ef070a7a4da8a5ed696",
+    "to_group": "synthetic::dva__mean_of_50_paths",
+    "to_model_name": "dva__mean_of_50_paths",
+    "to_run_id": "synthetic_dva__mean_of_50_paths_eb38f0e4__with_fee__seed_1"
+  },
   "cache_schema": "ppo_eiie_training_cache_v2",
-  "commission": 0.0,
-  "commission_name": "no_fee",
+  "commission": 0.0025,
+  "commission_name": "with_fee",
   "completed": true,
-  "experiment_id": "0dee5008a0d0",
-  "group": "real_trained",
-  "last_reuse_runtime_provenance": {
-    "device": "cpu",
-    "library_versions": {
-      "numpy": "2.2.6",
-      "pandas": "2.2.3",
-      "stable_baselines3": "2.9.0",
-      "torch": "2.13.0"
-    },
-    "python": "3.10.20"
-  },
-  "legacy_cache_key": "2ef3a18a75a2bed02b428ff9f9cedb6dfaa1cbac942ac211e35a3e0c4e166cbc",
-  "model_name": null,
-  "run_id": "real_trained_e3add3a6__no_fee__seed_0",
+  "experiment_id": "5d3b4e18e713",
+  "group": "synthetic::dva__mean_of_50_paths",
+  "model_name": "dva__mean_of_50_paths",
+  "run_id": "synthetic_dva__mean_of_50_paths_eb38f0e4__with_fee__seed_1",
   "run_mode": "smoke",
-  "runtime_fingerprint": "67133dee0dd0dbbe809d32c780e0526515feebc2344ed778353b05b7ab7f615f",
-  "runtime_provenance": {
-    "device": "cpu",
-    "library_versions": {
-      "numpy": "2.2.6",
-      "pandas": "2.2.3",
-      "stable_baselines3": "2.9.0",
-      "torch": "2.13.0"
-    }
-  },
-  "seed": 0,
+  "seed": 1,
   "semantic_cache_config": {
     "algorithm": "PPO",
-    "commission": 0.0,
+    "commission": 0.0025,
     "environment": {
       "action_scale": 5.0,
       "action_space_mode": "symmetric",
@@ -54,7 +49,7 @@
       "time_window": 50
     },
     "eval_freq": 2048,
-    "group": "real_trained",
+    "group": "synthetic::dva__mean_of_50_paths",
     "max_synthetic_validation_paths": 3,
     "max_train_evaluation_paths": 3,
     "policy": "MultiInputPolicy",
@@ -81,7 +76,7 @@
       "high",
       "low"
     ],
-    "seed": 0,
+    "seed": 1,
     "tickers": [
       "AAPL",
       "AMZN",
@@ -95,7 +90,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "6f733ca743674acde5011f722c5ae19964b5fd9b91a26d3c0dfeb0ecf86724ed",
+    "training_data_fingerprint": "2c164003fe88cf77490c492628f2ac2dc7ddbf88fa7462ee52268589a99b3720",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -103,8 +98,8 @@
   },
   "total_timesteps": 4096,
   "training_cache_config": {
-    "commission": 0.0,
-    "commission_name": "no_fee",
+    "commission": 0.0025,
+    "commission_name": "with_fee",
     "environment": {
       "action_scale": 5.0,
       "action_space_mode": "symmetric",
@@ -121,12 +116,12 @@
       "time_window": 50
     },
     "eval_freq": 2048,
-    "group": "real_trained",
+    "group": "synthetic::dva__mean_of_50_paths",
     "library_versions": {
       "numpy": "2.2.6",
       "pandas": "2.2.3",
       "stable_baselines3": "2.9.0",
-      "torch": "2.13.0"
+      "torch": "2.13.0+cu130"
     },
     "max_synthetic_validation_paths": 3,
     "max_train_evaluation_paths": 3,
@@ -156,7 +151,7 @@
       "low"
     ],
     "schema": "ppo_eiie_training_cache_v1",
-    "seed": 0,
+    "seed": 1,
     "tickers": [
       "AAPL",
       "AMZN",
@@ -170,11 +165,11 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "6f733ca743674acde5011f722c5ae19964b5fd9b91a26d3c0dfeb0ecf86724ed",
+    "training_data_fingerprint": "2c164003fe88cf77490c492628f2ac2dc7ddbf88fa7462ee52268589a99b3720",
     "validation": [
       "2024-10-01",
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "6f733ca743674acde5011f722c5ae19964b5fd9b91a26d3c0dfeb0ecf86724ed"
+  "training_data_fingerprint": "2c164003fe88cf77490c492628f2ac2dc7ddbf88fa7462ee52268589a99b3720"
 }

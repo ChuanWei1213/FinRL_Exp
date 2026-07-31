@@ -1,16 +1,32 @@
 {
-  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__no_fee__seed_0__2ef3a18a75a2/best_model",
-  "best_real_validation_reward": 0.12561463646733625,
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__mean_of_50_paths_eb38f0e4__no_fee__seed_0__3558d38538ec/best_model",
+  "best_real_validation_reward": 0.1256140732633198,
   "best_timestep": 0,
-  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__no_fee__seed_0__2ef3a18a75a2",
+  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__mean_of_50_paths_eb38f0e4__no_fee__seed_0__3558d38538ec",
   "cache_hit": true,
-  "cache_key": "53187a6aa9e753f6ebf09a5f56264588e00a923b7ad8a380492e22be58b2ecb8",
+  "cache_key": "3558d38538eca3d4c6ca76727e947efecea9dd4f7946ea54f4199d604501c610",
+  "cache_name_migration": {
+    "from_artifact_cache_key": null,
+    "from_cache_key": "1b665dc7fc8fbc17a70a4502e284a29be1c58dc2bbacdb38142c381adeb6f19d",
+    "from_group": "synthetic::dva",
+    "from_model_name": "dva",
+    "from_run_id": "synthetic_dva_c3a3276b__no_fee__seed_0",
+    "migrated_at": "2026-07-31T02:29:18.530098+00:00",
+    "physical_directory_renamed": true,
+    "schema": "synthetic_dataset_slug_v1",
+    "source_schema": "derived_legacy",
+    "to_artifact_cache_key": null,
+    "to_cache_key": "3558d38538eca3d4c6ca76727e947efecea9dd4f7946ea54f4199d604501c610",
+    "to_group": "synthetic::dva__mean_of_50_paths",
+    "to_model_name": "dva__mean_of_50_paths",
+    "to_run_id": "synthetic_dva__mean_of_50_paths_eb38f0e4__no_fee__seed_0"
+  },
   "cache_schema": "ppo_eiie_training_cache_v2",
   "commission": 0.0,
   "commission_name": "no_fee",
   "completed": true,
   "experiment_id": "0dee5008a0d0",
-  "group": "real_trained",
+  "group": "synthetic::dva__mean_of_50_paths",
   "last_reuse_runtime_provenance": {
     "device": "cpu",
     "library_versions": {
@@ -21,9 +37,8 @@
     },
     "python": "3.10.20"
   },
-  "legacy_cache_key": "2ef3a18a75a2bed02b428ff9f9cedb6dfaa1cbac942ac211e35a3e0c4e166cbc",
-  "model_name": null,
-  "run_id": "real_trained_e3add3a6__no_fee__seed_0",
+  "model_name": "dva__mean_of_50_paths",
+  "run_id": "synthetic_dva__mean_of_50_paths_eb38f0e4__no_fee__seed_0",
   "run_mode": "smoke",
   "runtime_fingerprint": "67133dee0dd0dbbe809d32c780e0526515feebc2344ed778353b05b7ab7f615f",
   "runtime_provenance": {
@@ -54,7 +69,7 @@
       "time_window": 50
     },
     "eval_freq": 2048,
-    "group": "real_trained",
+    "group": "synthetic::dva__mean_of_50_paths",
     "max_synthetic_validation_paths": 3,
     "max_train_evaluation_paths": 3,
     "policy": "MultiInputPolicy",
@@ -95,7 +110,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "6f733ca743674acde5011f722c5ae19964b5fd9b91a26d3c0dfeb0ecf86724ed",
+    "training_data_fingerprint": "44e1807b02471d80dcc0dd1e10490aabb4265ee432ce5703d3262179d200619c",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -121,7 +136,7 @@
       "time_window": 50
     },
     "eval_freq": 2048,
-    "group": "real_trained",
+    "group": "synthetic::dva__mean_of_50_paths",
     "library_versions": {
       "numpy": "2.2.6",
       "pandas": "2.2.3",
@@ -170,11 +185,11 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "6f733ca743674acde5011f722c5ae19964b5fd9b91a26d3c0dfeb0ecf86724ed",
+    "training_data_fingerprint": "44e1807b02471d80dcc0dd1e10490aabb4265ee432ce5703d3262179d200619c",
     "validation": [
       "2024-10-01",
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "6f733ca743674acde5011f722c5ae19964b5fd9b91a26d3c0dfeb0ecf86724ed"
+  "training_data_fingerprint": "44e1807b02471d80dcc0dd1e10490aabb4265ee432ce5703d3262179d200619c"
 }
