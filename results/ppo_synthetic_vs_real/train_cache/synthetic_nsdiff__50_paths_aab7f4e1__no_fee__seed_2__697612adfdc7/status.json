@@ -1,0 +1,106 @@
+{
+  "best_model_path": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_nsdiff__50_paths_aab7f4e1__no_fee__seed_2__697612adfdc7/best_model",
+  "best_real_validation_reward": 0.12468270668895484,
+  "best_timestep": 0,
+  "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_nsdiff__50_paths_aab7f4e1__no_fee__seed_2__697612adfdc7",
+  "cache_hit": true,
+  "cache_key": "697612adfdc7b49d3f351d77446c13262ba05ebc0e2ae16e69d16e2b7c402cea",
+  "cache_schema": "ppo_eiie_training_cache_v2",
+  "commission": 0.0,
+  "commission_name": "no_fee",
+  "completed": true,
+  "experiment_id": "06f2f47f911b",
+  "group": "synthetic::nsdiff__50_paths",
+  "last_reuse_runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0+cu130"
+    },
+    "python": "3.10.20"
+  },
+  "model_name": "nsdiff__50_paths",
+  "run_id": "synthetic_nsdiff__50_paths_aab7f4e1__no_fee__seed_2",
+  "run_mode": "full",
+  "runtime_fingerprint": "8861c9930c0989c6bbbf8bdb9520b3c3dc25b40e0f47c31bb26a8d936c7bf0a7",
+  "runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0+cu130"
+    },
+    "python": "3.10.20"
+  },
+  "seed": 2,
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "eval_freq": 20000,
+    "group": "synthetic::nsdiff__50_paths",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 2,
+    "tickers": [
+      "AAPL",
+      "AMZN",
+      "GOOGL",
+      "MSFT",
+      "NVDA"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2024-01-01",
+      "2024-10-01"
+    ],
+    "training_data_fingerprint": "c30167499bf866a80da2b19f8b22f9fd03780a47310025e8c239a63f5edb08f1",
+    "validation": [
+      "2024-10-01",
+      "2025-01-01"
+    ]
+  },
+  "total_timesteps": 200000,
+  "training_data_fingerprint": "c30167499bf866a80da2b19f8b22f9fd03780a47310025e8c239a63f5edb08f1"
+}

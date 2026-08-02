@@ -1,9 +1,9 @@
 {
-  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__50_paths_f65c0613__with_fee__seed_2__62aaee3652e3/best_model",
+  "best_model_path": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__50_paths_f65c0613__with_fee__seed_2__62aaee3652e3/best_model",
   "best_real_validation_reward": 0.12272001743847472,
   "best_timestep": 0,
-  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__50_paths_f65c0613__with_fee__seed_2__62aaee3652e3",
-  "cache_hit": false,
+  "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__50_paths_f65c0613__with_fee__seed_2__62aaee3652e3",
+  "cache_hit": true,
   "cache_key": "62aaee3652e33eb72ad4e59a83dfc2f809f0d1ede9f0a7192b8f3c392fe161f2",
   "cache_name_migration": {
     "from_artifact_cache_key": null,
@@ -27,6 +27,16 @@
   "completed": true,
   "experiment_id": "f7a0d57c38b6",
   "group": "synthetic::dva__50_paths",
+  "last_reuse_runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0+cu130"
+    },
+    "python": "3.10.20"
+  },
   "legacy_cache_key": "e496a8d65b2a31f64986642b69b5532baeff1d26d0297a04bded5945f6a93263",
   "migrated_from_cache_schema": "ppo_eiie_training_cache_v1",
   "model_name": "dva__50_paths",
