@@ -12,11 +12,15 @@ Usage::
 
     dfs = [real_train_df] + [synth_df_i for i in range(50)]
     env = MultiPathEnv.from_dataframes(dfs, **ENV_KWARGS)
-    model = PPO("MultiInputPolicy", Monitor(env), **PPO_KWARGS)
+    balanced_env = MultiPathEnv.from_balanced_real_and_synthetic_dataframes(
+        real_train_df, synth_dfs, **ENV_KWARGS
+    )
+    model = PPO("MultiInputPolicy", Monitor(balanced_env), **PPO_KWARGS)
 
 Validation and test must stay on real data -- otherwise you are only measuring how well
 the agent fits the generator's distribution.
 """
+
 from __future__ import annotations
 
 import gymnasium
@@ -72,6 +76,30 @@ class MultiPathEnv(gymnasium.Env):
         """Build one PortfolioOptimizationGymnasiumEnv per dataframe."""
         envs = [PortfolioOptimizationGymnasiumEnv(df, **env_kwargs) for df in dfs]
         return cls(envs, seed=seed, weights=weights)
+
+    @classmethod
+    def from_balanced_real_and_synthetic_dataframes(
+        cls, real_df, synthetic_dfs, seed=0, **env_kwargs
+    ):
+        """Build an env that samples real and synthetic sources equally.
+
+        The real dataframe receives half of the episode probability. The other
+        half is divided uniformly among the existing synthetic dataframes, so
+        balancing does not require copying the real dataframe once per synthetic
+        path.
+        """
+        synthetic_dfs = list(synthetic_dfs)
+        if not synthetic_dfs:
+            raise ValueError("need at least one synthetic dataframe")
+
+        weights = np.full(len(synthetic_dfs) + 1, 0.5 / len(synthetic_dfs))
+        weights[0] = 0.5
+        return cls.from_dataframes(
+            [real_df, *synthetic_dfs],
+            seed=seed,
+            weights=weights,
+            **env_kwargs,
+        )
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)

@@ -70,7 +70,7 @@
   "best_timestep": 200000,
   "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_armd__single_path_84ed9010__with_fee__seed_0__87eb6f7b7d03",
   "cache_hit": true,
-  "cache_key": "87eb6f7b7d03da98429d421d733f2c8fd35924d94684cdb0a8fbc743e2e2d907",
+  "cache_key": "7c3f99f172c3ef870309d4c0e7b2d2f118176b705046be0b3a6b88d818ce5151",
   "cache_name_migration": {
     "from_artifact_cache_key": "b7d12fa47b912ed58d6ed0d7228eb3727bb14f7a6fe6a0e710aafe7efb21b3f4",
     "from_cache_key": "b2b14cb83bf874f0db7f7e058614f1a0da5ab4fcc655315ad4a62971506b8370",
@@ -92,7 +92,7 @@
     "current_training_data_fingerprint": "f0243f31a7532c5c050c6bbad98e2df5d243ee290621c8511d09830b1709898f",
     "reason": "User-approved reuse of completed full-run artifacts"
   },
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0025,
   "commission_name": "with_fee",
   "completed": true,
@@ -108,7 +108,11 @@
     },
     "python": "3.10.20"
   },
-  "legacy_cache_key": "bfda73f16b402ec7c0b5c34462c766569cc722f35693ff4d50f4fccdfef1f0a4",
+  "legacy_cache_key": "87eb6f7b7d03da98429d421d733f2c8fd35924d94684cdb0a8fbc743e2e2d907",
+  "legacy_cache_keys": [
+    "bfda73f16b402ec7c0b5c34462c766569cc722f35693ff4d50f4fccdfef1f0a4",
+    "87eb6f7b7d03da98429d421d733f2c8fd35924d94684cdb0a8fbc743e2e2d907"
+  ],
   "migrated_from_cache_schema": "ppo_eiie_training_cache_v1",
   "model_name": "armd__single_path",
   "run_id": "synthetic_armd__single_path_84ed9010__with_fee__seed_0",
@@ -183,7 +187,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "f0243f31a7532c5c050c6bbad98e2df5d243ee290621c8511d09830b1709898f",
+    "training_data_fingerprint": "a5fb2d512bfcdee2ca983931a11b19e8d8ad8866ca681e4f4486d969d98054ee",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -265,5 +269,6 @@
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "152574bd322f9f48c35b6577b81e945544bab2f60671dccbab2b4e8e029fc61e"
+  "training_data_fingerprint": "a5fb2d512bfcdee2ca983931a11b19e8d8ad8866ca681e4f4486d969d98054ee",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

@@ -1,11 +1,11 @@
 {
-  "best_model_path": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_armd__single_path_84ed9010__with_fee__seed_1__0e08eb512d85/best_model",
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_armd__single_path_84ed9010__with_fee__seed_1__0e08eb512d85/best_model",
   "best_real_validation_reward": 0.17425926765578859,
   "best_timestep": 200000,
-  "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_armd__single_path_84ed9010__with_fee__seed_1__0e08eb512d85",
+  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_armd__single_path_84ed9010__with_fee__seed_1__0e08eb512d85",
   "cache_hit": true,
-  "cache_key": "0e08eb512d85d4def6d6354b624462810ef9924df6620949b56ad5b728ef2a9e",
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_key": "a391c0c722d560154ceb248576646e1b86d6347c48f8ef30e678700e7869b904",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0025,
   "commission_name": "with_fee",
   "completed": true,
@@ -17,10 +17,15 @@
       "numpy": "2.2.6",
       "pandas": "2.2.3",
       "stable_baselines3": "2.9.0",
-      "torch": "2.13.0+cu130"
+      "torch": "2.13.0"
     },
     "python": "3.10.20"
   },
+  "legacy_cache_key": "0e08eb512d85d4def6d6354b624462810ef9924df6620949b56ad5b728ef2a9e",
+  "legacy_cache_keys": [
+    "0e08eb512d85d4def6d6354b624462810ef9924df6620949b56ad5b728ef2a9e"
+  ],
+  "migrated_from_cache_schema": "ppo_eiie_training_cache_v2",
   "model_name": "armd__single_path",
   "run_id": "synthetic_armd__single_path_84ed9010__with_fee__seed_1",
   "run_mode": "full",
@@ -95,12 +100,13 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "152574bd322f9f48c35b6577b81e945544bab2f60671dccbab2b4e8e029fc61e",
+    "training_data_fingerprint": "a5fb2d512bfcdee2ca983931a11b19e8d8ad8866ca681e4f4486d969d98054ee",
     "validation": [
       "2024-10-01",
       "2025-01-01"
     ]
   },
   "total_timesteps": 200000,
-  "training_data_fingerprint": "152574bd322f9f48c35b6577b81e945544bab2f60671dccbab2b4e8e029fc61e"
+  "training_data_fingerprint": "a5fb2d512bfcdee2ca983931a11b19e8d8ad8866ca681e4f4486d969d98054ee",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

@@ -4,7 +4,7 @@
   "best_timestep": 0,
   "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__mean_of_50_paths_eb38f0e4__with_fee__seed_4__34cba03f6443",
   "cache_hit": true,
-  "cache_key": "34cba03f64437a168537283d59e96f15480cce9591c4e7d26a0e6d94baf01df8",
+  "cache_key": "b619a9e1bd5aff416b2702f92a078d0179aed63cab053cc9f8413d5f8cfaf079",
   "cache_name_migration": {
     "from_artifact_cache_key": null,
     "from_cache_key": "140ed760fc7a20d23bff2c0980827ce6a7fd4809de5d4d9b7382992cc5f09a52",
@@ -21,7 +21,7 @@
     "to_model_name": "dva__mean_of_50_paths",
     "to_run_id": "synthetic_dva__mean_of_50_paths_eb38f0e4__with_fee__seed_4"
   },
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0025,
   "commission_name": "with_fee",
   "completed": true,
@@ -37,7 +37,11 @@
     },
     "python": "3.10.20"
   },
-  "legacy_cache_key": "03c7c32ece9f8b26c451924c0d044f6ffbb3dfa766ce9d73cd6cd8af70d45149",
+  "legacy_cache_key": "34cba03f64437a168537283d59e96f15480cce9591c4e7d26a0e6d94baf01df8",
+  "legacy_cache_keys": [
+    "03c7c32ece9f8b26c451924c0d044f6ffbb3dfa766ce9d73cd6cd8af70d45149",
+    "34cba03f64437a168537283d59e96f15480cce9591c4e7d26a0e6d94baf01df8"
+  ],
   "migrated_from_cache_schema": "ppo_eiie_training_cache_v1",
   "model_name": "dva__mean_of_50_paths",
   "run_id": "synthetic_dva__mean_of_50_paths_eb38f0e4__with_fee__seed_4",
@@ -112,7 +116,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "2c164003fe88cf77490c492628f2ac2dc7ddbf88fa7462ee52268589a99b3720",
+    "training_data_fingerprint": "ac7351827f4163bc553f4c655ab224e81e34e21a8aadcc8a49b3dcbf9d962252",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -194,5 +198,6 @@
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "2c164003fe88cf77490c492628f2ac2dc7ddbf88fa7462ee52268589a99b3720"
+  "training_data_fingerprint": "ac7351827f4163bc553f4c655ab224e81e34e21a8aadcc8a49b3dcbf9d962252",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

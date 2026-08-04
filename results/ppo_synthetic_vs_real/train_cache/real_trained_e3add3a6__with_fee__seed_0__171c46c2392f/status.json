@@ -4,8 +4,8 @@
   "best_timestep": 180000,
   "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/real_trained_e3add3a6__with_fee__seed_0__171c46c2392f",
   "cache_hit": true,
-  "cache_key": "171c46c2392fbf49af50f7e3d2c9bb410c94c174f7aed4085378448f5192dae0",
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_key": "af5fe1eb7b43f41d0b6cabd430b5f6a861dbfebc5b77f97d8a5b496a0abe8153",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0025,
   "commission_name": "with_fee",
   "completed": true,
@@ -21,6 +21,11 @@
     },
     "python": "3.10.20"
   },
+  "legacy_cache_key": "171c46c2392fbf49af50f7e3d2c9bb410c94c174f7aed4085378448f5192dae0",
+  "legacy_cache_keys": [
+    "171c46c2392fbf49af50f7e3d2c9bb410c94c174f7aed4085378448f5192dae0"
+  ],
+  "migrated_from_cache_schema": "ppo_eiie_training_cache_v2",
   "model_name": null,
   "run_id": "real_trained_e3add3a6__with_fee__seed_0",
   "run_mode": "full",
@@ -95,12 +100,13 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "1f647e33a64466acd07f00d6d9d923d6c11cdeffea0f20a46729b7d529b251e7",
+    "training_data_fingerprint": "99db09eb090070f551749cb5c9ec3a3a9ac8e34864fa28a3bc240c77cb455240",
     "validation": [
       "2024-10-01",
       "2025-01-01"
     ]
   },
   "total_timesteps": 200000,
-  "training_data_fingerprint": "1f647e33a64466acd07f00d6d9d923d6c11cdeffea0f20a46729b7d529b251e7"
+  "training_data_fingerprint": "99db09eb090070f551749cb5c9ec3a3a9ac8e34864fa28a3bc240c77cb455240",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

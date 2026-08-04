@@ -4,7 +4,7 @@
   "best_timestep": 160000,
   "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__50_paths_f65c0613__no_fee__seed_1__bbf9c8be7ac5",
   "cache_hit": true,
-  "cache_key": "bbf9c8be7ac5aa8a63cf3213e891c0ab45e5f7675e28798320231856f5941bbf",
+  "cache_key": "79ec42570580ea9d82f179abc5c56ef0d94b3b65165e3933b82c916b547216d8",
   "cache_name_migration": {
     "from_artifact_cache_key": null,
     "from_cache_key": "011a403e9040db60361e43973bf7a61395b63a4c1c62104848637588291ead5c",
@@ -21,7 +21,7 @@
     "to_model_name": "dva__50_paths",
     "to_run_id": "synthetic_dva__50_paths_f65c0613__no_fee__seed_1"
   },
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0,
   "commission_name": "no_fee",
   "completed": true,
@@ -37,7 +37,11 @@
     },
     "python": "3.10.20"
   },
-  "legacy_cache_key": "b851ce7aeb7ca92eef62f71bebe496dc09567aa59ada9114361e7ca98759277d",
+  "legacy_cache_key": "bbf9c8be7ac5aa8a63cf3213e891c0ab45e5f7675e28798320231856f5941bbf",
+  "legacy_cache_keys": [
+    "b851ce7aeb7ca92eef62f71bebe496dc09567aa59ada9114361e7ca98759277d",
+    "bbf9c8be7ac5aa8a63cf3213e891c0ab45e5f7675e28798320231856f5941bbf"
+  ],
   "migrated_from_cache_schema": "ppo_eiie_training_cache_v1",
   "model_name": "dva__50_paths",
   "run_id": "synthetic_dva__50_paths_f65c0613__no_fee__seed_1",
@@ -112,7 +116,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "5f5dd225eb1e9f37f8126e41842f6570f675f54967954fb41e64c1eed90d4164",
+    "training_data_fingerprint": "d8dad931f803faf92bab2dd8f5b5f17b4910b656a5b2eb847980146bf4c0958c",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -194,5 +198,6 @@
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "5f5dd225eb1e9f37f8126e41842f6570f675f54967954fb41e64c1eed90d4164"
+  "training_data_fingerprint": "d8dad931f803faf92bab2dd8f5b5f17b4910b656a5b2eb847980146bf4c0958c",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

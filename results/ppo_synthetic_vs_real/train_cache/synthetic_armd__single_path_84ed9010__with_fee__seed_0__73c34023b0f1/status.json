@@ -4,7 +4,7 @@
   "best_timestep": 4096,
   "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_armd__single_path_84ed9010__with_fee__seed_0__73c34023b0f1",
   "cache_hit": true,
-  "cache_key": "73c34023b0f17a782a38a7925bb05ca8e6ab043a2f2238e81ea614403ad9cedc",
+  "cache_key": "6da43a075ce3621f54ddfc31f9a8646bb3de09404f68234ce8757f98267f94db",
   "cache_name_migration": {
     "from_artifact_cache_key": null,
     "from_cache_key": "eb2fcdbd5155fdf32a4d5d10907519c65fec041f3916a87368cae98c5fa3e598",
@@ -21,7 +21,7 @@
     "to_model_name": "armd__single_path",
     "to_run_id": "synthetic_armd__single_path_84ed9010__with_fee__seed_0"
   },
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0025,
   "commission_name": "with_fee",
   "completed": true,
@@ -37,6 +37,11 @@
     },
     "python": "3.10.20"
   },
+  "legacy_cache_key": "73c34023b0f17a782a38a7925bb05ca8e6ab043a2f2238e81ea614403ad9cedc",
+  "legacy_cache_keys": [
+    "73c34023b0f17a782a38a7925bb05ca8e6ab043a2f2238e81ea614403ad9cedc"
+  ],
+  "migrated_from_cache_schema": "ppo_eiie_training_cache_v2",
   "model_name": "armd__single_path",
   "run_id": "synthetic_armd__single_path_84ed9010__with_fee__seed_0",
   "run_mode": "smoke",
@@ -110,7 +115,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "f0243f31a7532c5c050c6bbad98e2df5d243ee290621c8511d09830b1709898f",
+    "training_data_fingerprint": "a5fb2d512bfcdee2ca983931a11b19e8d8ad8866ca681e4f4486d969d98054ee",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -191,5 +196,6 @@
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "f0243f31a7532c5c050c6bbad98e2df5d243ee290621c8511d09830b1709898f"
+  "training_data_fingerprint": "a5fb2d512bfcdee2ca983931a11b19e8d8ad8866ca681e4f4486d969d98054ee",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

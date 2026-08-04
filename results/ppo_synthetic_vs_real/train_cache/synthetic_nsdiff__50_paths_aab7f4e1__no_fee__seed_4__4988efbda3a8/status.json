@@ -4,7 +4,7 @@
   "best_timestep": 200000,
   "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_nsdiff__50_paths_aab7f4e1__no_fee__seed_4__4988efbda3a8",
   "cache_hit": true,
-  "cache_key": "4988efbda3a8a1dd4ac04a10c3345c2e124813b833f03f2aa7f5dcb35db372b6",
+  "cache_key": "d433ae4897cf8c0b422310c18dd9413d5a946ffc39ea2ef5277529e9c3728e3a",
   "cache_name_migration": {
     "from_artifact_cache_key": null,
     "from_cache_key": "c15c2067769060913746e2411631176ff0142c7dd8a3d07d2d9fb136b6ff54ea",
@@ -21,7 +21,7 @@
     "to_model_name": "nsdiff__50_paths",
     "to_run_id": "synthetic_nsdiff__50_paths_aab7f4e1__no_fee__seed_4"
   },
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0,
   "commission_name": "no_fee",
   "completed": true,
@@ -37,7 +37,11 @@
     },
     "python": "3.10.20"
   },
-  "legacy_cache_key": "b1d3db7e6da82cb8ed2b79086dbe8545896aa5b3c753c1d34f52a6f433f77c91",
+  "legacy_cache_key": "4988efbda3a8a1dd4ac04a10c3345c2e124813b833f03f2aa7f5dcb35db372b6",
+  "legacy_cache_keys": [
+    "b1d3db7e6da82cb8ed2b79086dbe8545896aa5b3c753c1d34f52a6f433f77c91",
+    "4988efbda3a8a1dd4ac04a10c3345c2e124813b833f03f2aa7f5dcb35db372b6"
+  ],
   "migrated_from_cache_schema": "ppo_eiie_training_cache_v1",
   "model_name": "nsdiff__50_paths",
   "run_id": "synthetic_nsdiff__50_paths_aab7f4e1__no_fee__seed_4",
@@ -112,7 +116,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "c30167499bf866a80da2b19f8b22f9fd03780a47310025e8c239a63f5edb08f1",
+    "training_data_fingerprint": "b961ab023354fd8f3de5bcca3f81cf3e1839cf5f77697a01e22dad88fb6500dd",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -194,5 +198,6 @@
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "c30167499bf866a80da2b19f8b22f9fd03780a47310025e8c239a63f5edb08f1"
+  "training_data_fingerprint": "b961ab023354fd8f3de5bcca3f81cf3e1839cf5f77697a01e22dad88fb6500dd",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

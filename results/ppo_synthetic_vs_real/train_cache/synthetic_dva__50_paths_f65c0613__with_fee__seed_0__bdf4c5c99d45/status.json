@@ -4,7 +4,7 @@
   "best_timestep": 160000,
   "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__50_paths_f65c0613__with_fee__seed_0__bdf4c5c99d45",
   "cache_hit": true,
-  "cache_key": "bdf4c5c99d4513b5689006e918008eeacd549cdebab3011d896e896fccdca2a4",
+  "cache_key": "14e3cbe32f396ac4e46915382695d675fa3db402dc9e82bdc3d0b8695d203071",
   "cache_name_migration": {
     "from_artifact_cache_key": null,
     "from_cache_key": "ea55386cb19e34a8c7d07bbeaaed0419ba0a5ce8c3e929b053b4a21765fe11a1",
@@ -21,7 +21,7 @@
     "to_model_name": "dva__50_paths",
     "to_run_id": "synthetic_dva__50_paths_f65c0613__with_fee__seed_0"
   },
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0025,
   "commission_name": "with_fee",
   "completed": true,
@@ -37,7 +37,11 @@
     },
     "python": "3.10.20"
   },
-  "legacy_cache_key": "4d66ba35e50d4db5d8647782e620b20b2eb9760623c32a9ad887a254cc302b1c",
+  "legacy_cache_key": "bdf4c5c99d4513b5689006e918008eeacd549cdebab3011d896e896fccdca2a4",
+  "legacy_cache_keys": [
+    "4d66ba35e50d4db5d8647782e620b20b2eb9760623c32a9ad887a254cc302b1c",
+    "bdf4c5c99d4513b5689006e918008eeacd549cdebab3011d896e896fccdca2a4"
+  ],
   "migrated_from_cache_schema": "ppo_eiie_training_cache_v1",
   "model_name": "dva__50_paths",
   "run_id": "synthetic_dva__50_paths_f65c0613__with_fee__seed_0",
@@ -112,7 +116,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "5f5dd225eb1e9f37f8126e41842f6570f675f54967954fb41e64c1eed90d4164",
+    "training_data_fingerprint": "d8dad931f803faf92bab2dd8f5b5f17b4910b656a5b2eb847980146bf4c0958c",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -194,5 +198,6 @@
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "5f5dd225eb1e9f37f8126e41842f6570f675f54967954fb41e64c1eed90d4164"
+  "training_data_fingerprint": "d8dad931f803faf92bab2dd8f5b5f17b4910b656a5b2eb847980146bf4c0958c",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

@@ -4,7 +4,7 @@
   "best_timestep": 200000,
   "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__mean_of_50_paths_eb38f0e4__no_fee__seed_4__89d3ff6c7a13",
   "cache_hit": true,
-  "cache_key": "89d3ff6c7a1346820de886ab41fb0cd1e18bd85a38e48794965edc3899a0f207",
+  "cache_key": "4ae01f0d98ad1d096f846770a36af47653272d0dd6e9871503650ffa902d8053",
   "cache_name_migration": {
     "from_artifact_cache_key": null,
     "from_cache_key": "0c62089ba1a78f3652a831edbdaa00e3515f7ee3e2764f25cd459dbd98b27531",
@@ -21,7 +21,7 @@
     "to_model_name": "dva__mean_of_50_paths",
     "to_run_id": "synthetic_dva__mean_of_50_paths_eb38f0e4__no_fee__seed_4"
   },
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0,
   "commission_name": "no_fee",
   "completed": true,
@@ -37,7 +37,11 @@
     },
     "python": "3.10.20"
   },
-  "legacy_cache_key": "a1e1404257b256abceae743964224ab151d28bae206ba7fbf09003b691ecc11e",
+  "legacy_cache_key": "89d3ff6c7a1346820de886ab41fb0cd1e18bd85a38e48794965edc3899a0f207",
+  "legacy_cache_keys": [
+    "a1e1404257b256abceae743964224ab151d28bae206ba7fbf09003b691ecc11e",
+    "89d3ff6c7a1346820de886ab41fb0cd1e18bd85a38e48794965edc3899a0f207"
+  ],
   "migrated_from_cache_schema": "ppo_eiie_training_cache_v1",
   "model_name": "dva__mean_of_50_paths",
   "run_id": "synthetic_dva__mean_of_50_paths_eb38f0e4__no_fee__seed_4",
@@ -112,7 +116,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "2c164003fe88cf77490c492628f2ac2dc7ddbf88fa7462ee52268589a99b3720",
+    "training_data_fingerprint": "ac7351827f4163bc553f4c655ab224e81e34e21a8aadcc8a49b3dcbf9d962252",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -194,5 +198,6 @@
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "2c164003fe88cf77490c492628f2ac2dc7ddbf88fa7462ee52268589a99b3720"
+  "training_data_fingerprint": "ac7351827f4163bc553f4c655ab224e81e34e21a8aadcc8a49b3dcbf9d962252",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

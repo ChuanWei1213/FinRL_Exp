@@ -4,7 +4,7 @@
   "best_timestep": 200000,
   "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_armd__single_path_84ed9010__with_fee__seed_4__a79c0f2bc841",
   "cache_hit": true,
-  "cache_key": "a79c0f2bc8417bc891b0874e4967a77388bce4f218b142e407b5b2bd16ff4bb0",
+  "cache_key": "b2e834c5055cc0521e851d47fa27b0b00a0dd4af53543bf4e9f8a4104e12d91a",
   "cache_name_migration": {
     "from_artifact_cache_key": null,
     "from_cache_key": "3fda34279f12f9675577d737cbd8a77e96a5b01d09786c2e9c2393ff4da54c70",
@@ -21,7 +21,7 @@
     "to_model_name": "armd__single_path",
     "to_run_id": "synthetic_armd__single_path_84ed9010__with_fee__seed_4"
   },
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0025,
   "commission_name": "with_fee",
   "completed": true,
@@ -37,7 +37,11 @@
     },
     "python": "3.10.20"
   },
-  "legacy_cache_key": "b30ec6b1e0f0d88b2864314b44302437ea0f9a417bdda050fdcb70bf31e336a7",
+  "legacy_cache_key": "a79c0f2bc8417bc891b0874e4967a77388bce4f218b142e407b5b2bd16ff4bb0",
+  "legacy_cache_keys": [
+    "b30ec6b1e0f0d88b2864314b44302437ea0f9a417bdda050fdcb70bf31e336a7",
+    "a79c0f2bc8417bc891b0874e4967a77388bce4f218b142e407b5b2bd16ff4bb0"
+  ],
   "migrated_from_cache_schema": "ppo_eiie_training_cache_v1",
   "model_name": "armd__single_path",
   "run_id": "synthetic_armd__single_path_84ed9010__with_fee__seed_4",
@@ -112,7 +116,7 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "152574bd322f9f48c35b6577b81e945544bab2f60671dccbab2b4e8e029fc61e",
+    "training_data_fingerprint": "a5fb2d512bfcdee2ca983931a11b19e8d8ad8866ca681e4f4486d969d98054ee",
     "validation": [
       "2024-10-01",
       "2025-01-01"
@@ -194,5 +198,6 @@
       "2025-01-01"
     ]
   },
-  "training_data_fingerprint": "152574bd322f9f48c35b6577b81e945544bab2f60671dccbab2b4e8e029fc61e"
+  "training_data_fingerprint": "a5fb2d512bfcdee2ca983931a11b19e8d8ad8866ca681e4f4486d969d98054ee",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }

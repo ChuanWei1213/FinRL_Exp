@@ -1,11 +1,11 @@
 {
-  "best_model_path": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_cndiff__50_paths_c6bf8db5__no_fee__seed_1__8bf6ceceb633/best_model",
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_cndiff__50_paths_c6bf8db5__no_fee__seed_1__8bf6ceceb633/best_model",
   "best_real_validation_reward": 0.147624786869219,
   "best_timestep": 200000,
-  "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_cndiff__50_paths_c6bf8db5__no_fee__seed_1__8bf6ceceb633",
+  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_cndiff__50_paths_c6bf8db5__no_fee__seed_1__8bf6ceceb633",
   "cache_hit": true,
-  "cache_key": "8bf6ceceb633fbd3b3711b6b05c5ff9c683a0982ab09eccd7d27910da99629c1",
-  "cache_schema": "ppo_eiie_training_cache_v2",
+  "cache_key": "bd3ead2e832f4ae681e89abda4862c2dce582aee31e0593b0e5237dca03b7fdb",
+  "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0,
   "commission_name": "no_fee",
   "completed": true,
@@ -17,10 +17,15 @@
       "numpy": "2.2.6",
       "pandas": "2.2.3",
       "stable_baselines3": "2.9.0",
-      "torch": "2.13.0+cu130"
+      "torch": "2.13.0"
     },
     "python": "3.10.20"
   },
+  "legacy_cache_key": "8bf6ceceb633fbd3b3711b6b05c5ff9c683a0982ab09eccd7d27910da99629c1",
+  "legacy_cache_keys": [
+    "8bf6ceceb633fbd3b3711b6b05c5ff9c683a0982ab09eccd7d27910da99629c1"
+  ],
+  "migrated_from_cache_schema": "ppo_eiie_training_cache_v2",
   "model_name": "cndiff__50_paths",
   "run_id": "synthetic_cndiff__50_paths_c6bf8db5__no_fee__seed_1",
   "run_mode": "full",
@@ -95,12 +100,13 @@
       "2024-01-01",
       "2024-10-01"
     ],
-    "training_data_fingerprint": "dfe19c0ffdf391d0bec4bfcab06faa949ac4198250ca238d6dff5303a14fdef8",
+    "training_data_fingerprint": "08c6dc0a6cdf0d6d5dfedbd5824335e99db707715efdf5efa9f3cf13661208ef",
     "validation": [
       "2024-10-01",
       "2025-01-01"
     ]
   },
   "total_timesteps": 200000,
-  "training_data_fingerprint": "dfe19c0ffdf391d0bec4bfcab06faa949ac4198250ca238d6dff5303a14fdef8"
+  "training_data_fingerprint": "08c6dc0a6cdf0d6d5dfedbd5824335e99db707715efdf5efa9f3cf13661208ef",
+  "training_data_fingerprint_schema": "market_source_rows_v1"
 }
