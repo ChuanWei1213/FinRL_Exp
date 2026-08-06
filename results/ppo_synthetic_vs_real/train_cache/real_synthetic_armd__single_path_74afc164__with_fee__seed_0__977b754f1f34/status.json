@@ -3,7 +3,7 @@
   "best_real_validation_reward": 0.12382160585789274,
   "best_timestep": 0,
   "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/real_synthetic_armd__single_path_74afc164__with_fee__seed_0__977b754f1f34",
-  "cache_hit": false,
+  "cache_hit": true,
   "cache_key": "977b754f1f34367be932e2e279b8d748fd874b8753830bf58a75e09327c9bcfd",
   "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0025,
@@ -16,6 +16,16 @@
   },
   "experiment_id": "32fc6838ca1d",
   "group": "real_synthetic::armd__single_path",
+  "last_reuse_runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0"
+    },
+    "python": "3.10.20"
+  },
   "model_name": "armd__single_path",
   "run_id": "real_synthetic_armd__single_path_74afc164__with_fee__seed_0",
   "run_mode": "smoke",

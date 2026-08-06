@@ -3,7 +3,7 @@
   "best_real_validation_reward": 0.12297435984705393,
   "best_timestep": 0,
   "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/real_synthetic_nsdiff__50_paths_c63fbd5a__with_fee__seed_1__e8aee976a630",
-  "cache_hit": false,
+  "cache_hit": true,
   "cache_key": "e8aee976a6302581ecfa6b28afca7687c65612518e9d6382371cde892ff29382",
   "cache_schema": "ppo_eiie_training_cache_v3",
   "commission": 0.0025,
@@ -16,6 +16,16 @@
   },
   "experiment_id": "32fc6838ca1d",
   "group": "real_synthetic::nsdiff__50_paths",
+  "last_reuse_runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0"
+    },
+    "python": "3.10.20"
+  },
   "model_name": "nsdiff__50_paths",
   "run_id": "real_synthetic_nsdiff__50_paths_c63fbd5a__with_fee__seed_1",
   "run_mode": "smoke",

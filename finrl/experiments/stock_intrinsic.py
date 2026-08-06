@@ -1055,7 +1055,15 @@ def aggregate_equity_curves(
 
 def _variant_order(values: Sequence[str]) -> list[str]:
     available = set(values)
-    known = [variant for variant in VARIANT_WEIGHTS if variant in available]
+    preferred = (
+        "baseline",
+        "paper_faithful",
+        "robust_surprise",
+        "surprise",
+        "dejavu",
+        "combined",
+    )
+    known = [variant for variant in preferred if variant in available]
     return known + sorted(available - set(known))
 
 
@@ -1095,7 +1103,14 @@ def plot_intrinsic_diagnostics(
     table_axis.axis("off")
 
     variants = _variant_order(curve["variant"].unique())
-    palette = ("#0057B8", "#E66100", "#00856A", "#C51B7D")
+    palette = (
+        "#0057B8",
+        "#E66100",
+        "#00856A",
+        "#C51B7D",
+        "#6A3D9A",
+        "#8C6D1F",
+    )
     colors = {
         variant: palette[index % len(palette)] for index, variant in enumerate(variants)
     }
