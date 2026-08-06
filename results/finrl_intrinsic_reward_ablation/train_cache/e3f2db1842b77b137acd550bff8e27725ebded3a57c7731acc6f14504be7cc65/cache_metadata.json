@@ -1,0 +1,84 @@
+{
+  "best_real_validation_reward": 0.024667823059130473,
+  "best_timestep": 180000,
+  "cache_key": "e3f2db1842b77b137acd550bff8e27725ebded3a57c7731acc6f14504be7cc65",
+  "complete": true,
+  "loaded_from_cache": false,
+  "payload": {
+    "algorithm": "PPO",
+    "environment": {
+      "action_space": 5,
+      "buy_cost_pct": [
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001
+      ],
+      "hmax": 100,
+      "initial_amount": 100000,
+      "num_stock_shares": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "print_verbosity": 10000,
+      "reward_scaling": 0.0001,
+      "sell_cost_pct": [
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001
+      ],
+      "state_space": 31,
+      "stock_dim": 5,
+      "tech_indicator_list": [
+        "macd",
+        "rsi_30",
+        "close_30_sma",
+        "close_60_sma"
+      ]
+    },
+    "eval_freq": 20000,
+    "initial_allocation": "cash",
+    "intrinsic_reward": {
+      "alpha": 0.05,
+      "batch_size": 128,
+      "beta": 0.0,
+      "device": "cpu",
+      "replay_capacity": 100000
+    },
+    "policy": "MlpPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "device": "cpu",
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048
+    },
+    "schema": "stock_intrinsic_v3",
+    "seed": 0,
+    "total_timesteps": 200000,
+    "train_fingerprint": "3d5a533fcc1a05d7d76b44fc021de7e3cfcced84a6255b14c8ab768b2b21bd68",
+    "validation_fingerprint": "5fae754761acd87b9010bad3b48f689831f9d75de3e9190c00a918575aa945e4",
+    "variant": "surprise",
+    "variant_weights": [
+      0.05,
+      0.0
+    ],
+    "versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0+cu130"
+    },
+    "warmup_steps": 1024
+  },
+  "schema": "stock_intrinsic_v3"
+}

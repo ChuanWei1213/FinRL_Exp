@@ -1,8 +1,8 @@
 {
-  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_cndiff__50_paths_c6bf8db5__no_fee__seed_1__8bf6ceceb633/best_model",
+  "best_model_path": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_cndiff__50_paths_c6bf8db5__no_fee__seed_1__8bf6ceceb633/best_model",
   "best_real_validation_reward": 0.147624786869219,
   "best_timestep": 200000,
-  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_cndiff__50_paths_c6bf8db5__no_fee__seed_1__8bf6ceceb633",
+  "cache_dir": "/home/cwei1213/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_cndiff__50_paths_c6bf8db5__no_fee__seed_1__8bf6ceceb633",
   "cache_hit": true,
   "cache_key": "bd3ead2e832f4ae681e89abda4862c2dce582aee31e0593b0e5237dca03b7fdb",
   "cache_schema": "ppo_eiie_training_cache_v3",
@@ -17,7 +17,7 @@
       "numpy": "2.2.6",
       "pandas": "2.2.3",
       "stable_baselines3": "2.9.0",
-      "torch": "2.13.0"
+      "torch": "2.13.0+cu130"
     },
     "python": "3.10.20"
   },
