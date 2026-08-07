@@ -1057,10 +1057,11 @@ def _variant_order(values: Sequence[str]) -> list[str]:
     available = set(values)
     preferred = (
         "baseline",
-        "paper_faithful",
+        "paper_surprise",
         "robust_surprise",
-        "surprise",
         "dejavu",
+        "paper_surprise_dejavu",
+        "robust_surprise_dejavu",
         "combined",
     )
     known = [variant for variant in preferred if variant in available]

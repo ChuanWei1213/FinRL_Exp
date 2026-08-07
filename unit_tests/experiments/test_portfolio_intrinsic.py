@@ -17,7 +17,7 @@ from finrl.experiments.portfolio_intrinsic import (
 )
 from finrl.experiments.portfolio_intrinsic import resolve_variant_reward_config
 from finrl.experiments.portfolio_intrinsic import train_portfolio_variant
-from finrl.meta.rewards import IntrinsicRewardController
+from finrl.experiments.portfolio_intrinsic import VARIANT_WEIGHTS
 from finrl.meta.rewards import PaperFaithfulIntrinsicRewardController
 from finrl.meta.rewards import RobustIntrinsicRewardController
 
@@ -162,7 +162,15 @@ def test_portfolio_training_cache_round_trip(tmp_path):
     assert (first_plan.run_dir / "last_model.zip").is_file()
 
 
-def test_surprise_variants_resolve_distinct_controllers_and_paper_alpha(tmp_path):
+def test_surprise_variants_resolve_controllers_weights_and_paper_alpha(tmp_path):
+    assert tuple(VARIANT_WEIGHTS) == (
+        "baseline",
+        "paper_surprise",
+        "robust_surprise",
+        "dejavu",
+        "paper_surprise_dejavu",
+        "robust_surprise_dejavu",
+    )
     frame = market_frame(days=12)[["date", "tic", "close", "high", "low"]]
     kwargs = portfolio_environment_kwargs(
         0.0025,
@@ -170,17 +178,31 @@ def test_surprise_variants_resolve_distinct_controllers_and_paper_alpha(tmp_path
         initial_amount=1_000,
         time_window=3,
     )
-    paper_config = resolve_variant_reward_config(frame, "paper_faithful", kwargs)
+    paper_config = resolve_variant_reward_config(frame, "paper_surprise", kwargs)
     robust_config = resolve_variant_reward_config(frame, "robust_surprise", kwargs)
-    legacy_config = resolve_variant_reward_config(frame, "surprise", kwargs)
+    paper_dejavu_config = resolve_variant_reward_config(
+        frame, "paper_surprise_dejavu", kwargs
+    )
+    robust_dejavu_config = resolve_variant_reward_config(
+        frame, "robust_surprise_dejavu", kwargs
+    )
 
     assert paper_config["observation_dim"] == 21
     assert paper_config["effective_alpha"] == 0.05 / 21
     assert robust_config["effective_alpha"] == 0.05
-    assert legacy_config["effective_alpha"] == 0.05
+    assert paper_dejavu_config["effective_alpha"] == 0.05 / 21
+    assert paper_dejavu_config["beta"] == 0.05
+    assert robust_dejavu_config["effective_alpha"] == 0.05
+    assert robust_dejavu_config["beta"] == 0.05
 
     controllers = {}
-    for variant in ("paper_faithful", "robust_surprise", "surprise"):
+    variants = (
+        "paper_surprise",
+        "robust_surprise",
+        "paper_surprise_dejavu",
+        "robust_surprise_dejavu",
+    )
+    for variant in variants:
         environment = build_portfolio_training_environment(
             train=frame,
             variant=variant,
@@ -192,7 +214,16 @@ def test_surprise_variants_resolve_distinct_controllers_and_paper_alpha(tmp_path
             replay_capacity=32,
         )
         controllers[variant] = type(environment.intrinsic_controller)
+        if variant.endswith("_dejavu"):
+            assert environment.intrinsic_controller.dejavu_model is not None
 
-    assert controllers["paper_faithful"] is PaperFaithfulIntrinsicRewardController
+    assert controllers["paper_surprise"] is PaperFaithfulIntrinsicRewardController
     assert controllers["robust_surprise"] is RobustIntrinsicRewardController
-    assert controllers["surprise"] is IntrinsicRewardController
+    assert (
+        controllers["paper_surprise_dejavu"]
+        is PaperFaithfulIntrinsicRewardController
+    )
+    assert (
+        controllers["robust_surprise_dejavu"]
+        is RobustIntrinsicRewardController
+    )

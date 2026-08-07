@@ -44,7 +44,7 @@ VARIANT_SPECS = {
         "beta": 0.0,
         "surprise_mode": "none",
     },
-    "paper_faithful": {
+    "paper_surprise": {
         "alpha": 0.05,
         "beta": 0.0,
         "surprise_mode": "paper_sum_nll",
@@ -55,20 +55,21 @@ VARIANT_SPECS = {
         "beta": 0.0,
         "surprise_mode": "robust_centered_z",
     },
-    "surprise": {
-        "alpha": 0.05,
-        "beta": 0.0,
-        "surprise_mode": "legacy_positive_rms",
-    },
     "dejavu": {
         "alpha": 0.0,
         "beta": 0.05,
         "surprise_mode": "none",
     },
-    "combined": {
+    "paper_surprise_dejavu": {
         "alpha": 0.05,
         "beta": 0.05,
-        "surprise_mode": "legacy_positive_rms",
+        "surprise_mode": "paper_sum_nll",
+        "dimension_adjust_alpha": True,
+    },
+    "robust_surprise_dejavu": {
+        "alpha": 0.05,
+        "beta": 0.05,
+        "surprise_mode": "robust_centered_z",
     },
 }
 VARIANT_WEIGHTS = {
@@ -77,7 +78,6 @@ VARIANT_WEIGHTS = {
 }
 SURPRISE_CONTROLLER_CLASSES = {
     "none": IntrinsicRewardController,
-    "legacy_positive_rms": IntrinsicRewardController,
     "paper_sum_nll": PaperFaithfulIntrinsicRewardController,
     "robust_centered_z": RobustIntrinsicRewardController,
 }
