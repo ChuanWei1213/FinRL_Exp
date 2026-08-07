@@ -171,7 +171,8 @@ results/ppo_synthetic_vs_real/*
 
 # Share the intrinsic-reward semantic training cache across machines while
 # keeping smoke/full reports and duplicated experiment artifacts local.
-!results/finrl_intrinsic_reward_ablation/
-results/finrl_intrinsic_reward_ablation/*
-!results/finrl_intrinsic_reward_ablation/train_cache/
-!results/finrl_intrinsic_reward_ablation/train_cache/**
+# !results/ppo_portfolio_intrinsic_reward_ablation/
+# results/ppo_portfolio_intrinsic_reward_ablation/*
+# !results/ppo_portfolio_intrinsic_reward_ablation/train_cache/
+# !results/ppo_portfolio_intrinsic_reward_ablation/train_cache/**
+### FILE TOO LARGE ###

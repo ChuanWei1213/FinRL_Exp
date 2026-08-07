@@ -1,6 +1,7 @@
 # Project Instructions
 
 - Ask for permission before making a modification outside the current scope, because the user may have changed previously written code without notice.
+- The user grants permission to edit any file under `/private/tmp/` without requesting additional approval.
 
 ## Notebook validation
 
