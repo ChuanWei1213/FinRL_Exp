@@ -4,12 +4,20 @@ from __future__ import annotations
 
 import math
 
-import gym
 import matplotlib
 import numpy as np
 import pandas as pd
-from gym import spaces
-from gym.utils import seeding
+
+try:
+    import gym
+    from gym import spaces
+    from gym.utils import seeding
+except ModuleNotFoundError:
+    # The PPO experiment uses the Gymnasium adapter below.  Keep this legacy
+    # environment importable in minimal SB3/Gymnasium installations as well.
+    import gymnasium as gym
+    from gymnasium import spaces
+    from gymnasium.utils import seeding
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -19,13 +27,7 @@ from pathlib import Path
 try:
     import quantstats as qs
 except ModuleNotFoundError:
-    raise ModuleNotFoundError(
-        """QuantStats module not found, environment can't plot results and calculate indicadors.
-        This module is not installed with FinRL. Install by running one of the options:
-        pip install quantstats --upgrade --no-cache-dir
-        conda install -c ranaroussi quantstats
-        """
-    )
+    qs = None
 
 
 class PortfolioOptimizationEnv(gym.Env):
@@ -225,6 +227,12 @@ class PortfolioOptimizationEnv(gym.Env):
         self._terminal = self._time_index >= len(self._sorted_times) - 1
 
         if self._terminal:
+            if qs is None:
+                raise ModuleNotFoundError(
+                    "QuantStats is required only for the legacy terminal report. "
+                    "Install it with `python -m pip install quantstats`, or use "
+                    "PortfolioOptimizationGymnasiumEnv(plot_on_terminal=False)."
+                )
             metrics_df = pd.DataFrame(
                 {
                     "date": self._date_memory,

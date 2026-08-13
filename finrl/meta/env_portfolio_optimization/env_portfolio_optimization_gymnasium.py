@@ -1,10 +1,10 @@
 """Gymnasium-compatible wrapper around PortfolioOptimizationEnv.
 
-The original environment is built on the legacy `gym` package, so Stable-Baselines3
-2.x rejects it (SB3 checks `isinstance(env, gymnasium.Env)`). This subclass inherits
-from both, converts the spaces to gymnasium ones and adapts `reset` to the gymnasium
-signature. The original module is untouched -- `PolicyGradient` keeps working exactly
-as before.
+The original environment was built on the legacy `gym` package, so
+Stable-Baselines3 2.x rejects its legacy spaces. The base environment preserves that
+behavior when `gym` is installed and falls back to `gymnasium` otherwise. This
+subclass converts any legacy spaces to gymnasium ones and adapts `reset` to the
+gymnasium signature. `PolicyGradient` keeps its existing reset/step behavior.
 
 Usage::
 

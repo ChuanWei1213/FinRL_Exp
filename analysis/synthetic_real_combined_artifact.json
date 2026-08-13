@@ -1,0 +1,1023 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "Real + Synthetic PPO：加入真實資料後的成效",
+    "description": "Technical analysis of real-only, synthetic-only, and source-balanced real+synthetic PPO training on a common real 2025 test.",
+    "generatedAt": "2026-08-09T15:30:00Z",
+    "sources": [
+      {
+        "id": "test_metrics_source",
+        "label": "Formal full-run PPO test metrics",
+        "path": "results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv",
+        "query": {
+          "engine": "DuckDB",
+          "language": "sql",
+          "description": "Paired same-seed comparison of real+synthetic against real-only and the corresponding synthetic-only policy on the common real 2025 test period.",
+          "sql": "WITH test AS (\n  SELECT * FROM read_csv_auto('results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv')\n), combined AS (\n  SELECT commission_name, seed, model_name,\n         cumulative_return, sharpe, annualized_volatility, max_drawdown, turnover\n  FROM test WHERE group LIKE 'real_synthetic::%'\n), real_control AS (\n  SELECT commission_name, seed,\n         cumulative_return, sharpe, annualized_volatility, max_drawdown, turnover\n  FROM test WHERE group = 'real_trained'\n), synthetic_control AS (\n  SELECT commission_name, seed, model_name,\n         cumulative_return, sharpe, annualized_volatility, max_drawdown, turnover\n  FROM test WHERE group LIKE 'synthetic::%'\n)\nSELECT c.commission_name, c.seed, c.model_name, 'real' AS baseline,\n       c.cumulative_return - r.cumulative_return AS delta_cumulative_return,\n       c.sharpe - r.sharpe AS delta_sharpe,\n       c.annualized_volatility - r.annualized_volatility AS delta_annualized_volatility,\n       c.max_drawdown - r.max_drawdown AS delta_max_drawdown,\n       c.turnover - r.turnover AS delta_turnover\nFROM combined c\nJOIN real_control r USING (commission_name, seed)\nUNION ALL\nSELECT c.commission_name, c.seed, c.model_name, 'synthetic' AS baseline,\n       c.cumulative_return - s.cumulative_return,\n       c.sharpe - s.sharpe,\n       c.annualized_volatility - s.annualized_volatility,\n       c.max_drawdown - s.max_drawdown,\n       c.turnover - s.turnover\nFROM combined c\nJOIN synthetic_control s USING (commission_name, seed, model_name)\nORDER BY commission_name, model_name, baseline, seed",
+          "tables_used": [
+            "results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv"
+          ],
+          "filters": [
+            "period = test",
+            "real test window = [2025-01-01, 2026-01-01)",
+            "seeds = 0, 1, 2",
+            "fees = 0% and 0.25%"
+          ],
+          "metric_definitions": [
+            "Cumulative return = final portfolio value / initial portfolio value - 1 over the continuous real 2025 test.",
+            "Sharpe = annualized mean daily portfolio return divided by annualized daily-return standard deviation.",
+            "Maximum drawdown is the minimum peak-to-trough portfolio decline; a less negative value is better.",
+            "Mean paired delta averages real+synthetic minus baseline across the 30 model × fee × seed comparisons."
+          ]
+        }
+      },
+      {
+        "id": "comparison_source",
+        "label": "Formal PPO test metrics and Buy & Hold benchmark",
+        "path": "analysis/synthetic_real_combined_analysis.ipynb",
+        "query": {
+          "engine": "DuckDB",
+          "language": "sql",
+          "description": "All-seed PPO aggregates combined with the deterministic Buy & Hold test benchmark.",
+          "sql": "WITH test AS (\n  SELECT * FROM read_csv_auto('results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv')\n), benchmark AS (\n  SELECT * FROM read_csv_auto('results/ppo_synthetic_vs_real/full/b5a9990cf90b/buy_and_hold_metrics.csv')\n), ppo AS (\n  SELECT commission_name AS fee, agent AS strategy,\n         CASE WHEN group = 'real_trained' THEN 'real-only' ELSE 'real + synthetic' END AS strategy_type,\n         avg(cumulative_return) AS return_mean,\n         stddev_samp(cumulative_return) AS return_std,\n         avg(sharpe) AS sharpe_mean,\n         stddev_samp(sharpe) AS sharpe_std,\n         avg(annualized_volatility) AS volatility_mean,\n         avg(max_drawdown) AS max_drawdown_mean,\n         avg(turnover) AS turnover_mean,\n         count(*) AS seed_count\n  FROM test\n  WHERE group = 'real_trained' OR group LIKE 'real_synthetic::%'\n  GROUP BY commission_name, agent, group\n), buy_hold AS (\n  SELECT commission_name AS fee, 'Buy & Hold' AS strategy, 'benchmark' AS strategy_type,\n         cumulative_return AS return_mean, NULL::DOUBLE AS return_std,\n         sharpe AS sharpe_mean, NULL::DOUBLE AS sharpe_std,\n         annualized_volatility AS volatility_mean,\n         max_drawdown AS max_drawdown_mean,\n         turnover AS turnover_mean, NULL::BIGINT AS seed_count\n  FROM benchmark WHERE period = 'test'\n)\nSELECT * FROM ppo UNION ALL SELECT * FROM buy_hold\nORDER BY fee, sharpe_mean DESC",
+          "tables_used": [
+            "results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv",
+            "results/ppo_synthetic_vs_real/full/b5a9990cf90b/buy_and_hold_metrics.csv"
+          ],
+          "filters": [
+            "period = test",
+            "real test window = [2025-01-01, 2026-01-01)"
+          ],
+          "metric_definitions": [
+            "PPO values are mean and sample standard deviation across three training seeds.",
+            "Buy & Hold is deterministic and therefore has no seed standard deviation."
+          ]
+        }
+      }
+    ],
+    "cards": [
+      {
+        "id": "return_vs_real",
+        "dataset": "headline_metrics",
+        "sourceId": "test_metrics_source",
+        "description": "Across 5 generators × 2 fee settings × 3 paired seeds.",
+        "metrics": [
+          {
+            "label": "Return delta vs real",
+            "field": "return_delta_vs_real",
+            "format": "percent",
+            "signed": true
+          },
+          {
+            "label": "Favorable pairs",
+            "field": "return_win_rate_vs_real",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": "sharpe_vs_real",
+        "dataset": "headline_metrics",
+        "sourceId": "test_metrics_source",
+        "description": "Risk-adjusted improvement relative to real-only.",
+        "metrics": [
+          {
+            "label": "Sharpe delta vs real",
+            "field": "sharpe_delta_vs_real",
+            "format": "number",
+            "signed": true
+          },
+          {
+            "label": "Favorable pairs",
+            "field": "sharpe_win_rate_vs_real",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": "return_vs_synthetic",
+        "dataset": "headline_metrics",
+        "sourceId": "test_metrics_source",
+        "description": "Combined minus the corresponding synthetic-only policy.",
+        "metrics": [
+          {
+            "label": "Return delta vs synthetic",
+            "field": "return_delta_vs_synthetic",
+            "format": "percent",
+            "signed": true
+          },
+          {
+            "label": "Favorable pairs",
+            "field": "return_win_rate_vs_synthetic",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": "sharpe_vs_synthetic",
+        "dataset": "headline_metrics",
+        "sourceId": "test_metrics_source",
+        "description": "Combined minus the corresponding synthetic-only policy.",
+        "metrics": [
+          {
+            "label": "Sharpe delta vs synthetic",
+            "field": "sharpe_delta_vs_synthetic",
+            "format": "number",
+            "signed": true
+          },
+          {
+            "label": "Favorable pairs",
+            "field": "sharpe_win_rate_vs_synthetic",
+            "format": "percent"
+          }
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "id": "no_fee_sharpe_delta",
+        "title": "No-fee paired test Sharpe deltas",
+        "subtitle": "Mean of three paired seeds per generator; positive values favor real+synthetic.",
+        "showDescription": true,
+        "intent": "comparison",
+        "question": "Where does real+synthetic improve test Sharpe relative to real-only or synthetic-only without fees?",
+        "rationale": "Grouped bars compare the two baselines for each generator while preserving the zero reference.",
+        "comparisonContext": {
+          "baseline": "real-only and corresponding synthetic-only",
+          "grain": "generator × baseline",
+          "unit": "Sharpe ratio delta"
+        },
+        "type": "bar",
+        "dataset": "paired_no_fee",
+        "sourceId": "test_metrics_source",
+        "encodings": {
+          "x": {
+            "field": "model_label",
+            "type": "nominal",
+            "label": "Synthetic generator"
+          },
+          "y": {
+            "field": "sharpe_delta_mean",
+            "type": "quantitative",
+            "label": "Mean paired Sharpe delta",
+            "format": "number"
+          },
+          "color": {
+            "field": "baseline_label",
+            "type": "nominal",
+            "label": "Comparison"
+          },
+          "tooltip": [
+            {
+              "field": "sharpe_delta_std",
+              "type": "quantitative",
+              "label": "Seed SD",
+              "format": "number"
+            },
+            {
+              "field": "sharpe_wins",
+              "type": "quantitative",
+              "label": "Positive seeds"
+            },
+            {
+              "field": "return_delta_mean",
+              "type": "quantitative",
+              "label": "Mean return delta",
+              "format": "percent"
+            }
+          ]
+        },
+        "yAxisTitle": "Mean paired Sharpe delta",
+        "valueFormat": "number",
+        "layout": "full",
+        "palette": {
+          "kind": "categorical",
+          "name": "blue-orange"
+        },
+        "referenceLines": [
+          {
+            "axis": "y",
+            "value": 0,
+            "label": "No change",
+            "color": "neutral",
+            "lineStyle": "solid"
+          }
+        ],
+        "legend": {
+          "position": "bottom",
+          "title": "Baseline"
+        },
+        "settings": {
+          "groupMode": "grouped",
+          "categoryLabelPolicy": "wrap",
+          "sort": "none",
+          "showValues": true
+        },
+        "surface": {
+          "surface": "card",
+          "viewMode": "both"
+        }
+      },
+      {
+        "id": "with_fee_sharpe_delta",
+        "title": "0.25% fee paired test Sharpe deltas",
+        "subtitle": "Mean of three paired seeds per generator; positive values favor real+synthetic.",
+        "showDescription": true,
+        "intent": "comparison",
+        "question": "Where does real+synthetic improve test Sharpe relative to real-only or synthetic-only with transaction fees?",
+        "rationale": "Grouped bars compare the two baselines for each generator under the fee-aware training and test condition.",
+        "comparisonContext": {
+          "baseline": "real-only and corresponding synthetic-only",
+          "grain": "generator × baseline",
+          "unit": "Sharpe ratio delta"
+        },
+        "type": "bar",
+        "dataset": "paired_with_fee",
+        "sourceId": "test_metrics_source",
+        "encodings": {
+          "x": {
+            "field": "model_label",
+            "type": "nominal",
+            "label": "Synthetic generator"
+          },
+          "y": {
+            "field": "sharpe_delta_mean",
+            "type": "quantitative",
+            "label": "Mean paired Sharpe delta",
+            "format": "number"
+          },
+          "color": {
+            "field": "baseline_label",
+            "type": "nominal",
+            "label": "Comparison"
+          },
+          "tooltip": [
+            {
+              "field": "sharpe_delta_std",
+              "type": "quantitative",
+              "label": "Seed SD",
+              "format": "number"
+            },
+            {
+              "field": "sharpe_wins",
+              "type": "quantitative",
+              "label": "Positive seeds"
+            },
+            {
+              "field": "return_delta_mean",
+              "type": "quantitative",
+              "label": "Mean return delta",
+              "format": "percent"
+            }
+          ]
+        },
+        "yAxisTitle": "Mean paired Sharpe delta",
+        "valueFormat": "number",
+        "layout": "full",
+        "palette": {
+          "kind": "categorical",
+          "name": "blue-orange"
+        },
+        "referenceLines": [
+          {
+            "axis": "y",
+            "value": 0,
+            "label": "No change",
+            "color": "neutral",
+            "lineStyle": "solid"
+          }
+        ],
+        "legend": {
+          "position": "bottom",
+          "title": "Baseline"
+        },
+        "settings": {
+          "groupMode": "grouped",
+          "categoryLabelPolicy": "wrap",
+          "sort": "none",
+          "showValues": true
+        },
+        "surface": {
+          "surface": "card",
+          "viewMode": "both"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "strategy_comparison_table",
+        "title": "Real 2025 test strategy comparison",
+        "subtitle": "PPO values are mean ± sample SD across three seeds; Buy & Hold is deterministic.",
+        "showDescription": true,
+        "dataset": "strategy_comparison",
+        "defaultSort": {
+          "field": "sharpe_mean",
+          "direction": "desc"
+        },
+        "density": "spacious",
+        "sourceId": "comparison_source",
+        "layout": "full",
+        "columns": [
+          {
+            "field": "fee",
+            "label": "Fee",
+            "type": "text"
+          },
+          {
+            "field": "strategy",
+            "label": "Strategy",
+            "type": "text"
+          },
+          {
+            "field": "return_mean",
+            "label": "Mean return",
+            "format": "percent"
+          },
+          {
+            "field": "return_std",
+            "label": "Return SD",
+            "format": "percent"
+          },
+          {
+            "field": "sharpe_mean",
+            "label": "Mean Sharpe",
+            "format": "number"
+          },
+          {
+            "field": "sharpe_std",
+            "label": "Sharpe SD",
+            "format": "number"
+          },
+          {
+            "field": "max_drawdown_mean",
+            "label": "Mean max drawdown",
+            "format": "percent"
+          },
+          {
+            "field": "turnover_mean",
+            "label": "Mean turnover",
+            "format": "number"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "id": "title",
+        "type": "markdown",
+        "body": "# Real + Synthetic PPO：加入真實資料後的成效",
+        "layout": "full"
+      },
+      {
+        "id": "technical_summary",
+        "type": "markdown",
+        "body": "## Technical summary\n\n**加入 synthetic 後，real+synthetic 相對 real-only 有一致的描述性改善，但沒有穩定超越 synthetic-only。** 跨 5 個生成模型、2 種費率與 3 個配對 seeds，combined 相對 real-only 的平均測試報酬增加 **2.47 個百分點**、Sharpe 增加 **0.105**；報酬與 Sharpe 分別在 **23/30**、**21/30** 個 seed-level 配對中較高。相對 synthetic-only，平均報酬只增加 **0.23 個百分點**、Sharpe 增加 **0.017**，有利配對僅 **13/30** 與 **14/30**。因此，real data 的主要效果較像穩定器與風險控制，而不是普遍提高 alpha。\n\n**最佳 combined 仍未全面勝過 Buy & Hold。**無費率時 Real + ARMD 的平均 Sharpe 為 **1.094**，略高於 Buy & Hold 的 **1.054**，且最大回撤較小；但平均報酬 **25.79%** 低於 Buy & Hold 的 **28.30%**。含 0.25% 費率時 Real + CN-Diff 的 Sharpe **1.022** 接近、但略低於 Buy & Hold 的 **1.031**，報酬也較低。",
+        "layout": "full"
+      },
+      {
+        "id": "headline_metrics_block",
+        "type": "metric-strip",
+        "cardIds": [
+          "return_vs_real",
+          "sharpe_vs_real",
+          "return_vs_synthetic",
+          "sharpe_vs_synthetic"
+        ],
+        "layout": "full"
+      },
+      {
+        "id": "no_fee_finding",
+        "type": "markdown",
+        "sourceId": "test_metrics_source",
+        "body": "## 無交易成本時，ARMD 是最清楚的 combined 改善\n\nReal + ARMD 對 real-only 的平均 Sharpe 增加 **0.200**，3/3 seeds 都改善；對 ARMD synthetic-only 也增加 **0.115**，同樣 3/3 seeds 改善。它同時降低波動與回撤，但相對 ARMD synthetic-only 的平均報酬少 **5.25 個百分點**。這是典型的風險調整改善：收益上限下降，路徑更穩。",
+        "layout": "full"
+      },
+      {
+        "id": "no_fee_chart_block",
+        "type": "chart",
+        "chartId": "no_fee_sharpe_delta",
+        "layout": "full"
+      },
+      {
+        "id": "with_fee_finding",
+        "type": "markdown",
+        "sourceId": "test_metrics_source",
+        "body": "## 含交易成本時，combined 對 real-only 更穩，但對 synthetic-only 仍混合\n\nReal + CN-Diff 的平均 Sharpe 為 **1.022 ± 0.009**，是 fee-aware combined 中最高且最穩定者；相對 real-only 平均增加 **0.184**。不過相對 CN-Diff synthetic-only 只增加 **0.016**，且只有 1/3 seeds 較高。Real + ARMD 對 synthetic-only 的 Sharpe 改善較大（**+0.249**），但 seed 變異也明顯較高。",
+        "layout": "full"
+      },
+      {
+        "id": "with_fee_chart_block",
+        "type": "chart",
+        "chartId": "with_fee_sharpe_delta",
+        "layout": "full"
+      },
+      {
+        "id": "benchmark_interpretation",
+        "type": "markdown",
+        "body": "## Combined 改善風險調整表現，但總報酬仍落後基準\n\n下表保留所有 combined 策略、real-only 與 Buy & Hold 的精確值。主要取捨是：combined 往往降低回撤與 seed 變異，但 2025 這個單一市場年度中，Buy & Hold 仍提供較高的總報酬；因此不能只依 Sharpe 排名宣稱投資績效全面勝出。",
+        "layout": "full"
+      },
+      {
+        "id": "strategy_table_block",
+        "type": "table",
+        "tableId": "strategy_comparison_table",
+        "layout": "full"
+      },
+      {
+        "id": "scope_definitions",
+        "type": "markdown",
+        "body": "## Scope、資料與指標定義\n\n- **訓練／驗證／測試：**2024-01-01–2024-10-01 訓練；2024-10-01–2025-01-01 real validation 選 checkpoint；2025 全年 real test。\n- **資產：**AAPL、AMZN、GOOGL、MSFT、NVDA；所有策略使用相同 real test dates。\n- **Combined 定義：**不是資料列直接串接，而是每個 episode 以 50/50 機率抽 real 或該模型的 synthetic source；multi-path source 內再均勻抽 path。\n- **比較單位：**相同 seed、相同 fee、相同 generator 的 paired delta；PPO 結果以 3 seeds 的平均與 sample SD 呈現。\n- **指標方向：**報酬與 Sharpe 越高越好；波動、turnover 越低越好；最大回撤越接近 0 越好。",
+        "layout": "full"
+      },
+      {
+        "id": "methodology",
+        "type": "markdown",
+        "body": "## Methodology 與驗證\n\n所有 PPO 使用相同架構與 hyperparameters，checkpoint 只依共同 real validation reward 選擇，最後以 deterministic rollout 在 real 2025 測試。本分析先驗證 66 筆 test rows 完整覆蓋 22 個 fee × group cells、每格恰有 3 seeds、無重複 key、核心指標無缺值；再計算 combined−real 與 combined−synthetic 的 seed-level paired deltas。圖中的誤差不作為顯著性證據；n=3 僅適合描述性判讀。",
+        "layout": "full"
+      },
+      {
+        "id": "limitations",
+        "type": "markdown",
+        "body": "## Limitations、uncertainty 與 robustness checks\n\n- **Seeds 太少：**每條件僅 3 seeds，無法支持穩健的顯著性檢定或窄信賴區間。\n- **單一市場 regime：**所有結論來自 2025 一年與 5 檔大型科技股，外推範圍有限。\n- **多重比較：**若依同一 2025 test 從 10 個 synthetic/combined 候選挑 winner，會產生 test-set overfitting。\n- **Scaler confound：**combined 與 synthetic-only 使用 generator-specific scaler，real-only 使用 real scaler；因此 combined-vs-real 同時改變資料 mix 與 scaler。\n- **Post-hoc 圖表選 seed：**原 notebook 的 median-test-Sharpe representative 僅為描述；本報告的主結論使用全 seeds 聚合與配對值。\n- **Fee delta 非純成本扣除：**no-fee 與 with-fee 分別訓練 policy，因此差異包含策略適應，不只是交易成本算術。",
+        "layout": "full"
+      },
+      {
+        "id": "next_steps",
+        "type": "markdown",
+        "body": "## Recommended next steps\n\n1. **保留 real+synthetic 作為 augmentation，而非預設取代 synthetic-only。**目前它可靠地改善 real-only，但未可靠地改善 synthetic-only。\n2. **優先驗證 Real + ARMD（無費率／風險調整）與 Real + CN-Diff（fee-aware 穩定性）。**先鎖定候選，再使用新的 untouched period。\n3. **將 seeds 擴至至少 10–20，並加入 rolling out-of-sample windows。**以 period bootstrap 或跨窗口分布報告不確定性。\n4. **做 real episode probability ablation：**0%、25%、50%、75%、100%，另做 joint-scaler 與 source-specific scaler ablation。\n5. **正式模型選擇不得再看 2025 test。**用 validation 選 1–2 個候選，在下一個全新 holdout 一次性評估。",
+        "layout": "full"
+      },
+      {
+        "id": "further_questions",
+        "type": "markdown",
+        "body": "## Further questions\n\n- Combined 的優勢是否集中在 2025 的特定月份或高波動 regime？\n- 50/50 source ratio 是否會隨 synthetic path 數量（1 vs 50）改變？\n- Joint scaler 是否能保留 ARMD 的風險改善並減少 input-range mismatch？\n- 擴充資產 universe、不同資產類別與多個測試年度後，排名是否維持？",
+        "layout": "full"
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-08-09T15:30:00Z",
+    "status": "ready",
+    "datasets": {
+      "headline_metrics": [
+        {
+          "return_delta_vs_real": 0.02465308072916666,
+          "return_win_rate_vs_real": 0.7666666666666667,
+          "sharpe_delta_vs_real": 0.10456990326847976,
+          "sharpe_win_rate_vs_real": 0.7,
+          "return_delta_vs_synthetic": 0.0023457421874999817,
+          "return_win_rate_vs_synthetic": 0.43333333333333335,
+          "sharpe_delta_vs_synthetic": 0.016819533247154152,
+          "sharpe_win_rate_vs_synthetic": 0.4666666666666667,
+          "comparison_count": 30
+        }
+      ],
+      "paired_no_fee": [
+        {
+          "commission_name": "no_fee",
+          "model_name": "armd__single_path",
+          "model_label": "ARMD (single path)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": 0.20048407617728412,
+          "sharpe_delta_std": 0.079865519899242,
+          "return_delta_mean": 0.021167187499999972,
+          "volatility_delta_mean": -0.06519481890050206,
+          "drawdown_delta_mean": 0.03304819474121327,
+          "turnover_delta_mean": -0.0172456225883216,
+          "sharpe_wins": 3,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "no_fee",
+          "model_name": "armd__single_path",
+          "model_label": "ARMD (single path)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": 0.11520947626521143,
+          "sharpe_delta_std": 0.09015559748938251,
+          "return_delta_mean": -0.052452395833333304,
+          "volatility_delta_mean": -0.09907076089371558,
+          "drawdown_delta_mean": 0.056474644132444345,
+          "turnover_delta_mean": -0.0037277786048750656,
+          "sharpe_wins": 3,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "no_fee",
+          "model_name": "cndiff__50_paths",
+          "model_label": "CN-Diff (50 paths)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": 0.05672142558795812,
+          "sharpe_delta_std": 0.11029122951732498,
+          "return_delta_mean": 0.011253906249999973,
+          "volatility_delta_mean": -0.011325361510033652,
+          "drawdown_delta_mean": 0.004413612032278386,
+          "turnover_delta_mean": -0.0031166286114603357,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "no_fee",
+          "model_name": "cndiff__50_paths",
+          "model_label": "CN-Diff (50 paths)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": -0.015990841435464104,
+          "sharpe_delta_std": 0.17722124050780674,
+          "return_delta_mean": 0.007135963541666669,
+          "volatility_delta_mean": 0.030798404372786314,
+          "drawdown_delta_mean": -0.03612702700205628,
+          "turnover_delta_mean": -0.0009891728858153353,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "no_fee",
+          "model_name": "dva__50_paths",
+          "model_label": "DVA (50 paths)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": 0.03818818565225753,
+          "sharpe_delta_std": 0.06299005286093859,
+          "return_delta_mean": 0.018111744791666596,
+          "volatility_delta_mean": 0.007418263433504463,
+          "drawdown_delta_mean": -0.0017520681626599643,
+          "turnover_delta_mean": -0.004134287691985567,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "no_fee",
+          "model_name": "dva__50_paths",
+          "model_label": "DVA (50 paths)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": -0.09470659014956755,
+          "sharpe_delta_std": 0.15024825005213766,
+          "return_delta_mean": 0.024549817708333282,
+          "volatility_delta_mean": 0.08033024486281029,
+          "drawdown_delta_mean": -0.03901226492452203,
+          "turnover_delta_mean": 0.015350156924376898,
+          "sharpe_wins": 1,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "no_fee",
+          "model_name": "dva__mean_of_50_paths",
+          "model_label": "DVA (mean of 50 paths)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": -0.007585101775263762,
+          "sharpe_delta_std": 0.20719030078679831,
+          "return_delta_mean": -0.0023250000000000306,
+          "volatility_delta_mean": -0.002069487649953359,
+          "drawdown_delta_mean": 0.004777683024499407,
+          "turnover_delta_mean": 0.003118984834601466,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "no_fee",
+          "model_name": "dva__mean_of_50_paths",
+          "model_label": "DVA (mean of 50 paths)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": -0.08650638121245409,
+          "sharpe_delta_std": 0.09586510680896065,
+          "return_delta_mean": -0.028577109375000038,
+          "volatility_delta_mean": 0.010642470058029116,
+          "drawdown_delta_mean": -0.015405831342474021,
+          "turnover_delta_mean": 0.0013564377905180003,
+          "sharpe_wins": 0,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "no_fee",
+          "model_name": "nsdiff__50_paths",
+          "model_label": "NS-Diff (50 paths)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": 0.12475203070720993,
+          "sharpe_delta_std": 0.06106878161598858,
+          "return_delta_mean": 0.0149229166666666,
+          "volatility_delta_mean": -0.04283315391468307,
+          "drawdown_delta_mean": 0.031845498715813464,
+          "turnover_delta_mean": -0.0042796912140523015,
+          "sharpe_wins": 3,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "no_fee",
+          "model_name": "nsdiff__50_paths",
+          "model_label": "NS-Diff (50 paths)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": -0.03473123375190068,
+          "sharpe_delta_std": 0.12208487798536671,
+          "return_delta_mean": -0.00011111979166669728,
+          "volatility_delta_mean": 0.01617498663971802,
+          "drawdown_delta_mean": -0.0062422907878265,
+          "turnover_delta_mean": 0.0068113542183613,
+          "sharpe_wins": 1,
+          "seed_count": 3
+        }
+      ],
+      "paired_with_fee": [
+        {
+          "commission_name": "with_fee",
+          "model_name": "armd__single_path",
+          "model_label": "ARMD (single path)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": 0.15105623298079776,
+          "sharpe_delta_std": 0.40660465034913085,
+          "return_delta_mean": 0.04952731770833333,
+          "volatility_delta_mean": -0.015477687010697192,
+          "drawdown_delta_mean": 0.014102776123059019,
+          "turnover_delta_mean": -0.011189840730124467,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "with_fee",
+          "model_name": "armd__single_path",
+          "model_label": "ARMD (single path)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": 0.24850767133152438,
+          "sharpe_delta_std": 0.4411566306163329,
+          "return_delta_mean": 0.04844221354166658,
+          "volatility_delta_mean": -0.03948368194807295,
+          "drawdown_delta_mean": 0.03445912413449458,
+          "turnover_delta_mean": 0.015117654317369065,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "with_fee",
+          "model_name": "cndiff__50_paths",
+          "model_label": "CN-Diff (50 paths)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": 0.18403225866561357,
+          "sharpe_delta_std": 0.2567879384634368,
+          "return_delta_mean": 0.03097416666666671,
+          "volatility_delta_mean": -0.0546526811154777,
+          "drawdown_delta_mean": 0.03134896532266052,
+          "turnover_delta_mean": -0.0292218320479927,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "with_fee",
+          "model_name": "cndiff__50_paths",
+          "model_label": "CN-Diff (50 paths)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": 0.015919122435176198,
+          "sharpe_delta_std": 0.033931737407026485,
+          "return_delta_mean": -0.002485546875000031,
+          "volatility_delta_mean": -0.007329243183180438,
+          "drawdown_delta_mean": -0.0009027617996297069,
+          "turnover_delta_mean": -0.008059140269955,
+          "sharpe_wins": 1,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "with_fee",
+          "model_name": "dva__50_paths",
+          "model_label": "DVA (50 paths)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": 0.10921999531598996,
+          "sharpe_delta_std": 0.3287952486974549,
+          "return_delta_mean": 0.06706315104166671,
+          "volatility_delta_mean": 0.030335042014547065,
+          "drawdown_delta_mean": -0.016523382995671475,
+          "turnover_delta_mean": -0.018380343913255895,
+          "sharpe_wins": 1,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "with_fee",
+          "model_name": "dva__50_paths",
+          "model_label": "DVA (50 paths)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": -0.051404561781158375,
+          "sharpe_delta_std": 0.13440484672204583,
+          "return_delta_mean": 0.035706328125000075,
+          "volatility_delta_mean": 0.07710100946271527,
+          "drawdown_delta_mean": -0.04852718022104239,
+          "turnover_delta_mean": 0.003940044012541533,
+          "sharpe_wins": 1,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "with_fee",
+          "model_name": "dva__mean_of_50_paths",
+          "model_label": "DVA (mean of 50 paths)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": 0.16132154442706118,
+          "sharpe_delta_std": 0.2763450572653577,
+          "return_delta_mean": 0.030634036458333402,
+          "volatility_delta_mean": -0.047946271639202655,
+          "drawdown_delta_mean": 0.027706271125568765,
+          "turnover_delta_mean": -0.0282430477848587,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "with_fee",
+          "model_name": "dva__mean_of_50_paths",
+          "model_label": "DVA (mean of 50 paths)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": 0.0043373956114165875,
+          "sharpe_delta_std": 0.0973044151070342,
+          "return_delta_mean": -0.017487734375000036,
+          "volatility_delta_mean": -0.023585705087590364,
+          "drawdown_delta_mean": -0.0005996411291767275,
+          "turnover_delta_mean": -0.01346420808384817,
+          "sharpe_wins": 1,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "with_fee",
+          "model_name": "nsdiff__50_paths",
+          "model_label": "NS-Diff (50 paths)",
+          "baseline": "real",
+          "baseline_label": "Combined − real",
+          "sharpe_delta_mean": 0.027508384945889253,
+          "sharpe_delta_std": 0.47777274734181124,
+          "return_delta_mean": 0.00520138020833331,
+          "volatility_delta_mean": -0.0037844867371288338,
+          "drawdown_delta_mean": 0.0074177258602757075,
+          "turnover_delta_mean": -0.002725193014523631,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        },
+        {
+          "commission_name": "with_fee",
+          "model_name": "nsdiff__50_paths",
+          "model_label": "NS-Diff (50 paths)",
+          "baseline": "synthetic",
+          "baseline_label": "Combined − synthetic",
+          "sharpe_delta_mean": 0.06756127515875776,
+          "sharpe_delta_std": 0.24980389627675184,
+          "return_delta_mean": 0.008737005208333296,
+          "volatility_delta_mean": 0.003147354211674567,
+          "drawdown_delta_mean": -0.01317469900715045,
+          "turnover_delta_mean": -0.0176504106381908,
+          "sharpe_wins": 2,
+          "seed_count": 3
+        }
+      ],
+      "strategy_comparison": [
+        {
+          "fee": "no_fee",
+          "strategy": "Real + ARMD (single path)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.25786867187499996,
+          "return_std": 0.032021240871481935,
+          "sharpe_mean": 1.0935203363178583,
+          "sharpe_std": 0.09946796263454738,
+          "volatility_mean": 0.23648056025100395,
+          "max_drawdown_mean": -0.22614573738154523,
+          "turnover_mean": 0.019394928390781,
+          "seed_count": 3
+        },
+        {
+          "fee": "no_fee",
+          "strategy": "Real + CN-Diff (50 paths)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.24795539062499997,
+          "return_std": 0.017618382844529178,
+          "sharpe_mean": 0.9497576857285323,
+          "sharpe_std": 0.16036515738030324,
+          "volatility_mean": 0.29035001764147234,
+          "max_drawdown_mean": -0.25478032009048013,
+          "turnover_mean": 0.03352392236764227,
+          "seed_count": 3
+        },
+        {
+          "fee": "no_fee",
+          "strategy": "Real + DVA (50 paths)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.2548132291666666,
+          "return_std": 0.022358368405824846,
+          "sharpe_mean": 0.9312244457928317,
+          "sharpe_std": 0.12594496238715727,
+          "volatility_mean": 0.30909364258501043,
+          "max_drawdown_mean": -0.2609460002854185,
+          "turnover_mean": 0.03250626328711703,
+          "seed_count": 3
+        },
+        {
+          "fee": "no_fee",
+          "strategy": "Real + DVA (mean of 50 paths)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.23437648437499994,
+          "return_std": 0.01920635699240427,
+          "sharpe_mean": 0.8854511583653104,
+          "sharpe_std": 0.14930314129339323,
+          "volatility_mean": 0.29960589150155265,
+          "max_drawdown_mean": -0.2544162490982591,
+          "turnover_mean": 0.03975953581370407,
+          "seed_count": 3
+        },
+        {
+          "fee": "no_fee",
+          "strategy": "Real + NS-Diff (50 paths)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.2516244010416666,
+          "return_std": 0.010718444643157892,
+          "sharpe_mean": 1.0177882908477842,
+          "sharpe_std": 0.11777021964470868,
+          "volatility_mean": 0.25884222523682293,
+          "max_drawdown_mean": -0.22734843340694502,
+          "turnover_mean": 0.0323608597650503,
+          "seed_count": 3
+        },
+        {
+          "fee": "no_fee",
+          "strategy": "Real data (2024)",
+          "strategy_type": "real-only",
+          "return_mean": 0.23670148437500002,
+          "return_std": 0.02456759473157225,
+          "sharpe_mean": 0.8930362601405742,
+          "sharpe_std": 0.1531465969751655,
+          "volatility_mean": 0.301675379151506,
+          "max_drawdown_mean": -0.2591939321227585,
+          "turnover_mean": 0.0366405509791026,
+          "seed_count": 3
+        },
+        {
+          "fee": "no_fee",
+          "strategy": "Buy & Hold",
+          "strategy_type": "benchmark",
+          "return_mean": 0.2830459375,
+          "return_std": null,
+          "sharpe_mean": 1.0541860886004204,
+          "sharpe_std": null,
+          "volatility_mean": 0.2732402496742431,
+          "max_drawdown_mean": -0.2615418778903047,
+          "turnover_mean": 0.0181322721256874,
+          "seed_count": null
+        },
+        {
+          "fee": "with_fee",
+          "strategy": "Real + ARMD (single path)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.24676320312499997,
+          "return_std": 0.016614151277954802,
+          "sharpe_mean": 0.9890544671818216,
+          "sharpe_std": 0.16435334678669028,
+          "volatility_mean": 0.26698432444688996,
+          "max_drawdown_mean": -0.24088875435927584,
+          "turnover_mean": 0.035047743414839065,
+          "seed_count": 3
+        },
+        {
+          "fee": "with_fee",
+          "strategy": "Real + CN-Diff (50 paths)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.22821005208333334,
+          "return_std": 0.004247467169018254,
+          "sharpe_mean": 1.0220304928666375,
+          "sharpe_std": 0.008832815512589505,
+          "volatility_mean": 0.22780933034210946,
+          "max_drawdown_mean": -0.22364256515967432,
+          "turnover_mean": 0.017015752096970833,
+          "seed_count": 3
+        },
+        {
+          "fee": "with_fee",
+          "strategy": "Real + DVA (50 paths)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.26429903645833336,
+          "return_std": 0.04449566253126557,
+          "sharpe_mean": 0.9472182295170137,
+          "sharpe_std": 0.09380691992623826,
+          "volatility_mean": 0.3127970534721342,
+          "max_drawdown_mean": -0.2715149134780063,
+          "turnover_mean": 0.02785724023170763,
+          "seed_count": 3
+        },
+        {
+          "fee": "with_fee",
+          "strategy": "Real + DVA (mean of 50 paths)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.22786992187500002,
+          "return_std": 0.00047932398558204006,
+          "sharpe_mean": 0.9993197786280851,
+          "sharpe_std": 0.03319487520991104,
+          "volatility_mean": 0.23451573981838447,
+          "max_drawdown_mean": -0.2272852593567661,
+          "turnover_mean": 0.017994536360104833,
+          "seed_count": 3
+        },
+        {
+          "fee": "with_fee",
+          "strategy": "Real + NS-Diff (50 paths)",
+          "strategy_type": "real + synthetic",
+          "return_mean": 0.20243726562499995,
+          "return_std": 0.048576557824599555,
+          "sharpe_mean": 0.8655066191469132,
+          "sharpe_std": 0.26983766775988993,
+          "volatility_mean": 0.2786775247204583,
+          "max_drawdown_mean": -0.24757380462205916,
+          "turnover_mean": 0.0435123911304399,
+          "seed_count": 3
+        },
+        {
+          "fee": "with_fee",
+          "strategy": "Real data (2024)",
+          "strategy_type": "real-only",
+          "return_mean": 0.19723588541666662,
+          "return_std": 0.051080354468824134,
+          "sharpe_mean": 0.8379982342010238,
+          "sharpe_std": 0.2606943070293407,
+          "volatility_mean": 0.28246201145758715,
+          "max_drawdown_mean": -0.25499153048233486,
+          "turnover_mean": 0.04623758414496353,
+          "seed_count": 3
+        },
+        {
+          "fee": "with_fee",
+          "strategy": "Buy & Hold",
+          "strategy_type": "benchmark",
+          "return_mean": 0.2749384374999999,
+          "return_std": null,
+          "sharpe_mean": 1.030811727488384,
+          "sharpe_std": null,
+          "volatility_mean": 0.2732299587133091,
+          "max_drawdown_mean": -0.2629376635647568,
+          "turnover_mean": 0.0181322701028548,
+          "seed_count": null
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "test_metrics_source",
+      "label": "Formal full-run PPO test metrics",
+      "path": "results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv",
+      "query": {
+        "engine": "DuckDB",
+        "language": "sql",
+        "description": "Paired same-seed comparison of real+synthetic against real-only and the corresponding synthetic-only policy on the common real 2025 test period.",
+        "sql": "WITH test AS (\n  SELECT * FROM read_csv_auto('results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv')\n), combined AS (\n  SELECT commission_name, seed, model_name,\n         cumulative_return, sharpe, annualized_volatility, max_drawdown, turnover\n  FROM test WHERE group LIKE 'real_synthetic::%'\n), real_control AS (\n  SELECT commission_name, seed,\n         cumulative_return, sharpe, annualized_volatility, max_drawdown, turnover\n  FROM test WHERE group = 'real_trained'\n), synthetic_control AS (\n  SELECT commission_name, seed, model_name,\n         cumulative_return, sharpe, annualized_volatility, max_drawdown, turnover\n  FROM test WHERE group LIKE 'synthetic::%'\n)\nSELECT c.commission_name, c.seed, c.model_name, 'real' AS baseline,\n       c.cumulative_return - r.cumulative_return AS delta_cumulative_return,\n       c.sharpe - r.sharpe AS delta_sharpe,\n       c.annualized_volatility - r.annualized_volatility AS delta_annualized_volatility,\n       c.max_drawdown - r.max_drawdown AS delta_max_drawdown,\n       c.turnover - r.turnover AS delta_turnover\nFROM combined c\nJOIN real_control r USING (commission_name, seed)\nUNION ALL\nSELECT c.commission_name, c.seed, c.model_name, 'synthetic' AS baseline,\n       c.cumulative_return - s.cumulative_return,\n       c.sharpe - s.sharpe,\n       c.annualized_volatility - s.annualized_volatility,\n       c.max_drawdown - s.max_drawdown,\n       c.turnover - s.turnover\nFROM combined c\nJOIN synthetic_control s USING (commission_name, seed, model_name)\nORDER BY commission_name, model_name, baseline, seed",
+        "tables_used": [
+          "results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv"
+        ],
+        "filters": [
+          "period = test",
+          "real test window = [2025-01-01, 2026-01-01)",
+          "seeds = 0, 1, 2",
+          "fees = 0% and 0.25%"
+        ],
+        "metric_definitions": [
+          "Cumulative return = final portfolio value / initial portfolio value - 1 over the continuous real 2025 test.",
+          "Sharpe = annualized mean daily portfolio return divided by annualized daily-return standard deviation.",
+          "Maximum drawdown is the minimum peak-to-trough portfolio decline; a less negative value is better.",
+          "Mean paired delta averages real+synthetic minus baseline across the 30 model × fee × seed comparisons."
+        ]
+      }
+    },
+    {
+      "id": "comparison_source",
+      "label": "Formal PPO test metrics and Buy & Hold benchmark",
+      "path": "analysis/synthetic_real_combined_analysis.ipynb",
+      "query": {
+        "engine": "DuckDB",
+        "language": "sql",
+        "description": "All-seed PPO aggregates combined with the deterministic Buy & Hold test benchmark.",
+        "sql": "WITH test AS (\n  SELECT * FROM read_csv_auto('results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv')\n), benchmark AS (\n  SELECT * FROM read_csv_auto('results/ppo_synthetic_vs_real/full/b5a9990cf90b/buy_and_hold_metrics.csv')\n), ppo AS (\n  SELECT commission_name AS fee, agent AS strategy,\n         CASE WHEN group = 'real_trained' THEN 'real-only' ELSE 'real + synthetic' END AS strategy_type,\n         avg(cumulative_return) AS return_mean,\n         stddev_samp(cumulative_return) AS return_std,\n         avg(sharpe) AS sharpe_mean,\n         stddev_samp(sharpe) AS sharpe_std,\n         avg(annualized_volatility) AS volatility_mean,\n         avg(max_drawdown) AS max_drawdown_mean,\n         avg(turnover) AS turnover_mean,\n         count(*) AS seed_count\n  FROM test\n  WHERE group = 'real_trained' OR group LIKE 'real_synthetic::%'\n  GROUP BY commission_name, agent, group\n), buy_hold AS (\n  SELECT commission_name AS fee, 'Buy & Hold' AS strategy, 'benchmark' AS strategy_type,\n         cumulative_return AS return_mean, NULL::DOUBLE AS return_std,\n         sharpe AS sharpe_mean, NULL::DOUBLE AS sharpe_std,\n         annualized_volatility AS volatility_mean,\n         max_drawdown AS max_drawdown_mean,\n         turnover AS turnover_mean, NULL::BIGINT AS seed_count\n  FROM benchmark WHERE period = 'test'\n)\nSELECT * FROM ppo UNION ALL SELECT * FROM buy_hold\nORDER BY fee, sharpe_mean DESC",
+        "tables_used": [
+          "results/ppo_synthetic_vs_real/full/b5a9990cf90b/test_metrics.csv",
+          "results/ppo_synthetic_vs_real/full/b5a9990cf90b/buy_and_hold_metrics.csv"
+        ],
+        "filters": [
+          "period = test",
+          "real test window = [2025-01-01, 2026-01-01)"
+        ],
+        "metric_definitions": [
+          "PPO values are mean and sample standard deviation across three training seeds.",
+          "Buy & Hold is deterministic and therefore has no seed standard deviation."
+        ]
+      }
+    }
+  ],
+  "package_info": {
+    "analysis_notebook": "analysis/synthetic_real_combined_analysis.ipynb",
+    "validation": "Socket-free, in-process sequential smoke test required because managed environment denied Jupyter kernel socket binding."
+  }
+}

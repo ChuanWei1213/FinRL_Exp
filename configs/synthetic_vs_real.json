@@ -1,0 +1,79 @@
+{
+  "real_data_glob": "data/real/*.csv",
+  "synthetic_root": "data/synthetic",
+  "artifact_dir": "results/ppo_synthetic_vs_real",
+  "ticker_groups": {
+    "tech_5": [
+      "AAPL",
+      "AMZN",
+      "GOOGL",
+      "MSFT",
+      "NVDA"
+    ],
+    "chosen_10": [
+      "AAPL",
+      "AMGN",
+      "CRM",
+      "CSCO",
+      "IBM",
+      "INTC",
+      "MSFT",
+      "NKE",
+      "VZ",
+      "WMT"
+    ]
+  },
+  "active_ticker_groups": [
+    "chosen_10"
+  ],
+  "synthetic_datasets": {
+    "tech_5": "oneshot_max_252x252__20240101_20241231__v1",
+    "chosen_10": "rolling_1260_63x21__20180102_20241231__v1"
+  },
+  "rolling_schedule": {
+    "name": "wf_504_126_63",
+    "train_days": 504,
+    "validation_days": 126,
+    "test_days": 63,
+    "step_days": 63,
+    "include_partial_final_test": true
+  },
+  "evaluation_modes": [
+    "independent",
+    "continuous"
+  ],
+  "synthetic_model_labels": {
+    "armd__single_path": "ARMD (single path)",
+    "armd_direct_adjusted_hlc": "ARMD (Direct)",
+    "armd_returns_reconstructed_adjusted_hlc": "ARMD (Returns)",
+    "cndiff__50_paths": "CN-Diff (50 paths)",
+    "dva__mean_of_50_paths": "DVA (mean of 50 paths)",
+    "dva__50_paths": "DVA (50 paths)",
+    "nsdiff__50_paths": "NS-Diff (50 paths)"
+  },
+  "time_window": 50,
+  "initial_amount": 100000,
+  "reward_scaling": 100,
+  "max_train_evaluation_paths": 3,
+  "max_synthetic_validation_paths": 3,
+  "device": "cpu",
+  "run_modes": {
+    "smoke": {
+      "seeds": [0, 1],
+      "total_timesteps": 4096,
+      "eval_freq": 2048,
+      "commissions": {
+        "with_fee": 0.0025
+      }
+    },
+    "full": {
+      "seeds": [0, 1, 2],
+      "total_timesteps": 200000,
+      "eval_freq": 20000,
+      "commissions": {
+        "no_fee": 0.0,
+        "with_fee": 0.0025
+      }
+    }
+  }
+}

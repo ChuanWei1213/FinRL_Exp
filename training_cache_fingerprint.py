@@ -8,10 +8,12 @@ import json
 from datetime import date
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
+import re
 from typing import Iterable
 
 
 TRAINING_DATA_FINGERPRINT_SCHEMA = "market_source_rows_v1"
+SYNTHETIC_PERIOD_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}_to_\d{4}-\d{2}-\d{2}$")
 
 
 def _canonical_decimal(value: str, *, path: Path, column: str) -> str:
@@ -30,10 +32,25 @@ def _canonical_decimal(value: str, *, path: Path, column: str) -> str:
 
 def _source_identity(path: Path, project_root: Path) -> str:
     try:
-        return path.resolve().relative_to(project_root.resolve()).as_posix()
+        relative = path.resolve().relative_to(project_root.resolve())
     except ValueError:
         # External data roots remain portable across machines.
         return path.name
+    parts = relative.parts
+    for index in range(len(parts) - 2):
+        if parts[index : index + 2] == (
+            "data",
+            "synthetic",
+        ) and SYNTHETIC_PERIOD_PATTERN.fullmatch(parts[index + 2]):
+            # The generated-period directory is data catalog structure, not
+            # training content. A further directory means the optional named
+            # ticker-group layer. Omitting these catalog layers preserves cache
+            # compatibility across both supported layouts.
+            has_ticker_group = len(parts) - (index + 3) >= 3
+            resume_at = index + 4 if has_ticker_group else index + 3
+            parts = (*parts[: index + 2], *parts[resume_at:])
+            break
+    return Path(*parts).as_posix()
 
 
 def _canonical_source_rows(

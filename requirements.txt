@@ -4,6 +4,7 @@ ccxt>=1.66.32
 elegantrl
 
 gputil
+gym==0.26.2  # legacy base class used by portfolio optimization environments
 gymnasium
 importlib-metadata>=6.0,<=8.5.0
 jqdatasdk
