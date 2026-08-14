@@ -2,6 +2,7 @@ alpaca-py
 alpaca_trade_api>=2.1.0
 ccxt>=1.66.32
 elegantrl
+filelock>=3.12
 
 gputil
 gym==0.26.2  # legacy base class used by portfolio optimization environments
@@ -59,3 +60,4 @@ yfinance
 
 quantstats
 gym
+ipykernel

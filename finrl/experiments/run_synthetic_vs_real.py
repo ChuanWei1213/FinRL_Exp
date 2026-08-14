@@ -11,6 +11,13 @@ from finrl.experiments.synthetic_vs_real import load_experiment_config
 from finrl.experiments.synthetic_vs_real import run_experiment_suite
 
 
+def positive_int(value: str) -> int:
+    parsed = int(value)
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("must be a positive integer")
+    return parsed
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
@@ -30,6 +37,21 @@ def build_parser() -> argparse.ArgumentParser:
         help="Training budget defined in the config (default: smoke).",
     )
     parser.add_argument(
+        "--stage",
+        choices=("all", "train", "evaluate"),
+        default="all",
+        help=(
+            "Run the complete train/evaluate pipeline, training only, or "
+            "evaluation from completed training artifacts (default: all)."
+        ),
+    )
+    parser.add_argument(
+        "--workers",
+        type=positive_int,
+        default=4,
+        help="Parallel PPO training processes, each limited to one CPU (default: 4).",
+    )
+    parser.add_argument(
         "--window",
         action="append",
         dest="windows",
@@ -47,12 +69,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--no-cache",
         action="store_true",
-        help="Write uncached runs below the experiment result directory.",
+        help=(
+            "Disable both training and evaluation caches; training artifacts "
+            "are written below the experiment result directory."
+        ),
     )
     parser.add_argument(
         "--force-retrain",
         action="store_true",
-        help="Ignore compatible training cache entries and retrain.",
+        help=(
+            "Retrain in all/train stages and rebuild evaluation outputs; in "
+            "evaluate stage, keep models but force reevaluation."
+        ),
     )
     parser.add_argument(
         "--quiet",
@@ -78,17 +106,22 @@ def main(argv: list[str] | None = None) -> int:
         use_cache=not args.no_cache,
         force_retrain=args.force_retrain,
         show_progress=not args.quiet,
+        stage=args.stage,
+        workers=args.workers,
     )
+    cases = suite.window_results or suite.training_cases
     summary = {
-        "manifest": str(suite.manifest_path),
-        "suite_root": str(suite.suite_root),
+        "stage": suite.stage,
+        "workers": args.workers,
+        "manifest": str(suite.manifest_path) if suite.manifest_path else None,
+        "suite_root": str(suite.suite_root) if suite.suite_root else None,
         "cases": [
             {
                 "window_id": result.split.name,
                 "ticker_group": result.ticker_group,
                 "tickers": list(result.tickers),
             }
-            for result in suite.window_results
+            for result in cases
         ],
         "test_rows": len(suite.test_metrics),
         "continuous_metric_rows": len(suite.continuous_metrics),

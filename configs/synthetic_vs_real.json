@@ -67,7 +67,7 @@
       }
     },
     "full": {
-      "seeds": [0, 1, 2],
+      "seeds": [0],
       "total_timesteps": 200000,
       "eval_freq": 20000,
       "commissions": {

@@ -126,7 +126,9 @@ PY
 ```bash
 venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
   --config configs/synthetic_vs_real.json \
-  --mode smoke
+  --mode smoke \
+  --stage all \
+  --workers 4
 ```
 
 建議第一次只跑第一個 window，確認整條 data → train → validation → independent/continuous test → artifacts 流程：
@@ -144,7 +146,9 @@ venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
 ```bash
 venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
   --config configs/synthetic_vs_real.json \
-  --mode full
+  --mode full \
+  --stage all \
+  --workers 4
 ```
 
 只跑特定 ticker group：
@@ -166,9 +170,30 @@ venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
 
 其他常用選項：
 
+- `--stage all`：預設流程；先完成所有選定 window 的訓練，再統一執行 independent/continuous evaluation 與結果合併。
+- `--stage train`：只建立 training cache，不執行 evaluation，也不更新 `latest_suite.json`。
+- `--stage evaluate`：要求所有 training artifacts 已存在，只執行 evaluation 與合併；缺少模型時會列出 run IDs 後停止。
+- `--workers 4`：同時執行的 PPO process 數量，預設 4；每個 worker 限制為單一 CPU thread。可用 `--workers 1` 進行循序除錯。
 - `--quiet`：隱藏 tqdm progress bar，保留狀態訊息；適合寫入 server log。
-- `--force-retrain`：忽略相容的 train cache，重新訓練並覆寫該 cache entry。
-- `--no-cache`：完全不讀寫共用 train cache，模型寫到該實驗的 `uncached_runs/`。
+- `--force-retrain`：在 `all/train` 重新訓練；同時略過 evaluation cache。搭配 `evaluate` 時保留模型、只強制重算 evaluation。
+- `--no-cache`：不讀寫 training 或 evaluation cache；模型仍寫到該實驗的 `uncached_runs/`，正式結果檔照常產生。
+
+若要明確分兩階段執行：
+
+```bash
+venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
+  --config configs/synthetic_vs_real.json \
+  --mode full \
+  --stage train \
+  --workers 4
+
+venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
+  --config configs/synthetic_vs_real.json \
+  --mode full \
+  --stage evaluate
+```
+
+平行訓練的 tqdm 由主程序顯示完成的 PPO runs；worker 不各自輸出 progress bar。Evaluation 另有每個 window 的 independent bar，以及 suite 層級的 continuous-chain bar，postfix 會顯示 cache hits 與實際執行數。
 
 若使用 `tmux`：
 
@@ -203,6 +228,22 @@ status.json
 ```
 
 正常重跑時，runner 會先顯示 cache hit 與需要訓練的數量。資料內容或訓練 config 改變後，fingerprint/key 會改變，不需要手動清空舊 cache。
+
+## 6.1 Evaluation cache
+
+Evaluation cache 位於：
+
+```text
+results/ppo_synthetic_vs_real/evaluation_cache/
+├── independent/
+└── continuous/
+```
+
+- Independent evaluation 以單一 window 的 PPO run 為 cache 單位；Buy & Hold 則以 window × fee 為單位。
+- Continuous evaluation 以完整 `(ticker_group, group, fee, seed)` test chain 為單位，chain 內仍依時間順序承接 portfolio value、actual weights 與 last action。
+- Cache key 包含模型內容、資料 fingerprint、日期、fee、seed 與 evaluation environment。模型或資料改變時只重算受影響項目。
+- 每個 entry 的 `status.json` 必須為 `completed: true`，且所有 CSV artifacts 都存在且可讀，才會視為 cache hit；中斷或損壞的 entry 會自動重算。
+- 每個 window 會輸出 `evaluation_timings.csv`，suite 另有 `continuous_evaluation_timings.csv`，記錄 cache hit 與耗時。
 
 ## 7. 輸出結果
 
@@ -242,6 +283,7 @@ equity_curves.csv
 portfolio_weights.csv
 median_sharpe_representatives.csv
 model_references.json
+evaluation_timings.csv
 ```
 
 ## 8. 在 notebook 載入結果

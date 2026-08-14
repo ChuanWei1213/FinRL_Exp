@@ -4,7 +4,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 
+from finrl.experiments.run_synthetic_vs_real import build_parser
+from finrl.experiments.synthetic_vs_real import _independent_evaluation_item
 from finrl.experiments.synthetic_vs_real import ExperimentConfig
 from finrl.experiments.synthetic_vs_real import ExperimentPaths
 from finrl.experiments.synthetic_vs_real import PreparedWindow
@@ -16,6 +19,9 @@ from finrl.experiments.synthetic_vs_real import evaluate_continuous_test_chains
 from finrl.experiments.synthetic_vs_real import prepare_window_data
 from finrl.experiments.synthetic_vs_real import rolling_time_splits
 from finrl.experiments.synthetic_vs_real import rollout
+from finrl.experiments.synthetic_vs_real import run_experiment_suite
+from finrl.experiments.synthetic_vs_real import run_training_matrix
+from finrl.experiments.synthetic_vs_real import TrainingPlan
 from finrl.experiments.synthetic_vs_real import training_cache_key
 from training_cache_fingerprint import fingerprint_training_sources
 
@@ -148,6 +154,15 @@ def test_config_resolves_smoke_protocol_and_dataset():
     assert settings.commission_map == {"with_fee": 0.0025}
     assert config.select_ticker_groups(None) == ((TICKER_GROUP, TICKERS),)
     assert config.evaluation_modes == ("independent", "continuous")
+
+
+def test_cli_defaults_to_all_stage_and_four_workers():
+    args = build_parser().parse_args([])
+
+    assert args.stage == "all"
+    assert args.workers == 4
+    with pytest.raises(SystemExit):
+        build_parser().parse_args(["--workers", "0"])
 
 
 def test_config_selects_named_ticker_groups():
@@ -341,6 +356,306 @@ def test_training_cache_key_ignores_test_dates_and_evaluation_mode(tmp_path):
     assert "evaluation_modes" not in first_payload
 
 
+def test_independent_evaluation_cache_skips_completed_rollout(
+    tmp_path, monkeypatch
+):
+    split = time_split()
+    config = experiment_config(split)
+    settings = config.resolve_run_settings("smoke")
+    model_path = tmp_path / "model"
+    model_path.with_suffix(".zip").write_bytes(b"model-v1")
+    prepared = PreparedWindow(
+        split=split,
+        ticker_group=TICKER_GROUP,
+        dataset_id=DATASET_ID,
+        tickers=TICKERS,
+        real_files=[],
+        synthetic_files_by_model={},
+        real_pipeline={},
+        synthetic_pipelines={},
+        training_data_fingerprints={"real_trained": "train-data"},
+        data_fingerprint="evaluation-data",
+        data_summary=pd.DataFrame(),
+        scale_summary=pd.DataFrame(),
+    )
+    paths = ExperimentPaths(
+        artifact_root=tmp_path,
+        output_root=tmp_path,
+        experiment_root=tmp_path / "experiment",
+        train_cache_root=tmp_path / "train_cache",
+        evaluation_cache_root=tmp_path / "evaluation_cache",
+        experiment_id="test",
+    )
+    record = {
+        "run_id": "real_trained__with_fee__seed_0",
+        "group": "real_trained",
+        "model_name": None,
+        "commission_name": "with_fee",
+        "commission": 0.0025,
+        "seed": 0,
+        "best_timestep": 4,
+        "best_model_path": model_path,
+        "cache_key": "training-key",
+    }
+    calls = []
+
+    def fake_evaluate(**kwargs):
+        calls.append(kwargs["record"]["run_id"])
+        return {
+            "period_metrics": pd.DataFrame([{"period": "test", "value": 1.0}]),
+            "equity_curves": pd.DataFrame(
+                [{"date": pd.Timestamp("2024-01-01"), "growth_of_one": 1.0}]
+            ),
+            "portfolio_weights": pd.DataFrame(
+                [{"date": pd.Timestamp("2024-01-01"), "asset": "Cash"}]
+            ),
+        }
+
+    monkeypatch.setattr(
+        "finrl.experiments.synthetic_vs_real._evaluate_policy_independent",
+        fake_evaluate,
+    )
+    first, first_timing = _independent_evaluation_item(
+        prepared=prepared,
+        config=config,
+        settings=settings,
+        paths=paths,
+        record=record,
+        commission_name="with_fee",
+        commission=0.0025,
+        use_cache=True,
+        force_reevaluate=False,
+    )
+    second, second_timing = _independent_evaluation_item(
+        prepared=prepared,
+        config=config,
+        settings=settings,
+        paths=paths,
+        record=record,
+        commission_name="with_fee",
+        commission=0.0025,
+        use_cache=True,
+        force_reevaluate=False,
+    )
+
+    assert calls == [record["run_id"]]
+    assert first_timing["evaluation_cache_hit"] is False
+    assert second_timing["evaluation_cache_hit"] is True
+    pd.testing.assert_frame_equal(first["period_metrics"], second["period_metrics"])
+
+    _, forced_timing = _independent_evaluation_item(
+        prepared=prepared,
+        config=config,
+        settings=settings,
+        paths=paths,
+        record=record,
+        commission_name="with_fee",
+        commission=0.0025,
+        use_cache=True,
+        force_reevaluate=True,
+    )
+
+    assert calls == [record["run_id"], record["run_id"]]
+    assert forced_timing["evaluation_cache_hit"] is False
+
+    (Path(forced_timing["evaluation_cache_dir"]) / "equity_curves.csv").unlink()
+    _, repaired_timing = _independent_evaluation_item(
+        prepared=prepared,
+        config=config,
+        settings=settings,
+        paths=paths,
+        record=record,
+        commission_name="with_fee",
+        commission=0.0025,
+        use_cache=True,
+        force_reevaluate=False,
+    )
+
+    assert calls == [record["run_id"], record["run_id"], record["run_id"]]
+    assert repaired_timing["evaluation_cache_hit"] is False
+
+    uncached_root = tmp_path / "disabled_evaluation_cache"
+    uncached_paths = ExperimentPaths(
+        artifact_root=tmp_path,
+        output_root=tmp_path,
+        experiment_root=tmp_path / "uncached_experiment",
+        train_cache_root=tmp_path / "disabled_train_cache",
+        evaluation_cache_root=uncached_root,
+        experiment_id="uncached",
+    )
+    _, uncached_timing = _independent_evaluation_item(
+        prepared=prepared,
+        config=config,
+        settings=settings,
+        paths=uncached_paths,
+        record=record,
+        commission_name="with_fee",
+        commission=0.0025,
+        use_cache=False,
+        force_reevaluate=False,
+    )
+
+    assert uncached_timing["evaluation_cache_dir"] == ""
+    assert not uncached_root.exists()
+
+
+def test_evaluate_stage_reports_all_missing_training_runs(tmp_path):
+    split = time_split()
+    config = experiment_config(split)
+    frame = market_rows(pd.bdate_range("2024-01-01", "2024-02-05"))
+    write_real_files(tmp_path, frame)
+    write_synthetic_paths(tmp_path, frame)
+
+    with pytest.raises(RuntimeError, match="Run --stage train first") as error:
+        run_experiment_suite(
+            project_root=tmp_path,
+            config=config,
+            mode="smoke",
+            stage="evaluate",
+            workers=4,
+            show_progress=False,
+        )
+
+    message = str(error.value)
+    assert "real_trained" in message
+    assert "synthetic_toy__two_paths" in message
+
+
+def test_parallel_training_submits_only_cache_misses_and_preserves_plan_order(
+    tmp_path, monkeypatch
+):
+    split = time_split()
+    config = experiment_config(split)
+    settings = config.resolve_run_settings("smoke")
+    prepared = PreparedWindow(
+        split=split,
+        ticker_group=TICKER_GROUP,
+        dataset_id=DATASET_ID,
+        tickers=TICKERS,
+        real_files=[],
+        synthetic_files_by_model={"toy__two_paths": []},
+        real_pipeline={},
+        synthetic_pipelines={},
+        training_data_fingerprints={
+            "real_trained": "real",
+            "synthetic::toy__two_paths": "synthetic",
+            "real_synthetic::toy__two_paths": "combined",
+        },
+        data_fingerprint="data",
+        data_summary=pd.DataFrame(),
+        scale_summary=pd.DataFrame(),
+    )
+    paths = ExperimentPaths(
+        artifact_root=tmp_path,
+        output_root=tmp_path,
+        experiment_root=tmp_path / "experiment",
+        train_cache_root=tmp_path / "train_cache",
+        evaluation_cache_root=tmp_path / "evaluation_cache",
+        experiment_id="parallel",
+    )
+    planned_ids = []
+
+    def fake_plan(**kwargs):
+        identifier = (
+            f"{kwargs['group']}::{kwargs['commission_name']}::{kwargs['seed']}"
+        )
+        planned_ids.append(identifier)
+        cache_match = (
+            (tmp_path / "status.json", {"completed": True})
+            if len(planned_ids) == 1
+            else None
+        )
+        return TrainingPlan(
+            group=kwargs["group"],
+            commission_name=kwargs["commission_name"],
+            commission=kwargs["commission"],
+            seed=kwargs["seed"],
+            identifier=identifier,
+            cache_key=f"key-{len(planned_ids)}",
+            cache_config={},
+            planned_run_dir=tmp_path / identifier.replace(":", "_"),
+            cache_match=cache_match,
+            use_cache=True,
+            force_retrain=False,
+        )
+
+    def record_for(plan, cache_hit):
+        return {
+            "run_id": plan.identifier,
+            "group": plan.group,
+            "model_name": None,
+            "commission_name": plan.commission_name,
+            "commission": plan.commission,
+            "seed": plan.seed,
+            "cache_hit": cache_hit,
+        }
+
+    submitted = []
+    observed_workers = []
+
+    class FakeFuture:
+        def __init__(self, payload):
+            self.payload = payload
+
+        def result(self):
+            return self.payload
+
+    class FakeExecutor:
+        def __init__(self, *, max_workers, **kwargs):
+            observed_workers.append(max_workers)
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def submit(self, function, plan):
+            submitted.append(plan.identifier)
+            return FakeFuture(
+                {
+                    "ok": True,
+                    "record": record_for(plan, False),
+                    "error_type": "",
+                    "error_message": "",
+                    "traceback": "",
+                    "started_at_utc": "2024-01-01T00:00:00+00:00",
+                    "finished_at_utc": "2024-01-01T00:00:01+00:00",
+                    "elapsed_seconds": 1.0,
+                    "torch_num_threads": 1,
+                }
+            )
+
+    monkeypatch.setattr(
+        "finrl.experiments.synthetic_vs_real.plan_training_run", fake_plan
+    )
+    monkeypatch.setattr(
+        "finrl.experiments.synthetic_vs_real._cached_record",
+        lambda plan, prepared, config: record_for(plan, True),
+    )
+    monkeypatch.setattr(
+        "finrl.experiments.synthetic_vs_real.ProcessPoolExecutor", FakeExecutor
+    )
+    monkeypatch.setattr(
+        "finrl.experiments.synthetic_vs_real.as_completed", lambda futures: futures
+    )
+
+    records = run_training_matrix(
+        prepared=prepared,
+        config=config,
+        settings=settings,
+        paths=paths,
+        workers=4,
+        show_progress=False,
+    )
+
+    assert observed_workers == [4]
+    assert submitted == planned_ids[1:]
+    assert [record["run_id"] for record in records] == planned_ids
+    assert records[0]["cache_hit"] is True
+    assert all(record["cache_hit"] is False for record in records[1:])
+
+
 def test_rollout_can_start_from_carried_actual_weights(tmp_path):
     config = experiment_config(time_split())
     frame = market_rows(pd.bdate_range("2024-01-01", periods=8))
@@ -381,6 +696,8 @@ def test_continuous_evaluation_carries_previous_actual_weights(tmp_path, monkeyp
     config = experiment_config(first_split)
     settings = config.resolve_run_settings("smoke")
     observed_initial_weights = []
+    model_path = tmp_path / "model"
+    model_path.with_suffix(".zip").write_bytes(b"continuous-model")
 
     def fake_rollout(
         frame,
@@ -453,8 +770,9 @@ def test_continuous_evaluation_carries_previous_actual_weights(tmp_path, monkeyp
             "commission_name": "with_fee",
             "commission": 0.0025,
             "seed": 0,
-            "best_model_path": tmp_path / "model",
+            "best_model_path": model_path,
             "best_timestep": 4,
+            "cache_key": f"training-{split.name}",
         }
         return WindowResult(
             split=split,
@@ -476,6 +794,8 @@ def test_continuous_evaluation_carries_previous_actual_weights(tmp_path, monkeyp
         window_results=[window_result(first_split), window_result(second_split)],
         config=config,
         settings=settings,
+        evaluation_cache_root=tmp_path / "evaluation_cache",
+        show_progress=False,
     )
 
     np.testing.assert_allclose(observed_initial_weights[0], [1.0, 0.0, 0.0])
@@ -483,3 +803,20 @@ def test_continuous_evaluation_carries_previous_actual_weights(tmp_path, monkeyp
     transitions = artifacts["window_transition_log"]
     assert transitions.iloc[1]["initial_portfolio_value"] == 101_000
     assert artifacts["continuous_metrics"].iloc[0]["test_days"] == 2
+
+    monkeypatch.setattr(
+        "finrl.experiments.synthetic_vs_real.rollout",
+        lambda *args, **kwargs: pytest.fail("continuous rollout should be cached"),
+    )
+    cached = evaluate_continuous_test_chains(
+        window_results=[window_result(first_split), window_result(second_split)],
+        config=config,
+        settings=settings,
+        evaluation_cache_root=tmp_path / "evaluation_cache",
+        show_progress=False,
+    )
+
+    assert cached["continuous_evaluation_timings"][
+        "evaluation_cache_hit"
+    ].tolist() == [True]
+    assert cached["continuous_metrics"].iloc[0]["test_days"] == 2

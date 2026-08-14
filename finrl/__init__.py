@@ -1,7 +1,22 @@
 from __future__ import annotations
 
 from importlib import import_module
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version
 from typing import Any
+
+
+def _disable_installed_gym_notice() -> None:
+    """Hide Gym's import-time maintenance notice without muting stderr."""
+    try:
+        import gym_notices.notices as gym_notices
+
+        gym_notices.notices.pop(version("gym"), None)
+    except (ImportError, PackageNotFoundError):
+        pass
+
+
+_disable_installed_gym_notice()
 
 
 __all__ = ("test", "trade", "train")

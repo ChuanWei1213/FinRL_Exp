@@ -16,22 +16,31 @@ test windows without duplicating source files.
 
 from __future__ import annotations
 
+from concurrent.futures import as_completed
+from concurrent.futures import ProcessPoolExecutor
+from contextlib import contextmanager
 from dataclasses import asdict
 from dataclasses import dataclass
+from dataclasses import replace
 from datetime import datetime
 from datetime import timezone
 import glob
 import hashlib
 import json
+import multiprocessing
+import os
 from pathlib import Path
 import re
 import sys
+import tempfile
 import time
+import traceback
 from typing import Any
 from typing import Iterable
 from typing import Mapping
 from typing import Sequence
 
+from filelock import FileLock
 import numpy as np
 import pandas as pd
 import stable_baselines3 as sb3
@@ -66,6 +75,25 @@ from training_cache_fingerprint import fingerprint_training_sources
 PRICE_COLUMNS = ("close", "high", "low")
 REQUIRED_COLUMNS = ("date", "tic", *PRICE_COLUMNS)
 TRAIN_CACHE_SCHEMA = "ppo_eiie_training_cache_v3"
+INDEPENDENT_EVALUATION_CACHE_SCHEMA = "ppo_eiie_independent_evaluation_cache_v1"
+CONTINUOUS_EVALUATION_CACHE_SCHEMA = "ppo_eiie_continuous_evaluation_cache_v1"
+CPU_THREAD_ENVIRONMENT = {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+}
+
+
+class MissingTrainingArtifactsError(RuntimeError):
+    def __init__(self, run_ids: Sequence[str]):
+        self.run_ids = tuple(run_ids)
+        missing = "\n".join(f"- {run_id}" for run_id in self.run_ids)
+        super().__init__(
+            "Evaluation requires completed training artifacts for every run. "
+            "Run --stage train first. Missing run IDs:\n" + missing
+        )
 DEFAULT_SYNTHETIC_MODEL_LABELS = {
     "armd__single_path": "ARMD (single path)",
     "cndiff__50_paths": "CN-Diff (50 paths)",
@@ -118,6 +146,93 @@ def _content_hash(payload: Mapping[str, Any]) -> str:
         separators=(",", ":"),
     ).encode()
     return hashlib.sha256(encoded).hexdigest()
+
+
+def _atomic_write_text(path: Path, text: str) -> None:
+    """Replace a text artifact only after the complete payload is on disk."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        delete=False,
+    ) as handle:
+        temporary = Path(handle.name)
+        handle.write(text)
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(temporary, path)
+
+
+def _atomic_write_json(path: Path, payload: Any) -> None:
+    _atomic_write_text(
+        path,
+        json.dumps(_serializable(payload), indent=2, sort_keys=True) + "\n",
+    )
+
+
+def _atomic_write_csv(frame: pd.DataFrame, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        newline="",
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        delete=False,
+    ) as handle:
+        temporary = Path(handle.name)
+        frame.to_csv(handle, index=False)
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(temporary, path)
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _model_archive_path(path: str | Path) -> Path:
+    candidate = Path(path)
+    if candidate.is_file():
+        return candidate
+    archive = Path(str(candidate) + ".zip")
+    if archive.is_file():
+        return archive
+    raise FileNotFoundError(f"Trained model archive not found: {archive}")
+
+
+def _configure_single_cpu_worker() -> None:
+    for name, value in CPU_THREAD_ENVIRONMENT.items():
+        os.environ[name] = value
+    torch.set_num_threads(1)
+    try:
+        torch.set_num_interop_threads(1)
+    except RuntimeError:
+        # PyTorch only permits setting this once per process. A reused worker may
+        # already have the requested setting.
+        pass
+
+
+@contextmanager
+def _single_cpu_child_environment():
+    previous = {name: os.environ.get(name) for name in CPU_THREAD_ENVIRONMENT}
+    os.environ.update(CPU_THREAD_ENVIRONMENT)
+    try:
+        yield
+    finally:
+        for name, value in previous.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
 
 
 @dataclass(frozen=True)
@@ -482,6 +597,7 @@ class ExperimentPaths:
     experiment_root: Path
     train_cache_root: Path
     experiment_id: str
+    evaluation_cache_root: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -495,6 +611,19 @@ class TrainingPlan:
     cache_config: dict[str, Any]
     planned_run_dir: Path
     cache_match: tuple[Path, dict[str, Any]] | None
+    use_cache: bool
+    force_retrain: bool
+
+
+@dataclass
+class TrainingCaseResult:
+    split: TimeSplit
+    ticker_group: str
+    dataset_id: str
+    tickers: tuple[str, ...]
+    experiment_root: Path
+    experiment_id: str
+    run_records: list[dict[str, Any]]
 
 
 @dataclass
@@ -516,13 +645,15 @@ class WindowResult:
 
 @dataclass
 class ExperimentSuiteResult:
-    manifest_path: Path
-    suite_root: Path
+    manifest_path: Path | None
+    suite_root: Path | None
     window_results: list[WindowResult]
     test_metrics: pd.DataFrame
     aggregate_summary: pd.DataFrame
     paired_deltas: pd.DataFrame
     continuous_metrics: pd.DataFrame
+    training_cases: list[TrainingCaseResult]
+    stage: str
 
 
 def load_experiment_config(path: str | Path) -> ExperimentConfig:
@@ -1175,6 +1306,8 @@ def _runtime_provenance(config: ExperimentConfig) -> dict[str, Any]:
     return {
         "device": config.device,
         "python": sys.version.split()[0],
+        "torch_num_threads": torch.get_num_threads(),
+        "torch_num_interop_threads": torch.get_num_interop_threads(),
         "library_versions": {
             "stable_baselines3": sb3.__version__,
             "torch": torch.__version__,
@@ -1215,6 +1348,7 @@ def resolve_experiment_paths(
         output_root=output_root,
         experiment_root=output_root / experiment_id,
         train_cache_root=artifact_root / "train_cache",
+        evaluation_cache_root=artifact_root / "evaluation_cache",
         experiment_id=experiment_id,
     )
 
@@ -1326,7 +1460,7 @@ def find_compatible_training_cache(
             continue
         try:
             status = json.loads(status_path.read_text())
-        except (OSError, json.JSONDecodeError):
+        except (OSError, UnicodeError, json.JSONDecodeError):
             continue
         semantic = _status_semantic_cache_config(status)
         if semantic is None or _content_hash(semantic) != cache_key:
@@ -1384,6 +1518,8 @@ def plan_training_run(
         cache_config=cache_config,
         planned_run_dir=planned_run_dir,
         cache_match=cache_match,
+        use_cache=use_cache,
+        force_retrain=force_retrain,
     )
 
 
@@ -1642,7 +1778,7 @@ def _cached_record(
     return record
 
 
-def train_one_run(
+def _train_one_run_unlocked(
     *,
     plan: TrainingPlan,
     prepared: PreparedWindow,
@@ -1651,11 +1787,20 @@ def train_one_run(
     paths: ExperimentPaths,
     show_progress: bool,
 ) -> dict[str, Any]:
-    if plan.cache_match is not None:
-        return _cached_record(plan, prepared, config)
-
     run_dir = plan.planned_run_dir
     run_dir.mkdir(parents=True, exist_ok=True)
+    _atomic_write_json(
+        run_dir / "status.json",
+        {
+            "completed": False,
+            "cache_key": plan.cache_key,
+            "cache_schema": TRAIN_CACHE_SCHEMA,
+            "run_id": plan.identifier,
+            "window_id": prepared.split.name,
+            "ticker_group": prepared.ticker_group,
+            "started_at_utc": datetime.now(timezone.utc).isoformat(),
+        },
+    )
     best_model_path = run_dir / "best_model"
     last_model_path = run_dir / "last_model"
     set_global_seed(plan.seed)
@@ -1699,8 +1844,10 @@ def train_one_run(
         callback=CallbackList(callbacks),
     )
     model.save(last_model_path)
-    pd.DataFrame(logger.records).to_csv(run_dir / "training_log.csv", index=False)
-    pd.DataFrame(validator.records).to_csv(run_dir / "validation_log.csv", index=False)
+    _atomic_write_csv(pd.DataFrame(logger.records), run_dir / "training_log.csv")
+    _atomic_write_csv(
+        pd.DataFrame(validator.records), run_dir / "validation_log.csv"
+    )
     runtime = _runtime_provenance(config)
     status = {
         "completed": True,
@@ -1729,10 +1876,182 @@ def train_one_run(
         "best_real_validation_reward": validator.best_score,
         "best_model_path": str(best_model_path),
     }
-    (run_dir / "status.json").write_text(
-        json.dumps(_serializable(status), indent=2, sort_keys=True) + "\n"
-    )
+    _atomic_write_json(run_dir / "status.json", status)
     return status
+
+
+def train_one_run(
+    *,
+    plan: TrainingPlan,
+    prepared: PreparedWindow,
+    config: ExperimentConfig,
+    settings: RunSettings,
+    paths: ExperimentPaths,
+    show_progress: bool,
+) -> dict[str, Any]:
+    if plan.cache_match is not None:
+        return _cached_record(plan, prepared, config)
+    if not plan.use_cache:
+        return _train_one_run_unlocked(
+            plan=plan,
+            prepared=prepared,
+            config=config,
+            settings=settings,
+            paths=paths,
+            show_progress=show_progress,
+        )
+
+    lock_path = Path(str(plan.planned_run_dir) + ".lock")
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with FileLock(lock_path):
+        if not plan.force_retrain:
+            cache_match = find_compatible_training_cache(
+                cache_root=paths.train_cache_root,
+                cache_key=plan.cache_key,
+                preferred_run_dir=plan.planned_run_dir,
+            )
+            if cache_match is not None:
+                return _cached_record(
+                    replace(plan, cache_match=cache_match), prepared, config
+                )
+        return _train_one_run_unlocked(
+            plan=plan,
+            prepared=prepared,
+            config=config,
+            settings=settings,
+            paths=paths,
+            show_progress=show_progress,
+        )
+
+
+_TRAINING_WORKER_STATE: tuple[
+    PreparedWindow, ExperimentConfig, RunSettings, ExperimentPaths
+] | None = None
+
+
+def _initialize_training_worker(
+    prepared: PreparedWindow,
+    config: ExperimentConfig,
+    settings: RunSettings,
+    paths: ExperimentPaths,
+) -> None:
+    global _TRAINING_WORKER_STATE
+    _configure_single_cpu_worker()
+    _TRAINING_WORKER_STATE = (prepared, config, settings, paths)
+
+
+def _execute_training_plan(plan: TrainingPlan) -> dict[str, Any]:
+    if _TRAINING_WORKER_STATE is None:
+        raise RuntimeError("Training worker was not initialized")
+    prepared, config, settings, paths = _TRAINING_WORKER_STATE
+    started_at = datetime.now(timezone.utc)
+    started_clock = time.perf_counter()
+    try:
+        record = train_one_run(
+            plan=plan,
+            prepared=prepared,
+            config=config,
+            settings=settings,
+            paths=paths,
+            show_progress=False,
+        )
+        return {
+            "ok": True,
+            "record": record,
+            "error_type": "",
+            "error_message": "",
+            "traceback": "",
+            "started_at_utc": started_at.isoformat(),
+            "finished_at_utc": datetime.now(timezone.utc).isoformat(),
+            "elapsed_seconds": round(time.perf_counter() - started_clock, 6),
+            "torch_num_threads": torch.get_num_threads(),
+        }
+    except Exception as error:  # returned so the parent can persist the failure
+        return {
+            "ok": False,
+            "record": None,
+            "error_type": type(error).__name__,
+            "error_message": str(error),
+            "traceback": traceback.format_exc(),
+            "started_at_utc": started_at.isoformat(),
+            "finished_at_utc": datetime.now(timezone.utc).isoformat(),
+            "elapsed_seconds": round(time.perf_counter() - started_clock, 6),
+            "torch_num_threads": torch.get_num_threads(),
+        }
+
+
+def _training_timing(
+    plan: TrainingPlan,
+    prepared: PreparedWindow,
+    settings: RunSettings,
+    payload: Mapping[str, Any],
+    *,
+    execution_order: int,
+) -> dict[str, Any]:
+    return {
+        "execution_order": execution_order,
+        "window_id": prepared.split.name,
+        "ticker_group": prepared.ticker_group,
+        "run_mode": settings.mode,
+        "run_id": plan.identifier,
+        "group": plan.group,
+        "model_name": model_from_group(plan.group),
+        "commission_name": plan.commission_name,
+        "seed": plan.seed,
+        "cache_hit": bool(payload.get("record", {}).get("cache_hit", False))
+        if payload.get("record")
+        else False,
+        "status": "completed" if payload["ok"] else "failed",
+        "error_type": payload["error_type"],
+        "error_message": payload["error_message"],
+        "started_at_utc": payload["started_at_utc"],
+        "finished_at_utc": payload["finished_at_utc"],
+        "elapsed_seconds": payload["elapsed_seconds"],
+        "torch_num_threads": payload["torch_num_threads"],
+    }
+
+
+def _existing_uncached_record(
+    plan: TrainingPlan,
+    prepared: PreparedWindow,
+    config: ExperimentConfig,
+) -> dict[str, Any] | None:
+    status_path = plan.planned_run_dir / "status.json"
+    if not status_path.is_file() or not all(
+        path.is_file() for path in _cache_artifact_paths(plan.planned_run_dir)
+    ):
+        return None
+    try:
+        status = json.loads(status_path.read_text())
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+    if status.get("completed") is not True:
+        return None
+    semantic = _status_semantic_cache_config(status)
+    if semantic is None or _content_hash(semantic) != plan.cache_key:
+        return None
+    record = dict(status)
+    record.update(
+        {
+            "cache_hit": False,
+            "cache_key": plan.cache_key,
+            "cache_dir": str(plan.planned_run_dir),
+            "best_model_path": str(plan.planned_run_dir / "best_model"),
+            "training_data_fingerprint": prepared.training_data_fingerprints[
+                plan.group
+            ],
+            "last_reuse_runtime_provenance": _runtime_provenance(config),
+            "window_id": prepared.split.name,
+            "ticker_group": prepared.ticker_group,
+            "group": plan.group,
+            "model_name": model_from_group(plan.group),
+            "commission_name": plan.commission_name,
+            "commission": plan.commission,
+            "seed": plan.seed,
+            "run_id": plan.identifier,
+        }
+    )
+    return record
 
 
 def run_training_matrix(
@@ -1744,7 +2063,11 @@ def run_training_matrix(
     use_cache: bool = True,
     force_retrain: bool = False,
     show_progress: bool = True,
+    workers: int = 4,
+    train_missing: bool = True,
 ) -> list[dict[str, Any]]:
+    if workers <= 0:
+        raise ValueError("workers must be positive")
     groups = training_groups(prepared.model_names)
     specs = [
         (group, commission_name, commission, seed)
@@ -1772,63 +2095,153 @@ def run_training_matrix(
             disable=not show_progress,
         )
     ]
-    cache_hits = [plan for plan in plans if plan.cache_match is not None]
-    cache_misses = [plan for plan in plans if plan.cache_match is None]
+    records_by_id: dict[str, dict[str, Any]] = {}
+    cache_hits: list[TrainingPlan] = []
+    cache_misses: list[TrainingPlan] = []
+    for plan in plans:
+        if plan.cache_match is not None:
+            records_by_id[plan.identifier] = _cached_record(plan, prepared, config)
+            cache_hits.append(plan)
+            continue
+        uncached = (
+            _existing_uncached_record(plan, prepared, config)
+            if not use_cache and not force_retrain and not train_missing
+            else None
+        )
+        if uncached is not None:
+            records_by_id[plan.identifier] = uncached
+            cache_hits.append(plan)
+        else:
+            cache_misses.append(plan)
     print(
         f"{prepared.split.name}/{prepared.ticker_group}: "
         f"{len(cache_hits)} cache hit(s), "
         f"{len(cache_misses)} training run(s)"
     )
+    if not train_missing and cache_misses:
+        raise MissingTrainingArtifactsError(
+            [plan.identifier for plan in cache_misses]
+        )
+    if not train_missing:
+        return [records_by_id[plan.identifier] for plan in plans]
+
     paths.experiment_root.mkdir(parents=True, exist_ok=True)
     timing_path = paths.experiment_root / "run_timings.csv"
     timing_records: list[dict[str, Any]] = []
-    records_by_id: dict[str, dict[str, Any]] = {}
+    now = datetime.now(timezone.utc).isoformat()
+    for plan in cache_hits:
+        payload = {
+            "ok": True,
+            "record": records_by_id[plan.identifier],
+            "error_type": "",
+            "error_message": "",
+            "started_at_utc": now,
+            "finished_at_utc": now,
+            "elapsed_seconds": 0.0,
+            "torch_num_threads": torch.get_num_threads(),
+        }
+        timing_records.append(
+            _training_timing(
+                plan,
+                prepared,
+                settings,
+                payload,
+                execution_order=len(timing_records) + 1,
+            )
+        )
 
-    for plan in tqdm(
-        [*cache_hits, *cache_misses],
+    progress = tqdm(
+        total=len(plans),
         desc=f"{prepared.split.name}/{prepared.ticker_group}: training matrix",
         unit="run",
         disable=not show_progress,
-    ):
-        started_at = datetime.now(timezone.utc)
-        started_clock = time.perf_counter()
-        status = "failed"
-        error_type = ""
-        try:
-            records_by_id[plan.identifier] = train_one_run(
-                plan=plan,
-                prepared=prepared,
-                config=config,
-                settings=settings,
-                paths=paths,
-                show_progress=show_progress and plan.cache_match is None,
-            )
-            status = "completed"
-        except Exception as error:
-            error_type = type(error).__name__
-            raise
-        finally:
-            finished_at = datetime.now(timezone.utc)
-            timing_records.append(
-                {
-                    "execution_order": len(timing_records) + 1,
-                    "window_id": prepared.split.name,
-                    "ticker_group": prepared.ticker_group,
-                    "run_mode": settings.mode,
-                    "run_id": plan.identifier,
-                    "group": plan.group,
-                    "model_name": model_from_group(plan.group),
-                    "commission_name": plan.commission_name,
-                    "seed": plan.seed,
-                    "cache_hit": plan.cache_match is not None,
-                    "status": status,
-                    "error_type": error_type,
-                    "started_at_utc": started_at.isoformat(),
-                    "finished_at_utc": finished_at.isoformat(),
-                    "elapsed_seconds": round(time.perf_counter() - started_clock, 6),
-                }
-            )
-            pd.DataFrame(timing_records).to_csv(timing_path, index=False)
+    )
+    progress.update(len(cache_hits))
+    progress.set_postfix(cache_hits=len(cache_hits), trained=0, failed=0)
+    failures: list[tuple[TrainingPlan, Mapping[str, Any]]] = []
+    trained = 0
+    if cache_misses:
+        if workers == 1:
+            _initialize_training_worker(prepared, config, settings, paths)
+            completed = ((plan, _execute_training_plan(plan)) for plan in cache_misses)
+            for plan, payload in completed:
+                if payload["ok"]:
+                    records_by_id[plan.identifier] = dict(payload["record"])
+                    trained += 1
+                else:
+                    failures.append((plan, payload))
+                timing_records.append(
+                    _training_timing(
+                        plan,
+                        prepared,
+                        settings,
+                        payload,
+                        execution_order=len(timing_records) + 1,
+                    )
+                )
+                _atomic_write_csv(pd.DataFrame(timing_records), timing_path)
+                progress.update(1)
+                progress.set_postfix(
+                    cache_hits=len(cache_hits), trained=trained, failed=len(failures)
+                )
+        else:
+            with _single_cpu_child_environment():
+                with ProcessPoolExecutor(
+                    max_workers=min(workers, len(cache_misses)),
+                    mp_context=multiprocessing.get_context("spawn"),
+                    initializer=_initialize_training_worker,
+                    initargs=(prepared, config, settings, paths),
+                ) as executor:
+                    futures = {
+                        executor.submit(_execute_training_plan, plan): plan
+                        for plan in cache_misses
+                    }
+                    for future in as_completed(futures):
+                        plan = futures[future]
+                        try:
+                            payload = future.result()
+                        except Exception as error:
+                            now = datetime.now(timezone.utc).isoformat()
+                            payload = {
+                                "ok": False,
+                                "record": None,
+                                "error_type": type(error).__name__,
+                                "error_message": str(error),
+                                "traceback": traceback.format_exc(),
+                                "started_at_utc": now,
+                                "finished_at_utc": now,
+                                "elapsed_seconds": 0.0,
+                                "torch_num_threads": 1,
+                            }
+                        if payload["ok"]:
+                            records_by_id[plan.identifier] = dict(payload["record"])
+                            trained += 1
+                        else:
+                            failures.append((plan, payload))
+                        timing_records.append(
+                            _training_timing(
+                                plan,
+                                prepared,
+                                settings,
+                                payload,
+                                execution_order=len(timing_records) + 1,
+                            )
+                        )
+                        _atomic_write_csv(pd.DataFrame(timing_records), timing_path)
+                        progress.update(1)
+                        progress.set_postfix(
+                            cache_hits=len(cache_hits),
+                            trained=trained,
+                            failed=len(failures),
+                        )
+    progress.close()
+    _atomic_write_csv(pd.DataFrame(timing_records), timing_path)
+    if failures:
+        plan, payload = failures[0]
+        raise RuntimeError(
+            f"Training run {plan.identifier} failed with {payload['error_type']}: "
+            f"{payload['error_message']}\n{payload['traceback']}"
+        )
     return [records_by_id[plan.identifier] for plan in plans]
 
 
@@ -1873,104 +2286,249 @@ def _add_split_columns(
     return enriched
 
 
-def evaluate_window(
+INDEPENDENT_EVALUATION_ARTIFACTS = {
+    "period_metrics": "period_metrics.csv",
+    "equity_curves": "equity_curves.csv",
+    "portfolio_weights": "portfolio_weights.csv",
+}
+
+
+def _evaluation_environment_payload(
+    config: ExperimentConfig, commission: float, *, cwd: Path
+) -> dict[str, Any]:
+    payload = environment_kwargs(config, commission, cwd=cwd)
+    payload.pop("cwd", None)
+    payload.pop("plot_on_terminal", None)
+    return _serializable(payload)
+
+
+def _read_evaluation_artifacts(
+    cache_dir: Path,
+    artifact_names: Mapping[str, str],
+) -> dict[str, pd.DataFrame]:
+    frames: dict[str, pd.DataFrame] = {}
+    for name, filename in artifact_names.items():
+        path = cache_dir / filename
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        frame = pd.read_csv(path)
+        if "date" in frame.columns:
+            frame["date"] = pd.to_datetime(frame["date"], errors="raise")
+        frames[name] = frame
+    return frames
+
+
+def _load_evaluation_cache(
+    *,
+    cache_dir: Path,
+    cache_key: str,
+    schema: str,
+    artifact_names: Mapping[str, str],
+) -> dict[str, pd.DataFrame] | None:
+    status_path = cache_dir / "status.json"
+    if not status_path.is_file():
+        return None
+    try:
+        status = json.loads(status_path.read_text())
+        if (
+            status.get("completed") is not True
+            or status.get("cache_schema") != schema
+            or status.get("cache_key") != cache_key
+        ):
+            return None
+        return _read_evaluation_artifacts(cache_dir, artifact_names)
+    except (
+        OSError,
+        ValueError,
+        json.JSONDecodeError,
+        pd.errors.ParserError,
+    ):
+        return None
+
+
+def _write_evaluation_cache(
+    *,
+    cache_dir: Path,
+    cache_key: str,
+    schema: str,
+    artifact_names: Mapping[str, str],
+    frames: Mapping[str, pd.DataFrame],
+    metadata: Mapping[str, Any],
+) -> None:
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    _atomic_write_json(
+        cache_dir / "status.json",
+        {
+            **dict(metadata),
+            "completed": False,
+            "cache_key": cache_key,
+            "cache_schema": schema,
+            "started_at_utc": datetime.now(timezone.utc).isoformat(),
+        },
+    )
+    for name, filename in artifact_names.items():
+        _atomic_write_csv(frames[name], cache_dir / filename)
+    _atomic_write_json(
+        cache_dir / "status.json",
+        {
+            **dict(metadata),
+            "completed": True,
+            "cache_key": cache_key,
+            "cache_schema": schema,
+            "completed_at_utc": datetime.now(timezone.utc).isoformat(),
+            "artifacts": {
+                name: str(cache_dir / filename)
+                for name, filename in artifact_names.items()
+            },
+        },
+    )
+
+
+def _mark_evaluation_started(
+    *,
+    cache_dir: Path,
+    cache_key: str,
+    schema: str,
+    metadata: Mapping[str, Any],
+) -> None:
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    _atomic_write_json(
+        cache_dir / "status.json",
+        {
+            **dict(metadata),
+            "completed": False,
+            "cache_key": cache_key,
+            "cache_schema": schema,
+            "started_at_utc": datetime.now(timezone.utc).isoformat(),
+        },
+    )
+
+
+def _evaluate_policy_independent(
+    *,
+    prepared: PreparedWindow,
+    config: ExperimentConfig,
+    paths: ExperimentPaths,
+    record: Mapping[str, Any],
+    group_label: str,
+) -> dict[str, pd.DataFrame]:
+    group = str(record["group"])
+    model_name = record.get("model_name")
+    commission_name = str(record["commission_name"])
+    commission = float(record["commission"])
+    seed = int(record["seed"])
+    model = PPO.load(record["best_model_path"], device=config.device)
+    kwargs = environment_kwargs(config, commission, cwd=paths.experiment_root)
+    period_rows: list[dict[str, Any]] = []
+    equity_rows: list[dict[str, Any]] = []
+    weight_rows: list[dict[str, Any]] = []
+    for period in ("train", "validation", "test"):
+        result = rollout(
+            _period_frame(prepared, group, model_name, period), model, kwargs, seed
+        )
+        period_rows.append(
+            {
+                "run_id": record["run_id"],
+                "period": period,
+                "evaluation_mode": "independent",
+                "agent": group_label,
+                "agent_type": "PPO",
+                "group": group,
+                "model_name": model_name,
+                "commission_name": commission_name,
+                "commission": commission,
+                "seed": seed,
+                "best_timestep": int(record["best_timestep"]),
+                **result["metrics"],
+            }
+        )
+        for date, value in zip(
+            result["dates"], result["values"] / result["values"][0]
+        ):
+            equity_rows.append(
+                {
+                    "date": pd.Timestamp(date),
+                    "period": period,
+                    "evaluation_mode": "independent",
+                    "agent": group_label,
+                    "agent_type": "PPO",
+                    "group": group,
+                    "model_name": model_name,
+                    "commission_name": commission_name,
+                    "seed": seed,
+                    "growth_of_one": float(value),
+                }
+            )
+        if period == "test":
+            for date_index, date in enumerate(result["dates"][1:]):
+                for asset_index, asset in enumerate(result["weight_labels"]):
+                    weight_rows.append(
+                        {
+                            "date": pd.Timestamp(date),
+                            "evaluation_mode": "independent",
+                            "group": group,
+                            "model_name": model_name,
+                            "commission_name": commission_name,
+                            "seed": seed,
+                            "asset": asset,
+                            "target_weight": float(
+                                result["target_weights"][1:][date_index, asset_index]
+                            ),
+                            "actual_weight": float(
+                                result["actual_weights"][1:][date_index, asset_index]
+                            ),
+                        }
+                    )
+    return {
+        "period_metrics": pd.DataFrame(period_rows),
+        "equity_curves": pd.DataFrame(equity_rows),
+        "portfolio_weights": pd.DataFrame(weight_rows),
+    }
+
+
+def _evaluate_benchmark_independent(
     *,
     prepared: PreparedWindow,
     config: ExperimentConfig,
     settings: RunSettings,
     paths: ExperimentPaths,
-    run_records: Sequence[Mapping[str, Any]],
-) -> WindowResult:
-    """Evaluate cached/trained policies and persist notebook-ready artifacts."""
-    groups = training_groups(prepared.model_names)
-    group_labels = {group: training_group_label(config, group) for group in groups}
-    ppo_rows: list[dict[str, Any]] = []
-    benchmark_rows: list[dict[str, Any]] = []
+    commission_name: str,
+    commission: float,
+) -> dict[str, pd.DataFrame]:
+    period_rows: list[dict[str, Any]] = []
     equity_rows: list[dict[str, Any]] = []
-    weight_rows: list[dict[str, Any]] = []
-
-    for record in run_records:
-        group = str(record["group"])
-        model_name = record.get("model_name")
-        commission_name = str(record["commission_name"])
-        commission = float(record["commission"])
-        seed = int(record["seed"])
-        model = PPO.load(record["best_model_path"], device=config.device)
-        kwargs = environment_kwargs(config, commission, cwd=paths.experiment_root)
-        for period in ("train", "validation", "test"):
-            frame = _period_frame(prepared, group, model_name, period)
-            result = rollout(frame, model, kwargs, seed)
-            ppo_rows.append(
-                {
-                    "run_id": record["run_id"],
-                    "period": period,
-                    "evaluation_mode": "independent",
-                    "agent": group_labels[group],
-                    "agent_type": "PPO",
-                    "group": group,
-                    "model_name": model_name,
-                    "commission_name": commission_name,
-                    "commission": commission,
-                    "seed": seed,
-                    "best_timestep": int(record["best_timestep"]),
-                    **result["metrics"],
-                }
-            )
-            for date, value in zip(
-                result["dates"], result["values"] / result["values"][0]
-            ):
-                equity_rows.append(
-                    {
-                        "date": pd.Timestamp(date),
-                        "period": period,
-                        "evaluation_mode": "independent",
-                        "agent": group_labels[group],
-                        "agent_type": "PPO",
-                        "group": group,
-                        "model_name": model_name,
-                        "commission_name": commission_name,
-                        "seed": seed,
-                        "growth_of_one": float(value),
-                    }
-                )
-            if period == "test":
-                labels = result["weight_labels"]
-                dates = result["dates"][1:]
-                actual = result["actual_weights"][1:]
-                target = result["target_weights"][1:]
-                for date_index, date in enumerate(dates):
-                    for asset_index, asset in enumerate(labels):
-                        weight_rows.append(
-                            {
-                                "date": pd.Timestamp(date),
-                                "evaluation_mode": "independent",
-                                "group": group,
-                                "model_name": model_name,
-                                "commission_name": commission_name,
-                                "seed": seed,
-                                "asset": asset,
-                                "target_weight": float(target[date_index, asset_index]),
-                                "actual_weight": float(actual[date_index, asset_index]),
-                            }
-                        )
-
+    kwargs = environment_kwargs(config, commission, cwd=paths.experiment_root)
     for period in ("train", "validation", "test"):
-        for commission_name, commission in settings.commissions:
-            kwargs = environment_kwargs(config, commission, cwd=paths.experiment_root)
-            real_key = {
-                "train": "train",
-                "validation": "real_valid",
-                "test": "real_test",
-            }[period]
-            result = rollout(
-                prepared.real_pipeline[real_key],
-                None,
-                kwargs,
-                settings.seeds[0],
-            )
-            benchmark_rows.append(
+        real_key = {
+            "train": "train",
+            "validation": "real_valid",
+            "test": "real_test",
+        }[period]
+        result = rollout(
+            prepared.real_pipeline[real_key], None, kwargs, settings.seeds[0]
+        )
+        period_rows.append(
+            {
+                "run_id": f"buy_and_hold__{period}__{commission_name}",
+                "period": period,
+                "evaluation_mode": "independent",
+                "agent": "Buy & Hold",
+                "agent_type": "Buy & Hold",
+                "group": "buy_and_hold",
+                "model_name": None,
+                "commission_name": commission_name,
+                "commission": commission,
+                "seed": pd.NA,
+                "best_timestep": np.nan,
+                **result["metrics"],
+            }
+        )
+        for date, value in zip(
+            result["dates"], result["values"] / result["values"][0]
+        ):
+            equity_rows.append(
                 {
-                    "run_id": f"buy_and_hold__{period}__{commission_name}",
+                    "date": pd.Timestamp(date),
                     "period": period,
                     "evaluation_mode": "independent",
                     "agent": "Buy & Hold",
@@ -1978,32 +2536,336 @@ def evaluate_window(
                     "group": "buy_and_hold",
                     "model_name": None,
                     "commission_name": commission_name,
-                    "commission": commission,
                     "seed": pd.NA,
-                    "best_timestep": np.nan,
-                    **result["metrics"],
+                    "growth_of_one": float(value),
                 }
             )
-            for date, value in zip(
-                result["dates"], result["values"] / result["values"][0]
-            ):
-                equity_rows.append(
-                    {
-                        "date": pd.Timestamp(date),
-                        "period": period,
-                        "evaluation_mode": "independent",
-                        "agent": "Buy & Hold",
-                        "agent_type": "Buy & Hold",
-                        "group": "buy_and_hold",
-                        "model_name": None,
-                        "commission_name": commission_name,
-                        "seed": pd.NA,
-                        "growth_of_one": float(value),
-                    }
+    return {
+        "period_metrics": pd.DataFrame(period_rows),
+        "equity_curves": pd.DataFrame(equity_rows),
+        "portfolio_weights": pd.DataFrame(
+            columns=(
+                "date",
+                "evaluation_mode",
+                "group",
+                "model_name",
+                "commission_name",
+                "seed",
+                "asset",
+                "target_weight",
+                "actual_weight",
+            )
+        ),
+    }
+
+
+def _independent_evaluation_item(
+    *,
+    prepared: PreparedWindow,
+    config: ExperimentConfig,
+    settings: RunSettings,
+    paths: ExperimentPaths,
+    record: Mapping[str, Any] | None,
+    commission_name: str,
+    commission: float,
+    use_cache: bool,
+    force_reevaluate: bool,
+) -> tuple[dict[str, pd.DataFrame], dict[str, Any]]:
+    is_benchmark = record is None
+    identifier = (
+        f"buy_and_hold__{commission_name}"
+        if is_benchmark
+        else str(record["run_id"])
+    )
+    model_hash = None
+    if record is not None and use_cache:
+        model_hash = _sha256_file(_model_archive_path(record["best_model_path"]))
+    payload = {
+        "schema": INDEPENDENT_EVALUATION_CACHE_SCHEMA,
+        "kind": "buy_and_hold" if is_benchmark else "ppo",
+        "identifier": identifier,
+        "split": asdict(prepared.split),
+        "ticker_group": prepared.ticker_group,
+        "tickers": list(prepared.tickers),
+        "data_fingerprint": prepared.data_fingerprint,
+        "training_data_fingerprint": (
+            None
+            if is_benchmark
+            else prepared.training_data_fingerprints[str(record["group"])]
+        ),
+        "training_cache_key": None if is_benchmark else record.get("cache_key"),
+        "model_sha256": model_hash,
+        "group": "buy_and_hold" if is_benchmark else record["group"],
+        "commission_name": commission_name,
+        "commission": commission,
+        "seed": settings.seeds[0] if is_benchmark else int(record["seed"]),
+        "environment": _evaluation_environment_payload(
+            config, commission, cwd=paths.experiment_root
+        ),
+    }
+    cache_key = _content_hash(payload)
+    slug = re.sub(r"[^A-Za-z0-9_.-]+", "_", identifier).strip("_")
+    evaluation_cache_root = (
+        paths.evaluation_cache_root
+        if paths.evaluation_cache_root is not None
+        else paths.artifact_root / "evaluation_cache"
+    )
+    cache_dir = (
+        evaluation_cache_root
+        / "independent"
+        / f"{prepared.split.name}__{prepared.ticker_group}"
+        / f"{slug}__{cache_key[:12]}"
+    )
+    started = datetime.now(timezone.utc)
+    started_clock = time.perf_counter()
+    cache_hit = False
+
+    def evaluate() -> dict[str, pd.DataFrame]:
+        if record is None:
+            return _evaluate_benchmark_independent(
+                prepared=prepared,
+                config=config,
+                settings=settings,
+                paths=paths,
+                commission_name=commission_name,
+                commission=commission,
+            )
+        return _evaluate_policy_independent(
+            prepared=prepared,
+            config=config,
+            paths=paths,
+            record=record,
+            group_label=training_group_label(config, str(record["group"])),
+        )
+
+    if use_cache:
+        lock_path = Path(str(cache_dir) + ".lock")
+        lock_path.parent.mkdir(parents=True, exist_ok=True)
+        with FileLock(lock_path):
+            frames = None
+            if not force_reevaluate:
+                frames = _load_evaluation_cache(
+                    cache_dir=cache_dir,
+                    cache_key=cache_key,
+                    schema=INDEPENDENT_EVALUATION_CACHE_SCHEMA,
+                    artifact_names=INDEPENDENT_EVALUATION_ARTIFACTS,
                 )
+            if frames is not None:
+                cache_hit = True
+            else:
+                metadata = {
+                    "identifier": identifier,
+                    "window_id": prepared.split.name,
+                    "ticker_group": prepared.ticker_group,
+                    "kind": payload["kind"],
+                    "semantic_cache_config": payload,
+                }
+                _mark_evaluation_started(
+                    cache_dir=cache_dir,
+                    cache_key=cache_key,
+                    schema=INDEPENDENT_EVALUATION_CACHE_SCHEMA,
+                    metadata=metadata,
+                )
+                frames = evaluate()
+                _write_evaluation_cache(
+                    cache_dir=cache_dir,
+                    cache_key=cache_key,
+                    schema=INDEPENDENT_EVALUATION_CACHE_SCHEMA,
+                    artifact_names=INDEPENDENT_EVALUATION_ARTIFACTS,
+                    frames=frames,
+                    metadata=metadata,
+                )
+    else:
+        frames = evaluate()
+
+    timing = {
+        "window_id": prepared.split.name,
+        "ticker_group": prepared.ticker_group,
+        "identifier": identifier,
+        "kind": payload["kind"],
+        "group": payload["group"],
+        "commission_name": commission_name,
+        "seed": payload["seed"],
+        "evaluation_cache_key": cache_key,
+        "evaluation_cache_dir": str(cache_dir) if use_cache else "",
+        "evaluation_cache_hit": cache_hit,
+        "status": "completed",
+        "started_at_utc": started.isoformat(),
+        "finished_at_utc": datetime.now(timezone.utc).isoformat(),
+        "elapsed_seconds": round(time.perf_counter() - started_clock, 6),
+    }
+    return frames, timing
+
+
+def evaluate_window(
+    *,
+    prepared: PreparedWindow,
+    config: ExperimentConfig,
+    settings: RunSettings,
+    paths: ExperimentPaths,
+    run_records: Sequence[Mapping[str, Any]],
+    use_cache: bool = True,
+    force_reevaluate: bool = False,
+    show_progress: bool = True,
+) -> WindowResult:
+    """Evaluate cached/trained policies and persist notebook-ready artifacts."""
+    groups = training_groups(prepared.model_names)
+    group_labels = {group: training_group_label(config, group) for group in groups}
+    ppo_frames: list[dict[str, pd.DataFrame]] = []
+    benchmark_frames: list[dict[str, pd.DataFrame]] = []
+    timings: list[dict[str, Any]] = []
+    updated_records: list[dict[str, Any]] = []
+    total_items = len(run_records) + len(settings.commissions)
+    progress = tqdm(
+        total=total_items,
+        desc=f"{prepared.split.name}/{prepared.ticker_group}: independent evaluation",
+        unit="item",
+        disable=not show_progress,
+    )
+    cache_hits = 0
+    evaluated = 0
+    failed = 0
+    for record in run_records:
+        try:
+            frames, timing = _independent_evaluation_item(
+                prepared=prepared,
+                config=config,
+                settings=settings,
+                paths=paths,
+                record=record,
+                commission_name=str(record["commission_name"]),
+                commission=float(record["commission"]),
+                use_cache=use_cache,
+                force_reevaluate=force_reevaluate,
+            )
+        except Exception as error:
+            failed += 1
+            now = datetime.now(timezone.utc).isoformat()
+            timings.append(
+                {
+                    "window_id": prepared.split.name,
+                    "ticker_group": prepared.ticker_group,
+                    "identifier": record["run_id"],
+                    "kind": "ppo",
+                    "group": record["group"],
+                    "commission_name": record["commission_name"],
+                    "seed": record["seed"],
+                    "evaluation_cache_key": "",
+                    "evaluation_cache_dir": "",
+                    "evaluation_cache_hit": False,
+                    "status": "failed",
+                    "error_type": type(error).__name__,
+                    "error_message": str(error),
+                    "started_at_utc": now,
+                    "finished_at_utc": now,
+                    "elapsed_seconds": 0.0,
+                }
+            )
+            progress.update(1)
+            progress.set_postfix(
+                cache_hits=cache_hits, evaluated=evaluated, failed=failed
+            )
+            progress.close()
+            _atomic_write_csv(
+                pd.DataFrame(timings),
+                paths.experiment_root / "evaluation_timings.csv",
+            )
+            raise
+        ppo_frames.append(frames)
+        timings.append(timing)
+        enriched_record = dict(record)
+        enriched_record.update(
+            {
+                key: timing[key]
+                for key in (
+                    "evaluation_cache_key",
+                    "evaluation_cache_dir",
+                    "evaluation_cache_hit",
+                )
+            }
+        )
+        updated_records.append(enriched_record)
+        cache_hits += int(timing["evaluation_cache_hit"])
+        evaluated += int(not timing["evaluation_cache_hit"])
+        progress.update(1)
+        progress.set_postfix(
+            cache_hits=cache_hits, evaluated=evaluated, failed=failed
+        )
+    for commission_name, commission in settings.commissions:
+        try:
+            frames, timing = _independent_evaluation_item(
+                prepared=prepared,
+                config=config,
+                settings=settings,
+                paths=paths,
+                record=None,
+                commission_name=commission_name,
+                commission=commission,
+                use_cache=use_cache,
+                force_reevaluate=force_reevaluate,
+            )
+        except Exception as error:
+            failed += 1
+            now = datetime.now(timezone.utc).isoformat()
+            timings.append(
+                {
+                    "window_id": prepared.split.name,
+                    "ticker_group": prepared.ticker_group,
+                    "identifier": f"buy_and_hold__{commission_name}",
+                    "kind": "buy_and_hold",
+                    "group": "buy_and_hold",
+                    "commission_name": commission_name,
+                    "seed": settings.seeds[0],
+                    "evaluation_cache_key": "",
+                    "evaluation_cache_dir": "",
+                    "evaluation_cache_hit": False,
+                    "status": "failed",
+                    "error_type": type(error).__name__,
+                    "error_message": str(error),
+                    "started_at_utc": now,
+                    "finished_at_utc": now,
+                    "elapsed_seconds": 0.0,
+                }
+            )
+            progress.update(1)
+            progress.set_postfix(
+                cache_hits=cache_hits, evaluated=evaluated, failed=failed
+            )
+            progress.close()
+            _atomic_write_csv(
+                pd.DataFrame(timings),
+                paths.experiment_root / "evaluation_timings.csv",
+            )
+            raise
+        benchmark_frames.append(frames)
+        timings.append(timing)
+        cache_hits += int(timing["evaluation_cache_hit"])
+        evaluated += int(not timing["evaluation_cache_hit"])
+        progress.update(1)
+        progress.set_postfix(
+            cache_hits=cache_hits, evaluated=evaluated, failed=failed
+        )
+    progress.close()
+
+    ppo_rows = pd.concat(
+        [frames["period_metrics"] for frames in ppo_frames], ignore_index=True
+    )
+    benchmark_rows = pd.concat(
+        [frames["period_metrics"] for frames in benchmark_frames], ignore_index=True
+    )
+    equity_rows = pd.concat(
+        [
+            *[frames["equity_curves"] for frames in ppo_frames],
+            *[frames["equity_curves"] for frames in benchmark_frames],
+        ],
+        ignore_index=True,
+    )
+    weight_rows = pd.concat(
+        [frames["portfolio_weights"] for frames in ppo_frames], ignore_index=True
+    )
 
     ppo_period = _add_split_columns(
-        pd.DataFrame(ppo_rows),
+        ppo_rows,
         prepared.split,
         prepared.ticker_group,
         prepared.dataset_id,
@@ -2022,20 +2884,20 @@ def evaluate_window(
         and test_days < config.rolling_schedule.test_days
     )
     benchmark = _add_split_columns(
-        pd.DataFrame(benchmark_rows),
+        benchmark_rows,
         prepared.split,
         prepared.ticker_group,
         prepared.dataset_id,
     )
     backtest = pd.concat([ppo_period, benchmark], ignore_index=True)
     equity = _add_split_columns(
-        pd.DataFrame(equity_rows),
+        equity_rows,
         prepared.split,
         prepared.ticker_group,
         prepared.dataset_id,
     )
     weights = _add_split_columns(
-        pd.DataFrame(weight_rows),
+        weight_rows,
         prepared.split,
         prepared.ticker_group,
         prepared.dataset_id,
@@ -2113,7 +2975,7 @@ def evaluate_window(
 
     paths.experiment_root.mkdir(parents=True, exist_ok=True)
     run_table = _add_split_columns(
-        pd.DataFrame(run_records),
+        pd.DataFrame(updated_records),
         prepared.split,
         prepared.ticker_group,
         prepared.dataset_id,
@@ -2133,7 +2995,10 @@ def evaluate_window(
         "median_sharpe_representatives.csv": representative_runs,
     }
     for filename, frame in artifacts.items():
-        frame.to_csv(paths.experiment_root / filename, index=False)
+        _atomic_write_csv(frame, paths.experiment_root / filename)
+    _atomic_write_csv(
+        pd.DataFrame(timings), paths.experiment_root / "evaluation_timings.csv"
+    )
     model_references = [
         {
             "window_id": prepared.split.name,
@@ -2144,10 +3009,11 @@ def evaluate_window(
             "seed": int(record["seed"]),
             "best_model_path": record["best_model_path"],
         }
-        for record in run_records
+        for record in updated_records
     ]
-    (paths.experiment_root / "model_references.json").write_text(
-        json.dumps(_serializable(model_references), indent=2, sort_keys=True) + "\n"
+    _atomic_write_json(
+        paths.experiment_root / "model_references.json",
+        model_references,
     )
     return WindowResult(
         split=prepared.split,
@@ -2162,8 +3028,212 @@ def evaluate_window(
         paired_deltas=paired,
         representative_runs=representative_runs,
         prepared=prepared,
-        run_records=[dict(record) for record in run_records],
+        run_records=updated_records,
     )
+
+
+CONTINUOUS_EVALUATION_ARTIFACTS = {
+    "continuous_metrics": "continuous_metrics.csv",
+    "continuous_window_metrics": "continuous_window_metrics.csv",
+    "continuous_daily_returns": "continuous_daily_returns.csv",
+    "continuous_equity_curves": "continuous_equity_curves.csv",
+    "continuous_portfolio_weights": "continuous_portfolio_weights.csv",
+    "window_transition_log": "window_transition_log.csv",
+}
+
+
+def _continuous_record_key(record: Mapping[str, Any]) -> tuple[str, str, int]:
+    return (
+        str(record["group"]),
+        str(record["commission_name"]),
+        int(record["seed"]),
+    )
+
+
+def _evaluate_continuous_chain(
+    *,
+    ordered_results: Sequence[WindowResult],
+    records: Sequence[Mapping[str, Any]],
+    config: ExperimentConfig,
+) -> dict[str, pd.DataFrame]:
+    first = records[0]
+    group = str(first["group"])
+    model_name = first.get("model_name")
+    commission_name = str(first["commission_name"])
+    commission = float(first["commission"])
+    seed = int(first["seed"])
+    ticker_group = ordered_results[0].ticker_group
+    state: dict[str, Any] | None = None
+    chain_values = [float(config.initial_amount)]
+    chain_turnovers: list[float] = []
+    window_metric_rows: list[dict[str, Any]] = []
+    daily_rows: list[dict[str, Any]] = []
+    equity_rows: list[dict[str, Any]] = []
+    weight_rows: list[dict[str, Any]] = []
+    transition_rows: list[dict[str, Any]] = []
+
+    for window_index, (window, record) in enumerate(zip(ordered_results, records)):
+        prepared = window.prepared
+        cash_weights = np.zeros(len(prepared.tickers) + 1, dtype=float)
+        cash_weights[0] = 1.0
+        if state is None:
+            state = {
+                "portfolio_value": float(config.initial_amount),
+                "actual_weights": cash_weights,
+                "last_action": cash_weights,
+            }
+        initial_value = float(state["portfolio_value"])
+        initial_weights = np.asarray(state["actual_weights"], dtype=float)
+        model = PPO.load(record["best_model_path"], device=config.device)
+        kwargs = environment_kwargs(config, commission, cwd=window.experiment_root)
+        rollout_result = rollout(
+            _period_frame(prepared, group, model_name, "test"),
+            model,
+            kwargs,
+            seed,
+            initial_portfolio_value=initial_value,
+            initial_actual_weights=initial_weights,
+            initial_last_action=state["last_action"],
+        )
+        values = np.asarray(rollout_result["values"], dtype=float)
+        execution_dates = pd.to_datetime(rollout_result["dates"][1:])
+        daily_returns = np.diff(values) / values[:-1]
+        turnovers = np.asarray(rollout_result["turnover_by_step"], dtype=float)
+        trf_mus = np.asarray(rollout_result["trf_mu_by_step"], dtype=float)
+        if not (len(execution_dates) == len(daily_returns) == len(turnovers)):
+            raise RuntimeError("Continuous rollout arrays are misaligned")
+        group_label = training_group_label(config, group)
+        window_metric_rows.append(
+            {
+                "window_id": window.split.name,
+                "ticker_group": ticker_group,
+                "synthetic_dataset_id": window.dataset_id,
+                "test_start": window.split.test_start,
+                "test_end": window.split.test_end,
+                "evaluation_mode": "continuous",
+                "agent": group_label,
+                "group": group,
+                "model_name": model_name,
+                "commission_name": commission_name,
+                "commission": commission,
+                "seed": seed,
+                "best_timestep": int(record["best_timestep"]),
+                "test_days": len(daily_returns),
+                "is_partial_window": (
+                    config.rolling_schedule is not None
+                    and len(daily_returns) < config.rolling_schedule.test_days
+                ),
+                **rollout_result["metrics"],
+            }
+        )
+        transition_rows.append(
+            {
+                "window_index": window_index,
+                "window_id": window.split.name,
+                "ticker_group": ticker_group,
+                "group": group,
+                "commission_name": commission_name,
+                "seed": seed,
+                "initial_portfolio_value": initial_value,
+                "final_portfolio_value": rollout_result["final_portfolio_value"],
+                "initial_actual_weights": json.dumps(
+                    initial_weights.tolist(), separators=(",", ":")
+                ),
+                "first_target_weights": json.dumps(
+                    rollout_result["target_weights"][1].tolist(), separators=(",", ":")
+                ),
+                "final_actual_weights": json.dumps(
+                    rollout_result["final_actual_weights"].tolist(),
+                    separators=(",", ":"),
+                ),
+                "final_target_weights": json.dumps(
+                    rollout_result["final_target_weights"].tolist(),
+                    separators=(",", ":"),
+                ),
+                "boundary_turnover": float(turnovers[0]) if len(turnovers) else np.nan,
+                "boundary_fee": (
+                    initial_value * (1.0 - float(trf_mus[0]))
+                    if len(trf_mus)
+                    else 0.0
+                ),
+            }
+        )
+        labels = rollout_result["weight_labels"]
+        targets = rollout_result["target_weights"][1:]
+        actuals = rollout_result["actual_weights"][1:]
+        for step_index, (date, daily_return, value, turnover) in enumerate(
+            zip(execution_dates, daily_returns, values[1:], turnovers)
+        ):
+            common = {
+                "date": date,
+                "window_id": window.split.name,
+                "ticker_group": ticker_group,
+                "synthetic_dataset_id": window.dataset_id,
+                "evaluation_mode": "continuous",
+                "agent": group_label,
+                "group": group,
+                "model_name": model_name,
+                "commission_name": commission_name,
+                "commission": commission,
+                "seed": seed,
+            }
+            daily_rows.append(
+                {
+                    **common,
+                    "daily_return": float(daily_return),
+                    "portfolio_value": float(value),
+                    "turnover": float(turnover),
+                }
+            )
+            equity_rows.append(
+                {**common, "growth_of_one": float(value / config.initial_amount)}
+            )
+            for asset_index, asset in enumerate(labels):
+                weight_rows.append(
+                    {
+                        **common,
+                        "asset": asset,
+                        "target_weight": float(targets[step_index, asset_index]),
+                        "actual_weight": float(actuals[step_index, asset_index]),
+                    }
+                )
+        state = {
+            "portfolio_value": rollout_result["final_portfolio_value"],
+            "actual_weights": rollout_result["final_actual_weights"],
+            "last_action": rollout_result["final_target_weights"],
+        }
+        chain_values.extend(values[1:].tolist())
+        chain_turnovers.extend(turnovers.tolist())
+
+    steps = len(chain_values) - 1
+    reward_per_day = float(
+        config.reward_scaling * np.log(chain_values[-1] / chain_values[0]) / steps
+    )
+    metric = {
+        "ticker_group": ticker_group,
+        "synthetic_dataset_id": ordered_results[-1].dataset_id,
+        "evaluation_mode": "continuous",
+        "agent": training_group_label(config, group),
+        "group": group,
+        "model_name": model_name,
+        "commission_name": commission_name,
+        "commission": commission,
+        "seed": seed,
+        "test_days": steps,
+        **performance_metrics_from_values(
+            chain_values,
+            turnover=float(np.mean(chain_turnovers)),
+            reward_per_day=reward_per_day,
+        ),
+    }
+    return {
+        "continuous_metrics": pd.DataFrame([metric]),
+        "continuous_window_metrics": pd.DataFrame(window_metric_rows),
+        "continuous_daily_returns": pd.DataFrame(daily_rows),
+        "continuous_equity_curves": pd.DataFrame(equity_rows),
+        "continuous_portfolio_weights": pd.DataFrame(weight_rows),
+        "window_transition_log": pd.DataFrame(transition_rows),
+    }
 
 
 def evaluate_continuous_test_chains(
@@ -2171,231 +3241,211 @@ def evaluate_continuous_test_chains(
     window_results: Sequence[WindowResult],
     config: ExperimentConfig,
     settings: RunSettings,
+    evaluation_cache_root: Path | None = None,
+    use_cache: bool = True,
+    force_reevaluate: bool = False,
+    show_progress: bool = True,
 ) -> dict[str, pd.DataFrame]:
-    """Evaluate ordered test windows while carrying portfolio state forward."""
-    metric_rows: list[dict[str, Any]] = []
-    window_metric_rows: list[dict[str, Any]] = []
-    daily_rows: list[dict[str, Any]] = []
-    equity_rows: list[dict[str, Any]] = []
-    weight_rows: list[dict[str, Any]] = []
-    transition_rows: list[dict[str, Any]] = []
+    """Evaluate and cache ordered test chains while carrying state forward."""
     by_ticker_group: dict[str, list[WindowResult]] = {}
     for result in window_results:
         by_ticker_group.setdefault(result.ticker_group, []).append(result)
 
+    chain_specs: list[
+        tuple[str, list[WindowResult], tuple[str, str, int], list[Mapping[str, Any]]]
+    ] = []
     for ticker_group, unsorted_results in by_ticker_group.items():
-        ordered_results = sorted(
+        ordered = sorted(
             unsorted_results, key=lambda result: pd.Timestamp(result.split.test_start)
         )
-        for previous, current in zip(ordered_results, ordered_results[1:]):
+        for previous, current in zip(ordered, ordered[1:]):
             if previous.split.test_end != current.split.test_start:
                 raise ValueError(
                     "Continuous evaluation requires contiguous test windows; "
                     f"{previous.split.name} ends {previous.split.test_end}, but "
                     f"{current.split.name} starts {current.split.test_start}"
                 )
-
-        chain_states: dict[tuple[str, str, int], dict[str, Any]] = {}
-        chain_values: dict[tuple[str, str, int], list[float]] = {}
-        chain_turnover: dict[tuple[str, str, int], list[float]] = {}
-        chain_metadata: dict[tuple[str, str, int], dict[str, Any]] = {}
-
-        for window_index, window in enumerate(ordered_results):
-            prepared = window.prepared
-            for record in window.run_records:
-                group = str(record["group"])
-                model_name = record.get("model_name")
-                commission_name = str(record["commission_name"])
-                commission = float(record["commission"])
-                seed = int(record["seed"])
-                key = (group, commission_name, seed)
-                cash_weights = np.zeros(len(prepared.tickers) + 1, dtype=float)
-                cash_weights[0] = 1.0
-                state = chain_states.get(
+        records_by_window = [
+            {_continuous_record_key(record): record for record in window.run_records}
+            for window in ordered
+        ]
+        expected_keys = list(records_by_window[0])
+        for index, records in enumerate(records_by_window[1:], start=1):
+            if set(records) != set(expected_keys):
+                raise ValueError(
+                    "Continuous evaluation run matrix differs in "
+                    f"{ordered[index].split.name}"
+                )
+        for key in expected_keys:
+            chain_specs.append(
+                (
+                    ticker_group,
+                    ordered,
                     key,
-                    {
-                        "portfolio_value": float(config.initial_amount),
-                        "actual_weights": cash_weights,
-                        "last_action": cash_weights,
-                    },
+                    [records[key] for records in records_by_window],
                 )
-                initial_value = float(state["portfolio_value"])
-                initial_weights = np.asarray(state["actual_weights"], dtype=float)
-                model = PPO.load(record["best_model_path"], device=config.device)
-                kwargs = environment_kwargs(
-                    config, commission, cwd=window.experiment_root
-                )
-                frame = _period_frame(prepared, group, model_name, "test")
-                rollout_result = rollout(
-                    frame,
-                    model,
-                    kwargs,
-                    seed,
-                    initial_portfolio_value=initial_value,
-                    initial_actual_weights=initial_weights,
-                    initial_last_action=state["last_action"],
-                )
-                values = np.asarray(rollout_result["values"], dtype=float)
-                execution_dates = pd.to_datetime(rollout_result["dates"][1:])
-                daily_returns = np.diff(values) / values[:-1]
-                turnovers = np.asarray(rollout_result["turnover_by_step"], dtype=float)
-                trf_mus = np.asarray(rollout_result["trf_mu_by_step"], dtype=float)
-                if not (len(execution_dates) == len(daily_returns) == len(turnovers)):
-                    raise RuntimeError("Continuous rollout arrays are misaligned")
-                group_label = training_group_label(config, group)
-                window_metric_rows.append(
-                    {
-                        "window_id": window.split.name,
-                        "ticker_group": ticker_group,
-                        "synthetic_dataset_id": window.dataset_id,
-                        "test_start": window.split.test_start,
-                        "test_end": window.split.test_end,
-                        "evaluation_mode": "continuous",
-                        "agent": group_label,
-                        "group": group,
-                        "model_name": model_name,
-                        "commission_name": commission_name,
-                        "commission": commission,
-                        "seed": seed,
-                        "best_timestep": int(record["best_timestep"]),
-                        "test_days": len(daily_returns),
-                        "is_partial_window": (
-                            config.rolling_schedule is not None
-                            and len(daily_returns) < config.rolling_schedule.test_days
-                        ),
-                        **rollout_result["metrics"],
-                    }
-                )
-                transition_rows.append(
-                    {
-                        "window_index": window_index,
-                        "window_id": window.split.name,
-                        "ticker_group": ticker_group,
-                        "group": group,
-                        "commission_name": commission_name,
-                        "seed": seed,
-                        "initial_portfolio_value": initial_value,
-                        "final_portfolio_value": rollout_result[
-                            "final_portfolio_value"
-                        ],
-                        "initial_actual_weights": json.dumps(
-                            initial_weights.tolist(), separators=(",", ":")
-                        ),
-                        "first_target_weights": json.dumps(
-                            rollout_result["target_weights"][1].tolist(),
-                            separators=(",", ":"),
-                        ),
-                        "final_actual_weights": json.dumps(
-                            rollout_result["final_actual_weights"].tolist(),
-                            separators=(",", ":"),
-                        ),
-                        "final_target_weights": json.dumps(
-                            rollout_result["final_target_weights"].tolist(),
-                            separators=(",", ":"),
-                        ),
-                        "boundary_turnover": (
-                            float(turnovers[0]) if len(turnovers) else np.nan
-                        ),
-                        "boundary_fee": (
-                            initial_value * (1.0 - float(trf_mus[0]))
-                            if len(trf_mus)
-                            else 0.0
-                        ),
-                    }
-                )
-                labels = rollout_result["weight_labels"]
-                targets = rollout_result["target_weights"][1:]
-                actuals = rollout_result["actual_weights"][1:]
-                for step_index, (date, daily_return, value, turnover) in enumerate(
-                    zip(execution_dates, daily_returns, values[1:], turnovers)
-                ):
-                    common = {
-                        "date": date,
-                        "window_id": window.split.name,
-                        "ticker_group": ticker_group,
-                        "synthetic_dataset_id": window.dataset_id,
-                        "evaluation_mode": "continuous",
-                        "agent": group_label,
-                        "group": group,
-                        "model_name": model_name,
-                        "commission_name": commission_name,
-                        "commission": commission,
-                        "seed": seed,
-                    }
-                    daily_rows.append(
-                        {
-                            **common,
-                            "daily_return": float(daily_return),
-                            "portfolio_value": float(value),
-                            "turnover": float(turnover),
-                        }
-                    )
-                    equity_rows.append(
-                        {
-                            **common,
-                            "growth_of_one": float(value / config.initial_amount),
-                        }
-                    )
-                    for asset_index, asset in enumerate(labels):
-                        weight_rows.append(
-                            {
-                                **common,
-                                "asset": asset,
-                                "target_weight": float(
-                                    targets[step_index, asset_index]
-                                ),
-                                "actual_weight": float(
-                                    actuals[step_index, asset_index]
-                                ),
-                            }
-                        )
-                chain_states[key] = {
-                    "portfolio_value": rollout_result["final_portfolio_value"],
-                    "actual_weights": rollout_result["final_actual_weights"],
-                    "last_action": rollout_result["final_target_weights"],
-                }
-                chain_values.setdefault(key, [float(config.initial_amount)]).extend(
-                    values[1:].tolist()
-                )
-                chain_turnover.setdefault(key, []).extend(turnovers.tolist())
-                chain_metadata[key] = {
-                    "ticker_group": ticker_group,
-                    "synthetic_dataset_id": window.dataset_id,
-                    "evaluation_mode": "continuous",
-                    "agent": group_label,
-                    "group": group,
-                    "model_name": model_name,
-                    "commission_name": commission_name,
-                    "commission": commission,
-                    "seed": seed,
-                }
-
-        for key, values in chain_values.items():
-            turnovers = chain_turnover[key]
-            steps = len(values) - 1
-            reward_per_day = float(
-                config.reward_scaling * np.log(values[-1] / values[0]) / steps
             )
-            metric_rows.append(
+
+    use_cache = use_cache and evaluation_cache_root is not None
+    collected = {name: [] for name in CONTINUOUS_EVALUATION_ARTIFACTS}
+    timings: list[dict[str, Any]] = []
+    progress = tqdm(
+        total=len(chain_specs),
+        desc="continuous evaluation",
+        unit="chain",
+        disable=not show_progress,
+    )
+    cache_hits = 0
+    evaluated = 0
+    failed = 0
+    for ticker_group, windows, key, records in chain_specs:
+        group, commission_name, seed = key
+        commission = float(records[0]["commission"])
+        window_payloads = []
+        for window, record in zip(windows, records):
+            window_payloads.append(
                 {
-                    **chain_metadata[key],
-                    "test_days": steps,
-                    **performance_metrics_from_values(
-                        values,
-                        turnover=float(np.mean(turnovers)),
-                        reward_per_day=reward_per_day,
+                    "split": asdict(window.split),
+                    "data_fingerprint": window.prepared.data_fingerprint,
+                    "training_cache_key": record.get("cache_key"),
+                    "model_sha256": (
+                        _sha256_file(_model_archive_path(record["best_model_path"]))
+                        if use_cache
+                        else None
                     ),
+                    "best_timestep": int(record["best_timestep"]),
                 }
             )
-
-    return {
-        "continuous_metrics": pd.DataFrame(metric_rows),
-        "continuous_window_metrics": pd.DataFrame(window_metric_rows),
-        "continuous_daily_returns": pd.DataFrame(daily_rows),
-        "continuous_equity_curves": pd.DataFrame(equity_rows),
-        "continuous_portfolio_weights": pd.DataFrame(weight_rows),
-        "window_transition_log": pd.DataFrame(transition_rows),
+        payload = {
+            "schema": CONTINUOUS_EVALUATION_CACHE_SCHEMA,
+            "ticker_group": ticker_group,
+            "group": group,
+            "commission_name": commission_name,
+            "commission": commission,
+            "seed": seed,
+            "initial_amount": config.initial_amount,
+            "reward_scaling": config.reward_scaling,
+            "environment": _evaluation_environment_payload(
+                config, commission, cwd=windows[0].experiment_root
+            ),
+            "windows": window_payloads,
+        }
+        cache_key = _content_hash(payload)
+        identifier = re.sub(
+            r"[^A-Za-z0-9_.-]+",
+            "_",
+            f"{ticker_group}__{group}__{commission_name}__seed_{seed}",
+        ).strip("_")
+        cache_dir = (
+            Path(evaluation_cache_root)
+            / "continuous"
+            / f"{identifier}__{cache_key[:12]}"
+            if evaluation_cache_root is not None
+            else Path()
+        )
+        started = datetime.now(timezone.utc)
+        started_clock = time.perf_counter()
+        frames = None
+        cache_hit = False
+        try:
+            if use_cache:
+                lock_path = Path(str(cache_dir) + ".lock")
+                lock_path.parent.mkdir(parents=True, exist_ok=True)
+                with FileLock(lock_path):
+                    if not force_reevaluate:
+                        frames = _load_evaluation_cache(
+                            cache_dir=cache_dir,
+                            cache_key=cache_key,
+                            schema=CONTINUOUS_EVALUATION_CACHE_SCHEMA,
+                            artifact_names=CONTINUOUS_EVALUATION_ARTIFACTS,
+                        )
+                    if frames is not None:
+                        cache_hit = True
+                    else:
+                        metadata = {
+                            "identifier": identifier,
+                            "ticker_group": ticker_group,
+                            "group": group,
+                            "commission_name": commission_name,
+                            "seed": seed,
+                            "semantic_cache_config": payload,
+                        }
+                        _mark_evaluation_started(
+                            cache_dir=cache_dir,
+                            cache_key=cache_key,
+                            schema=CONTINUOUS_EVALUATION_CACHE_SCHEMA,
+                            metadata=metadata,
+                        )
+                        frames = _evaluate_continuous_chain(
+                            ordered_results=windows, records=records, config=config
+                        )
+                        _write_evaluation_cache(
+                            cache_dir=cache_dir,
+                            cache_key=cache_key,
+                            schema=CONTINUOUS_EVALUATION_CACHE_SCHEMA,
+                            artifact_names=CONTINUOUS_EVALUATION_ARTIFACTS,
+                            frames=frames,
+                            metadata=metadata,
+                        )
+            else:
+                frames = _evaluate_continuous_chain(
+                    ordered_results=windows, records=records, config=config
+                )
+        except Exception as error:
+            failed += 1
+            timings.append(
+                {
+                    "ticker_group": ticker_group,
+                    "group": group,
+                    "commission_name": commission_name,
+                    "seed": seed,
+                    "evaluation_cache_key": cache_key,
+                    "evaluation_cache_dir": str(cache_dir) if use_cache else "",
+                    "evaluation_cache_hit": False,
+                    "status": "failed",
+                    "error_type": type(error).__name__,
+                    "error_message": str(error),
+                    "started_at_utc": started.isoformat(),
+                    "finished_at_utc": datetime.now(timezone.utc).isoformat(),
+                    "elapsed_seconds": round(time.perf_counter() - started_clock, 6),
+                }
+            )
+            progress.update(1)
+            progress.set_postfix(
+                cache_hits=cache_hits, evaluated=evaluated, failed=failed
+            )
+            progress.close()
+            raise
+        for name in CONTINUOUS_EVALUATION_ARTIFACTS:
+            collected[name].append(frames[name])
+        timings.append(
+            {
+                "ticker_group": ticker_group,
+                "group": group,
+                "commission_name": commission_name,
+                "seed": seed,
+                "evaluation_cache_key": cache_key,
+                "evaluation_cache_dir": str(cache_dir) if use_cache else "",
+                "evaluation_cache_hit": cache_hit,
+                "status": "completed",
+                "started_at_utc": started.isoformat(),
+                "finished_at_utc": datetime.now(timezone.utc).isoformat(),
+                "elapsed_seconds": round(time.perf_counter() - started_clock, 6),
+            }
+        )
+        cache_hits += int(cache_hit)
+        evaluated += int(not cache_hit)
+        progress.update(1)
+        progress.set_postfix(
+            cache_hits=cache_hits, evaluated=evaluated, failed=failed
+        )
+    progress.close()
+    combined = {
+        name: pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+        for name, frames in collected.items()
     }
+    combined["continuous_evaluation_timings"] = pd.DataFrame(timings)
+    return combined
 
 
 def run_window(
@@ -2411,6 +3461,7 @@ def run_window(
     use_cache: bool = True,
     force_retrain: bool = False,
     show_progress: bool = True,
+    workers: int = 4,
 ) -> WindowResult:
     prepared = prepare_window_data(
         project_root=project_root,
@@ -2439,14 +3490,12 @@ def run_window(
         "data_fingerprint": prepared.data_fingerprint,
         "training_data_fingerprints": prepared.training_data_fingerprints,
     }
-    (paths.experiment_root / "experiment_config.json").write_text(
-        json.dumps(_serializable(metadata), indent=2, sort_keys=True) + "\n"
+    _atomic_write_json(paths.experiment_root / "experiment_config.json", metadata)
+    _atomic_write_csv(
+        prepared.data_summary, paths.experiment_root / "data_summary.csv"
     )
-    prepared.data_summary.to_csv(
-        paths.experiment_root / "data_summary.csv", index=False
-    )
-    prepared.scale_summary.to_csv(
-        paths.experiment_root / "scale_summary.csv", index=False
+    _atomic_write_csv(
+        prepared.scale_summary, paths.experiment_root / "scale_summary.csv"
     )
     run_records = run_training_matrix(
         prepared=prepared,
@@ -2456,6 +3505,7 @@ def run_window(
         use_cache=use_cache,
         force_retrain=force_retrain,
         show_progress=show_progress,
+        workers=workers,
     )
     return evaluate_window(
         prepared=prepared,
@@ -2463,6 +3513,9 @@ def run_window(
         settings=settings,
         paths=paths,
         run_records=run_records,
+        use_cache=use_cache,
+        force_reevaluate=force_retrain,
+        show_progress=show_progress,
     )
 
 
@@ -2481,8 +3534,15 @@ def run_experiment_suite(
     use_cache: bool = True,
     force_retrain: bool = False,
     show_progress: bool = True,
+    stage: str = "all",
+    workers: int = 4,
 ) -> ExperimentSuiteResult:
-    """Run selected time-window × ticker-group cases and write suite artifacts."""
+    """Train all selected cases, then evaluate and merge after a global barrier."""
+    normalized_stage = stage.lower()
+    if normalized_stage not in {"all", "train", "evaluate"}:
+        raise ValueError("stage must be one of: all, train, evaluate")
+    if workers <= 0:
+        raise ValueError("workers must be positive")
     project_root = Path(project_root).resolve()
     settings = config.resolve_run_settings(mode)
     ticker_groups = config.select_ticker_groups(ticker_group_names)
@@ -2490,7 +3550,7 @@ def run_experiment_suite(
         ticker_group: load_real_market_data(project_root, config, tickers)
         for ticker_group, tickers in ticker_groups
     }
-    results: list[WindowResult] = []
+    case_specs: list[tuple[str, tuple[str, ...], TimeSplit]] = []
     for ticker_group, tickers in ticker_groups:
         splits = rolling_time_splits(
             project_root=project_root,
@@ -2500,21 +3560,124 @@ def run_experiment_suite(
             names=split_names,
         )
         for split in splits:
-            results.append(
-                run_window(
-                    project_root=project_root,
-                    config=config,
-                    settings=settings,
-                    split=split,
-                    ticker_group=ticker_group,
-                    tickers=tickers,
-                    real_files=real_data[ticker_group][0],
-                    real_raw=real_data[ticker_group][1],
-                    use_cache=use_cache,
-                    force_retrain=force_retrain,
-                    show_progress=show_progress,
-                )
+            case_specs.append((ticker_group, tickers, split))
+
+    training_cases: list[TrainingCaseResult] = []
+    missing_training_run_ids: list[str] = []
+    for ticker_group, tickers, split in case_specs:
+        prepared = prepare_window_data(
+            project_root=project_root,
+            config=config,
+            split=split,
+            real_files=real_data[ticker_group][0],
+            real_raw=real_data[ticker_group][1],
+            ticker_group=ticker_group,
+            tickers=tickers,
+        )
+        paths = resolve_experiment_paths(
+            project_root=project_root,
+            config=config,
+            settings=settings,
+            prepared=prepared,
+        )
+        paths.experiment_root.mkdir(parents=True, exist_ok=True)
+        metadata = {
+            "experiment_id": paths.experiment_id,
+            "split": asdict(split),
+            "ticker_group": ticker_group,
+            "tickers": list(tickers),
+            "synthetic_dataset_id": prepared.dataset_id,
+            "config": config.to_mapping(),
+            "run_settings": asdict(settings),
+            "data_fingerprint": prepared.data_fingerprint,
+            "training_data_fingerprints": prepared.training_data_fingerprints,
+        }
+        _atomic_write_json(paths.experiment_root / "experiment_config.json", metadata)
+        _atomic_write_csv(
+            prepared.data_summary, paths.experiment_root / "data_summary.csv"
+        )
+        _atomic_write_csv(
+            prepared.scale_summary, paths.experiment_root / "scale_summary.csv"
+        )
+        train_missing = normalized_stage in {"all", "train"}
+        try:
+            run_records = run_training_matrix(
+                prepared=prepared,
+                config=config,
+                settings=settings,
+                paths=paths,
+                use_cache=use_cache,
+                force_retrain=(force_retrain if train_missing else False),
+                show_progress=show_progress,
+                workers=workers,
+                train_missing=train_missing,
             )
+        except MissingTrainingArtifactsError as error:
+            missing_training_run_ids.extend(
+                f"{split.name}/{ticker_group}/{run_id}" for run_id in error.run_ids
+            )
+            continue
+        training_cases.append(
+            TrainingCaseResult(
+                split=split,
+                ticker_group=ticker_group,
+                dataset_id=prepared.dataset_id,
+                tickers=tuple(tickers),
+                experiment_root=paths.experiment_root,
+                experiment_id=paths.experiment_id,
+                run_records=[dict(record) for record in run_records],
+            )
+        )
+
+    if missing_training_run_ids:
+        raise MissingTrainingArtifactsError(missing_training_run_ids)
+
+    if normalized_stage == "train":
+        return ExperimentSuiteResult(
+            manifest_path=None,
+            suite_root=None,
+            window_results=[],
+            test_metrics=pd.DataFrame(),
+            aggregate_summary=pd.DataFrame(),
+            paired_deltas=pd.DataFrame(),
+            continuous_metrics=pd.DataFrame(),
+            training_cases=training_cases,
+            stage=normalized_stage,
+        )
+
+    results: list[WindowResult] = []
+    for (ticker_group, tickers, split), trained in zip(case_specs, training_cases):
+        prepared = prepare_window_data(
+            project_root=project_root,
+            config=config,
+            split=split,
+            real_files=real_data[ticker_group][0],
+            real_raw=real_data[ticker_group][1],
+            ticker_group=ticker_group,
+            tickers=tickers,
+        )
+        paths = resolve_experiment_paths(
+            project_root=project_root,
+            config=config,
+            settings=settings,
+            prepared=prepared,
+        )
+        if paths.experiment_id != trained.experiment_id:
+            raise RuntimeError(
+                "Experiment identity changed between train and evaluation"
+            )
+        results.append(
+            evaluate_window(
+                prepared=prepared,
+                config=config,
+                settings=settings,
+                paths=paths,
+                run_records=trained.run_records,
+                use_cache=use_cache,
+                force_reevaluate=force_retrain,
+                show_progress=show_progress,
+            )
+        )
     suite_payload = {
         "mode": settings.mode,
         "windows": [
@@ -2543,6 +3706,10 @@ def run_experiment_suite(
             window_results=results,
             config=config,
             settings=settings,
+            evaluation_cache_root=artifact_root / "evaluation_cache",
+            use_cache=use_cache,
+            force_reevaluate=force_retrain,
+            show_progress=show_progress,
         )
         if "continuous" in config.evaluation_modes
         else {
@@ -2552,13 +3719,14 @@ def run_experiment_suite(
             "continuous_equity_curves": pd.DataFrame(),
             "continuous_portfolio_weights": pd.DataFrame(),
             "window_transition_log": pd.DataFrame(),
+            "continuous_evaluation_timings": pd.DataFrame(),
         }
     )
-    test_metrics.to_csv(suite_root / "test_metrics.csv", index=False)
-    aggregate.to_csv(suite_root / "aggregate_summary.csv", index=False)
-    paired.to_csv(suite_root / "paired_deltas.csv", index=False)
+    _atomic_write_csv(test_metrics, suite_root / "test_metrics.csv")
+    _atomic_write_csv(aggregate, suite_root / "aggregate_summary.csv")
+    _atomic_write_csv(paired, suite_root / "paired_deltas.csv")
     for name, frame in continuous_artifacts.items():
-        frame.to_csv(suite_root / f"{name}.csv", index=False)
+        _atomic_write_csv(frame, suite_root / f"{name}.csv")
     manifest = {
         "suite_id": suite_id,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -2571,18 +3739,12 @@ def run_experiment_suite(
         },
     }
     manifest_path = suite_root / "manifest.json"
-    manifest_path.write_text(
-        json.dumps(_serializable(manifest), indent=2, sort_keys=True) + "\n"
-    )
+    _atomic_write_json(manifest_path, manifest)
     latest_path = artifact_root / settings.mode / "latest_suite.json"
     latest_path.parent.mkdir(parents=True, exist_ok=True)
-    latest_path.write_text(
-        json.dumps(
-            {"manifest_path": str(manifest_path), "suite_id": suite_id},
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n"
+    _atomic_write_json(
+        latest_path,
+        {"manifest_path": str(manifest_path), "suite_id": suite_id},
     )
     return ExperimentSuiteResult(
         manifest_path=manifest_path,
@@ -2592,4 +3754,6 @@ def run_experiment_suite(
         aggregate_summary=aggregate,
         paired_deltas=paired,
         continuous_metrics=continuous_artifacts["continuous_metrics"],
+        training_cases=training_cases,
+        stage=normalized_stage,
     )
