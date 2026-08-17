@@ -1,0 +1,107 @@
+{
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__3_paths_6fbd2ffe__no_fee__seed_0__7c11547ef9c4/best_model",
+  "best_real_validation_reward": 0.04869544909868816,
+  "best_timestep": 200000,
+  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/synthetic_dva__3_paths_6fbd2ffe__no_fee__seed_0__7c11547ef9c4",
+  "cache_hit": false,
+  "cache_key": "7c11547ef9c48cdceda5fefb6d7a05108d51a6eed86f14efe9555d948178631c",
+  "cache_schema": "ppo_eiie_training_cache_v3",
+  "commission": 0.0,
+  "commission_name": "no_fee",
+  "completed": true,
+  "episode_source_sampling": null,
+  "experiment_id": "d06b99fc7586",
+  "group": "synthetic::dva__3_paths",
+  "model_name": "dva__3_paths",
+  "run_id": "synthetic_dva__3_paths_6fbd2ffe__no_fee__seed_0",
+  "run_mode": "full",
+  "runtime_fingerprint": "fa1d1574f63747206f34ce5b47f1ef326ba22c115dc6ab70c79a4ebd133ce6f0",
+  "runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0"
+    },
+    "python": "3.10.20",
+    "torch_num_interop_threads": 1,
+    "torch_num_threads": 1
+  },
+  "seed": 0,
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "eval_freq": 20000,
+    "group": "synthetic::dva__3_paths",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 0,
+    "tickers": [
+      "AAPL",
+      "AMGN",
+      "CRM",
+      "CSCO",
+      "IBM",
+      "INTC",
+      "MSFT",
+      "NKE",
+      "VZ",
+      "WMT"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2021-04-06",
+      "2023-04-05"
+    ],
+    "training_data_fingerprint": "8d52448254e2df9f66fd7751ed8160c669bb456e5542bd3253257f7a00611b84",
+    "validation": [
+      "2023-04-05",
+      "2023-10-05"
+    ]
+  },
+  "ticker_group": "chosen_10",
+  "total_timesteps": 200000,
+  "training_data_fingerprint": "8d52448254e2df9f66fd7751ed8160c669bb456e5542bd3253257f7a00611b84",
+  "training_data_fingerprint_schema": "market_source_rows_v1",
+  "window_id": "wf_504_126_63_013__test_20231005_20240104"
+}

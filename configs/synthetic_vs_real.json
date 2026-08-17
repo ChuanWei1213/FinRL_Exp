@@ -49,7 +49,9 @@
     "cndiff__50_paths": "CN-Diff (50 paths)",
     "dva__mean_of_50_paths": "DVA (mean of 50 paths)",
     "dva__50_paths": "DVA (50 paths)",
-    "nsdiff__50_paths": "NS-Diff (50 paths)"
+    "dva__3_paths": "DVA (3 paths)",
+    "nsdiff__50_paths": "NS-Diff (50 paths)",
+    "timediff__50_paths": "Time-Diff (50 paths)"
   },
   "time_window": 50,
   "initial_amount": 100000,
