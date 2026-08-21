@@ -21,6 +21,7 @@ from concurrent.futures import ProcessPoolExecutor
 from contextlib import contextmanager
 from dataclasses import asdict
 from dataclasses import dataclass
+from dataclasses import field
 from dataclasses import replace
 from datetime import datetime
 from datetime import timezone
@@ -36,6 +37,7 @@ import tempfile
 import time
 import traceback
 from typing import Any
+from typing import Callable
 from typing import Iterable
 from typing import Mapping
 from typing import Sequence
@@ -69,14 +71,16 @@ from finrl.meta.env_portfolio_optimization.env_portfolio_optimization_gymnasium 
     PortfolioOptimizationGymnasiumEnv,
 )
 from training_cache_fingerprint import TRAINING_DATA_FINGERPRINT_SCHEMA
-from training_cache_fingerprint import fingerprint_training_sources
+from training_cache_fingerprint import TrainingFingerprintStore
 
 
 PRICE_COLUMNS = ("close", "high", "low")
 REQUIRED_COLUMNS = ("date", "tic", *PRICE_COLUMNS)
-TRAIN_CACHE_SCHEMA = "ppo_eiie_training_cache_v3"
-INDEPENDENT_EVALUATION_CACHE_SCHEMA = "ppo_eiie_independent_evaluation_cache_v1"
-CONTINUOUS_EVALUATION_CACHE_SCHEMA = "ppo_eiie_continuous_evaluation_cache_v1"
+TRAIN_CACHE_SCHEMA = "ppo_eiie_training_cache_v4"
+INDEPENDENT_EVALUATION_CACHE_SCHEMA = "ppo_eiie_independent_evaluation_cache_v2"
+CONTINUOUS_EVALUATION_CACHE_SCHEMA = "ppo_eiie_continuous_evaluation_cache_v2"
+LEGACY_INDEPENDENT_EVALUATION_CACHE_SCHEMA = "ppo_eiie_independent_evaluation_cache_v1"
+LEGACY_CONTINUOUS_EVALUATION_CACHE_SCHEMA = "ppo_eiie_continuous_evaluation_cache_v1"
 CPU_THREAD_ENVIRONMENT = {
     "OMP_NUM_THREADS": "1",
     "MKL_NUM_THREADS": "1",
@@ -94,27 +98,10 @@ class MissingTrainingArtifactsError(RuntimeError):
             "Evaluation requires completed training artifacts for every run. "
             "Run --stage train first. Missing run IDs:\n" + missing
         )
-DEFAULT_SYNTHETIC_MODEL_LABELS = {
-    "armd__single_path": "ARMD (single path)",
-    "cndiff__50_paths": "CN-Diff (50 paths)",
-    "dva__mean_of_50_paths": "DVA (mean of 50 paths)",
-    "dva__50_paths": "DVA (50 paths)",
-    "nsdiff__50_paths": "NS-Diff (50 paths)",
-}
-DEFAULT_RUN_MODES = {
-    "smoke": {
-        "seeds": [0, 1],
-        "total_timesteps": 4_096,
-        "eval_freq": 2_048,
-        "commissions": {"with_fee": 0.0025},
-    },
-    "full": {
-        "seeds": [0, 1, 2],
-        "total_timesteps": 200_000,
-        "eval_freq": 20_000,
-        "commissions": {"no_fee": 0.0, "with_fee": 0.0025},
-    },
-}
+
+
+STANDARD_STUDY = "standard"
+TRAINING_GROUP_KINDS = ("real_trained", "synthetic", "real_synthetic")
 
 
 def _date_text(value: str) -> str:
@@ -338,6 +325,231 @@ class RunSettings:
         return dict(self.commissions)
 
 
+def _run_settings_from_mapping(mode: str, raw: Mapping[str, Any]) -> RunSettings:
+    if not isinstance(raw, Mapping):
+        raise ValueError(f"Run mode {mode!r} must contain a JSON object")
+    commissions = raw.get("commissions", {})
+    if not isinstance(commissions, Mapping):
+        raise ValueError(f"Run mode {mode!r} commissions must contain a JSON object")
+    try:
+        return RunSettings(
+            mode=mode,
+            seeds=tuple(int(seed) for seed in raw["seeds"]),
+            total_timesteps=int(raw["total_timesteps"]),
+            eval_freq=int(raw["eval_freq"]),
+            commissions=tuple(
+                (str(name), float(value)) for name, value in commissions.items()
+            ),
+        )
+    except KeyError as error:
+        raise ValueError(
+            f"Run mode {mode!r} is missing required field {error.args[0]!r}"
+        ) from error
+
+
+@dataclass(frozen=True)
+class SyntheticModelVariant:
+    """One logical model backed by all or a prefix of one source directory."""
+
+    source_model: str
+    label: str
+    path_count: int | None = None
+    equivalent_source_model: str | None = None
+
+
+@dataclass(frozen=True)
+class SyntheticPathSubsetConfig:
+    """Configured nested path counts for one synthetic source model."""
+
+    source_model: str
+    label: str
+    counts: tuple[int, ...]
+    equivalent_source_models: Mapping[int, str] = field(default_factory=dict)
+
+    @classmethod
+    def from_mapping(
+        cls, source_model: str, raw: Mapping[str, Any]
+    ) -> "SyntheticPathSubsetConfig":
+        if not source_model or not re.fullmatch(r"[A-Za-z0-9_.-]+", source_model):
+            raise ValueError(f"Invalid synthetic source model {source_model!r}")
+        if not isinstance(raw, Mapping):
+            raise ValueError(
+                f"Synthetic path subset {source_model!r} must contain a JSON object"
+            )
+        label = str(raw.get("label", source_model)).strip()
+        if not label:
+            raise ValueError(
+                f"Synthetic path subset {source_model!r} must have a non-empty label"
+            )
+        raw_counts = raw.get("counts", ())
+        if not isinstance(raw_counts, Sequence) or isinstance(raw_counts, (str, bytes)):
+            raise ValueError(
+                f"Synthetic path subset {source_model!r} counts must be an array"
+            )
+        if any(type(count) is not int for count in raw_counts):
+            raise ValueError(
+                f"Synthetic path subset {source_model!r} counts must be integers"
+            )
+        counts = tuple(raw_counts)
+        if not counts:
+            raise ValueError(
+                f"Synthetic path subset {source_model!r} needs at least one count"
+            )
+        if any(count <= 0 for count in counts):
+            raise ValueError(
+                f"Synthetic path subset {source_model!r} counts must be positive"
+            )
+        if tuple(sorted(set(counts))) != counts:
+            raise ValueError(
+                f"Synthetic path subset {source_model!r} counts must be unique "
+                "and strictly increasing"
+            )
+        raw_equivalents = raw.get("equivalent_source_models", {})
+        if not isinstance(raw_equivalents, Mapping):
+            raise ValueError(
+                f"Synthetic path subset {source_model!r} "
+                "equivalent_source_models must be a JSON object"
+            )
+        equivalents: dict[int, str] = {}
+        for raw_count, raw_target in raw_equivalents.items():
+            try:
+                count = int(raw_count)
+            except (TypeError, ValueError) as error:
+                raise ValueError(
+                    f"Synthetic path subset {source_model!r} has invalid "
+                    f"equivalent path count {raw_count!r}"
+                ) from error
+            if str(count) != str(raw_count):
+                raise ValueError(
+                    f"Synthetic path subset {source_model!r} has invalid "
+                    f"equivalent path count {raw_count!r}"
+                )
+            if count not in counts:
+                raise ValueError(
+                    f"Synthetic path subset {source_model!r} equivalent count "
+                    f"{count} must also appear in counts"
+                )
+            target = str(raw_target).strip()
+            if not target or not re.fullmatch(r"[A-Za-z0-9_.-]+", target):
+                raise ValueError(
+                    f"Synthetic path subset {source_model!r} has invalid "
+                    f"equivalent source model {raw_target!r}"
+                )
+            equivalents[count] = target
+        return cls(
+            source_model=source_model,
+            label=label,
+            counts=counts,
+            equivalent_source_models=equivalents,
+        )
+
+    def to_mapping(self) -> dict[str, Any]:
+        payload: dict[str, Any] = {"label": self.label, "counts": list(self.counts)}
+        if self.equivalent_source_models:
+            payload["equivalent_source_models"] = {
+                str(count): model
+                for count, model in self.equivalent_source_models.items()
+            }
+        return payload
+
+
+@dataclass(frozen=True)
+class StudyConfig:
+    """A named training matrix and its study-specific run budgets."""
+
+    name: str
+    training_groups: tuple[str, ...]
+    synthetic_models: Mapping[str, str]
+    synthetic_path_subsets: Mapping[str, SyntheticPathSubsetConfig]
+    run_modes: Mapping[str, Mapping[str, Any]]
+
+    @classmethod
+    def from_mapping(cls, name: str, raw: Mapping[str, Any]) -> "StudyConfig":
+        if not name or not re.fullmatch(r"[A-Za-z0-9_.-]+", name):
+            raise ValueError(f"Invalid study name {name!r}")
+        if not isinstance(raw, Mapping):
+            raise ValueError(f"Study {name!r} must contain a JSON object")
+        training_groups = tuple(str(group) for group in raw.get("training_groups", ()))
+        if not training_groups:
+            raise ValueError(f"Study {name!r} needs at least one training group")
+        if len(set(training_groups)) != len(training_groups):
+            raise ValueError(f"Study {name!r} training groups must be unique")
+        unknown_groups = sorted(set(training_groups) - set(TRAINING_GROUP_KINDS))
+        if unknown_groups:
+            raise ValueError(
+                f"Study {name!r} has unknown training groups: {unknown_groups}"
+            )
+        raw_models = raw.get("synthetic_models")
+        raw_subsets = raw.get("synthetic_path_subsets")
+        if (raw_models is None) == (raw_subsets is None):
+            raise ValueError(
+                f"Study {name!r} must define exactly one of synthetic_models or "
+                "synthetic_path_subsets"
+            )
+        if raw_models is not None:
+            if not isinstance(raw_models, Mapping) or not raw_models:
+                raise ValueError(
+                    f"Study {name!r} synthetic_models must be a non-empty object"
+                )
+            models = {
+                str(model): str(label).strip() for model, label in raw_models.items()
+            }
+            if any(
+                not model or not re.fullmatch(r"[A-Za-z0-9_.-]+", model) or not label
+                for model, label in models.items()
+            ):
+                raise ValueError(
+                    f"Study {name!r} synthetic_models contains an invalid model or label"
+                )
+            subsets: dict[str, SyntheticPathSubsetConfig] = {}
+        else:
+            if not isinstance(raw_subsets, Mapping) or not raw_subsets:
+                raise ValueError(
+                    f"Study {name!r} synthetic_path_subsets must be a non-empty object"
+                )
+            models = {}
+            subsets = {
+                str(source_model): SyntheticPathSubsetConfig.from_mapping(
+                    str(source_model), subset
+                )
+                for source_model, subset in raw_subsets.items()
+            }
+        raw_run_modes = raw.get("run_modes", {})
+        if not isinstance(raw_run_modes, Mapping) or not raw_run_modes:
+            raise ValueError(f"Study {name!r} run_modes must be a non-empty object")
+        run_modes: dict[str, dict[str, Any]] = {}
+        for mode, settings in raw_run_modes.items():
+            normalized_mode = str(mode).lower()
+            if not isinstance(settings, Mapping):
+                raise ValueError(
+                    f"Run mode {normalized_mode!r} must contain a JSON object"
+                )
+            normalized_settings = dict(settings)
+            _run_settings_from_mapping(normalized_mode, normalized_settings)
+            run_modes[normalized_mode] = normalized_settings
+        return cls(
+            name=name,
+            training_groups=training_groups,
+            synthetic_models=models,
+            synthetic_path_subsets=subsets,
+            run_modes=run_modes,
+        )
+
+    def to_mapping(self) -> dict[str, Any]:
+        payload = {
+            "training_groups": list(self.training_groups),
+            "run_modes": _serializable(dict(self.run_modes)),
+        }
+        if self.synthetic_models:
+            payload["synthetic_models"] = dict(self.synthetic_models)
+        else:
+            payload["synthetic_path_subsets"] = {
+                name: subset.to_mapping()
+                for name, subset in self.synthetic_path_subsets.items()
+            }
+        return payload
+
+
 @dataclass(frozen=True)
 class ExperimentConfig:
     real_data_glob: str
@@ -349,14 +561,16 @@ class ExperimentConfig:
     time_splits: tuple[TimeSplit, ...]
     rolling_schedule: RollingSchedule | None
     evaluation_modes: tuple[str, ...]
-    synthetic_model_labels: Mapping[str, str]
-    run_modes: Mapping[str, Mapping[str, Any]]
+    studies: Mapping[str, StudyConfig]
     time_window: int = 50
     initial_amount: int = 100_000
     reward_scaling: float = 100.0
     max_train_evaluation_paths: int = 3
     max_synthetic_validation_paths: int = 3
     device: str = "cpu"
+    study_name: str = STANDARD_STUDY
+    training_group_kinds: tuple[str, ...] = TRAINING_GROUP_KINDS
+    synthetic_variants: Mapping[str, SyntheticModelVariant] | None = None
 
     def __post_init__(self) -> None:
         normalized_groups: dict[str, tuple[str, ...]] = {}
@@ -431,19 +645,70 @@ class ExperimentConfig:
             raise ValueError("max_train_evaluation_paths must be positive")
         if self.max_synthetic_validation_paths <= 0:
             raise ValueError("max_synthetic_validation_paths must be positive")
+        if STANDARD_STUDY not in self.studies:
+            raise ValueError("studies.standard is required")
+        standard = self.studies[STANDARD_STUDY]
+        if not standard.synthetic_models:
+            raise ValueError("studies.standard must define synthetic_models")
+        for study in self.studies.values():
+            for subset in study.synthetic_path_subsets.values():
+                unknown_targets = sorted(
+                    set(subset.equivalent_source_models.values())
+                    - set(standard.synthetic_models)
+                )
+                if unknown_targets:
+                    raise ValueError(
+                        f"Study {study.name!r} path subset {subset.source_model!r} "
+                        "references equivalent source model(s) not configured in "
+                        f"studies.standard.synthetic_models: {unknown_targets}"
+                    )
+        if self.study_name not in self.studies:
+            raise ValueError(f"Unknown active study {self.study_name!r}")
+        if len(set(self.training_group_kinds)) != len(self.training_group_kinds):
+            raise ValueError("Active training groups must be unique")
+        unknown_groups = sorted(
+            set(self.training_group_kinds) - set(TRAINING_GROUP_KINDS)
+        )
+        if unknown_groups:
+            raise ValueError(f"Unknown active training groups: {unknown_groups}")
+        if self.synthetic_variants is None:
+            active = self.studies[self.study_name]
+            if not active.synthetic_models:
+                object.__setattr__(self, "synthetic_variants", {})
+                return
+            object.__setattr__(
+                self,
+                "synthetic_variants",
+                {
+                    model_name: SyntheticModelVariant(
+                        source_model=model_name,
+                        label=label,
+                    )
+                    for model_name, label in active.synthetic_models.items()
+                },
+            )
 
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any]) -> "ExperimentConfig":
+        deprecated = sorted({"synthetic_model_labels", "run_modes"} & set(raw))
+        if deprecated:
+            raise ValueError(
+                f"Top-level {deprecated} are no longer supported; move them into "
+                "studies.standard"
+            )
         split_rows = raw.get("time_splits", ())
         time_splits = tuple(TimeSplit(**row) for row in split_rows)
         rolling_raw = raw.get("rolling_schedule")
         rolling_schedule = (
             RollingSchedule(**rolling_raw) if rolling_raw is not None else None
         )
-        labels = dict(DEFAULT_SYNTHETIC_MODEL_LABELS)
-        labels.update(raw.get("synthetic_model_labels", {}))
-        run_modes = dict(DEFAULT_RUN_MODES)
-        run_modes.update(raw.get("run_modes", {}))
+        raw_studies = raw.get("studies")
+        if not isinstance(raw_studies, Mapping) or not raw_studies:
+            raise ValueError("studies must contain a non-empty JSON object")
+        studies = {
+            str(name).lower(): StudyConfig.from_mapping(str(name).lower(), study)
+            for name, study in raw_studies.items()
+        }
         raw_ticker_groups = raw.get("ticker_groups")
         if raw_ticker_groups is None:
             ticker_groups = {"default": tuple(raw.get("tickers", ()))}
@@ -469,8 +734,7 @@ class ExperimentConfig:
             evaluation_modes=tuple(
                 raw.get("evaluation_modes", ("independent", "continuous"))
             ),
-            synthetic_model_labels=labels,
-            run_modes=run_modes,
+            studies=studies,
             time_window=int(raw.get("time_window", 50)),
             initial_amount=int(raw.get("initial_amount", 100_000)),
             reward_scaling=raw.get("reward_scaling", 100),
@@ -483,21 +747,117 @@ class ExperimentConfig:
 
     def resolve_run_settings(self, mode: str) -> RunSettings:
         normalized = mode.lower()
-        if normalized not in self.run_modes:
+        run_modes = self.studies[self.study_name].run_modes
+        if normalized not in run_modes:
             raise ValueError(
-                f"Unknown run mode {mode!r}; expected one of {sorted(self.run_modes)}"
+                f"Unknown run mode {mode!r}; expected one of {sorted(run_modes)}"
             )
-        raw = self.run_modes[normalized]
-        commissions = raw.get("commissions", {})
-        return RunSettings(
-            mode=normalized,
-            seeds=tuple(int(seed) for seed in raw["seeds"]),
-            total_timesteps=int(raw["total_timesteps"]),
-            eval_freq=int(raw["eval_freq"]),
-            commissions=tuple(
-                (str(name), float(value)) for name, value in commissions.items()
-            ),
+        return _run_settings_from_mapping(normalized, run_modes[normalized])
+
+    def for_study(self, name: str) -> "ExperimentConfig":
+        normalized = name.lower()
+        if normalized not in self.studies:
+            raise ValueError(
+                f"Unknown study {name!r}; expected one of {sorted(self.studies)}"
+            )
+        study = self.studies[normalized]
+        if study.synthetic_models:
+            variants = {
+                model_name: SyntheticModelVariant(
+                    source_model=model_name,
+                    label=label,
+                )
+                for model_name, label in study.synthetic_models.items()
+            }
+            return replace(
+                self,
+                study_name=normalized,
+                training_group_kinds=study.training_groups,
+                synthetic_variants=variants,
+            )
+        variants: dict[str, SyntheticModelVariant] = {}
+        for source_model, subset in study.synthetic_path_subsets.items():
+            for count in subset.counts:
+                variant_name = f"{source_model}__first_{count}_paths"
+                variants[variant_name] = SyntheticModelVariant(
+                    source_model=source_model,
+                    label=f"{subset.label} ({count} paths)",
+                    path_count=count,
+                    equivalent_source_model=subset.equivalent_source_models.get(count),
+                )
+        return replace(
+            self,
+            study_name=normalized,
+            training_group_kinds=study.training_groups,
+            synthetic_variants=variants,
         )
+
+    def select_synthetic_variants(
+        self,
+        *,
+        include: Sequence[str] | None = None,
+        exclude: Sequence[str] | None = None,
+    ) -> "ExperimentConfig":
+        """Filter active variants by variant ID or source-model ID."""
+
+        include_names = tuple(
+            dict.fromkeys(str(name).strip() for name in include or ())
+        )
+        exclude_names = tuple(
+            dict.fromkeys(str(name).strip() for name in exclude or ())
+        )
+        if include_names and exclude_names:
+            raise ValueError(
+                "include_datasets and exclude_datasets are mutually exclusive"
+            )
+        selectors = include_names or exclude_names
+        if any(not name for name in selectors):
+            raise ValueError("Dataset selectors must be non-empty")
+        if not selectors:
+            return self
+
+        matches = {
+            selector: {
+                variant_name
+                for variant_name, variant in self.synthetic_variants.items()
+                if selector in {variant_name, variant.source_model}
+            }
+            for selector in selectors
+        }
+        unknown = [selector for selector, names in matches.items() if not names]
+        if unknown:
+            valid = sorted(
+                {
+                    *self.synthetic_variants,
+                    *(
+                        variant.source_model
+                        for variant in self.synthetic_variants.values()
+                    ),
+                }
+            )
+            raise ValueError(
+                f"Unknown dataset selector(s) for study {self.study_name!r}: "
+                f"{unknown}; expected variant or source model from {valid}"
+            )
+        matched_names = set().union(*matches.values())
+        if include_names:
+            selected = {
+                name: variant
+                for name, variant in self.synthetic_variants.items()
+                if name in matched_names
+            }
+        else:
+            selected = {
+                name: variant
+                for name, variant in self.synthetic_variants.items()
+                if name not in matched_names
+            }
+        if not selected and "real_trained" not in self.training_group_kinds:
+            raise ValueError(
+                "Dataset selection removed every training group; include at least "
+                "one synthetic dataset"
+            )
+        return replace(self, synthetic_variants=selected)
 
     def select_splits(self, names: Sequence[str] | None) -> tuple[TimeSplit, ...]:
         if not names:
@@ -559,8 +919,9 @@ class ExperimentConfig:
                 asdict(self.rolling_schedule) if self.rolling_schedule else None
             ),
             "evaluation_modes": list(self.evaluation_modes),
-            "synthetic_model_labels": dict(self.synthetic_model_labels),
-            "run_modes": _serializable(dict(self.run_modes)),
+            "studies": {
+                name: study.to_mapping() for name, study in self.studies.items()
+            },
             "time_window": self.time_window,
             "initial_amount": self.initial_amount,
             "reward_scaling": self.reward_scaling,
@@ -584,10 +945,27 @@ class PreparedWindow:
     data_fingerprint: str
     data_summary: pd.DataFrame
     scale_summary: pd.DataFrame
+    study: str = STANDARD_STUDY
+    legacy_training_cache_aliases: dict[str, "TrainingCacheAlias"] = field(
+        default_factory=dict
+    )
+    legacy_standard_data_fingerprint: str | None = None
+    training_source_files: dict[str, list[tuple[str, Path]]] = field(
+        default_factory=dict
+    )
+    legacy_training_source_specs: dict[str, "LegacyTrainingSourceSpec"] = field(
+        default_factory=dict
+    )
+    equivalent_files_by_model: dict[str, list[Path]] = field(default_factory=dict)
+    preparation_timings: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def model_names(self) -> tuple[str, ...]:
         return tuple(self.synthetic_files_by_model)
+
+    @property
+    def is_materialized(self) -> bool:
+        return bool(self.real_pipeline)
 
 
 @dataclass(frozen=True)
@@ -598,6 +976,22 @@ class ExperimentPaths:
     train_cache_root: Path
     experiment_id: str
     evaluation_cache_root: Path | None = None
+
+
+@dataclass(frozen=True)
+class TrainingCacheAlias:
+    """One verified v1 cache identity compatible with a semantic training run."""
+
+    group: str
+    training_data_fingerprint: str
+    equivalent_source_model: str | None = None
+
+
+@dataclass(frozen=True)
+class LegacyTrainingSourceSpec:
+    group: str
+    sources: tuple[tuple[str, Path], ...]
+    equivalent_source_model: str | None = None
 
 
 @dataclass(frozen=True)
@@ -613,6 +1007,9 @@ class TrainingPlan:
     cache_match: tuple[Path, dict[str, Any]] | None
     use_cache: bool
     force_retrain: bool
+    legacy_cache_key: str | None = None
+    cache_match_type: str | None = None
+    cache_equivalent_model: str | None = None
 
 
 @dataclass
@@ -624,6 +1021,7 @@ class TrainingCaseResult:
     experiment_root: Path
     experiment_id: str
     run_records: list[dict[str, Any]]
+    identity: PreparedWindow | None = None
 
 
 @dataclass
@@ -654,6 +1052,8 @@ class ExperimentSuiteResult:
     continuous_metrics: pd.DataFrame
     training_cases: list[TrainingCaseResult]
     stage: str
+    dataset_selection: dict[str, Any] = field(default_factory=dict)
+    fingerprint_statistics: dict[str, Any] = field(default_factory=dict)
 
 
 def load_experiment_config(path: str | Path) -> ExperimentConfig:
@@ -684,6 +1084,16 @@ def is_real_synthetic_group(group: str) -> bool:
     return group.startswith("real_synthetic::")
 
 
+def training_group_kind(group: str) -> str:
+    if group == "real_trained":
+        return group
+    if group.startswith("synthetic::"):
+        return "synthetic"
+    if is_real_synthetic_group(group):
+        return "real_synthetic"
+    raise ValueError(f"Unknown training group: {group}")
+
+
 def model_from_group(group: str) -> str | None:
     for prefix in ("synthetic::", "real_synthetic::"):
         if group.startswith(prefix):
@@ -691,22 +1101,69 @@ def model_from_group(group: str) -> str | None:
     return None
 
 
-def training_groups(model_names: Sequence[str]) -> list[str]:
-    return [
-        "real_trained",
-        *[
-            group
-            for model_name in model_names
-            for group in (
-                synthetic_group(model_name),
-                real_synthetic_group(model_name),
-            )
-        ],
-    ]
+def training_groups(
+    model_names: Sequence[str],
+    group_kinds: Sequence[str] = TRAINING_GROUP_KINDS,
+) -> list[str]:
+    groups: list[str] = []
+    if "real_trained" in group_kinds:
+        groups.append("real_trained")
+    for model_name in model_names:
+        if "synthetic" in group_kinds:
+            groups.append(synthetic_group(model_name))
+        if "real_synthetic" in group_kinds:
+            groups.append(real_synthetic_group(model_name))
+    return groups
 
 
 def synthetic_model_label(config: ExperimentConfig, model_name: str) -> str:
-    return config.synthetic_model_labels.get(model_name, model_name)
+    variant = config.synthetic_variants.get(model_name)
+    if variant is not None:
+        return variant.label
+    return model_name
+
+
+def synthetic_variant_metadata(
+    config: ExperimentConfig, model_name: str | None
+) -> dict[str, Any]:
+    variant = config.synthetic_variants.get(str(model_name)) if model_name else None
+    return {
+        "study": config.study_name,
+        "synthetic_source_model": (
+            variant.source_model if variant is not None else None
+        ),
+        "synthetic_path_count": variant.path_count if variant is not None else None,
+    }
+
+
+def _enrich_variant_columns(
+    frame: pd.DataFrame, config: ExperimentConfig
+) -> pd.DataFrame:
+    enriched = frame.copy()
+    if "model_name" in enriched.columns:
+        metadata = [
+            synthetic_variant_metadata(
+                config,
+                None if pd.isna(model_name) else str(model_name),
+            )
+            for model_name in enriched["model_name"]
+        ]
+    elif "group" in enriched.columns:
+        metadata = [
+            synthetic_variant_metadata(config, model_from_group(str(group)))
+            for group in enriched["group"]
+        ]
+    else:
+        metadata = [synthetic_variant_metadata(config, None) for _ in enriched.index]
+    for name in ("study", "synthetic_source_model", "synthetic_path_count"):
+        if name in enriched.columns:
+            enriched = enriched.drop(columns=name)
+        enriched.insert(
+            len(enriched.columns),
+            name,
+            [row[name] for row in metadata],
+        )
+    return enriched
 
 
 def training_group_label(
@@ -731,6 +1188,14 @@ def synthetic_dataset_directory(
     )
 
 
+def _synthetic_path_sort_key(path: Path) -> tuple[tuple[int, Any], ...]:
+    """Sort path files naturally while keeping the order deterministic."""
+    return tuple(
+        (0, int(part)) if part.isdigit() else (1, part.casefold())
+        for part in re.split(r"(\d+)", path.name)
+    )
+
+
 def discover_synthetic_datasets(
     project_root: Path,
     config: ExperimentConfig,
@@ -745,18 +1210,54 @@ def discover_synthetic_datasets(
         )
     discovered: dict[str, list[Path]] = {}
     for model_dir in sorted(path for path in dataset_root.iterdir() if path.is_dir()):
-        paths = sorted(model_dir.glob("path*.csv"))
+        paths = sorted(model_dir.glob("path*.csv"), key=_synthetic_path_sort_key)
         if paths:
             discovered[model_dir.name] = paths
     if not discovered:
         raise FileNotFoundError(
             f"No synthetic paths found below {dataset_root}/<dataset>/path*.csv"
         )
-    return {
-        model_name: discovered[model_name]
-        for model_name in config.synthetic_model_labels
-        if model_name in discovered
-    }
+    selected: dict[str, list[Path]] = {}
+    for model_name, variant in config.synthetic_variants.items():
+        paths = discovered.get(variant.source_model)
+        if paths is None:
+            if variant.path_count is None:
+                continue
+            raise FileNotFoundError(
+                f"Study {config.study_name!r} requires synthetic model "
+                f"{variant.source_model!r}, but {dataset_root / variant.source_model} "
+                "does not contain path*.csv files"
+            )
+        if variant.path_count is not None and len(paths) < variant.path_count:
+            raise ValueError(
+                f"Study {config.study_name!r} requires the first "
+                f"{variant.path_count} paths from {variant.source_model!r}, but only "
+                f"{len(paths)} path*.csv files were found in "
+                f"{dataset_root / variant.source_model}"
+            )
+        selected[model_name] = (
+            paths if variant.path_count is None else paths[: variant.path_count]
+        )
+        if variant.equivalent_source_model is not None:
+            equivalent_paths = discovered.get(variant.equivalent_source_model)
+            if equivalent_paths is None:
+                raise FileNotFoundError(
+                    f"Study {config.study_name!r} declares {model_name!r} equivalent "
+                    f"to {variant.equivalent_source_model!r}, but "
+                    f"{dataset_root / variant.equivalent_source_model} does not "
+                    "contain path*.csv files"
+                )
+            if len(equivalent_paths) != variant.path_count:
+                raise ValueError(
+                    f"Equivalent source model {variant.equivalent_source_model!r} "
+                    f"must contain exactly {variant.path_count} paths for {model_name!r}; "
+                    f"found {len(equivalent_paths)}"
+                )
+    if not selected and config.synthetic_variants:
+        raise FileNotFoundError(
+            f"No configured synthetic models were found below {dataset_root}"
+        )
+    return selected
 
 
 def _synthetic_dataset_dates(
@@ -767,8 +1268,17 @@ def _synthetic_dataset_dates(
     tickers: Sequence[str],
 ) -> pd.DatetimeIndex:
     discovered = discover_synthetic_datasets(project_root, config, ticker_group)
-    first_model = next(iter(discovered))
-    first_path = discovered[first_model][0]
+    if discovered:
+        first_model = next(iter(discovered))
+        first_path = discovered[first_model][0]
+    else:
+        dataset_root = synthetic_dataset_directory(project_root, config, ticker_group)
+        available_paths = sorted(dataset_root.glob("*/path*.csv"))
+        if not available_paths:
+            raise FileNotFoundError(
+                f"No synthetic paths found below {dataset_root}/<model>/path*.csv"
+            )
+        first_path = available_paths[0]
     grid = pd.read_csv(first_path, usecols=["date", "tic"])
     grid["date"] = pd.to_datetime(grid["date"], errors="raise").dt.normalize()
     grid["tic"] = grid["tic"].astype(str).str.upper()
@@ -892,7 +1402,14 @@ def _read_synthetic_path(
     )
 
 
-def _fingerprint_files(project_root: Path, paths: Iterable[Path]) -> str:
+def _fingerprint_files(
+    project_root: Path,
+    paths: Iterable[Path],
+    *,
+    fingerprint_store: TrainingFingerprintStore | None = None,
+) -> str:
+    if fingerprint_store is not None:
+        return fingerprint_store.raw_file_set(project_root, paths)
     digest = hashlib.sha256()
     for path in sorted(paths):
         try:
@@ -911,6 +1428,34 @@ def _scaled_range(
 ) -> tuple[float, float]:
     values = frame[list(price_columns)].to_numpy(dtype=float)
     return float(values.min()), float(values.max())
+
+
+def _path_price_scales(
+    frame: pd.DataFrame,
+    tickers: Sequence[str],
+    price_columns: Sequence[str],
+) -> dict[str, float]:
+    """Compute per-ticker maxima from one validated, date/ticker-sorted path."""
+
+    ordered_tickers = tuple(sorted(str(ticker).upper() for ticker in tickers))
+    ticker_count = len(ordered_tickers)
+    if len(frame) % ticker_count:
+        raise ValueError("Validated path does not contain a complete ticker grid")
+    ticker_grid = frame["tic"].to_numpy().reshape(-1, ticker_count)
+    if not np.array_equal(
+        ticker_grid,
+        np.broadcast_to(np.asarray(ordered_tickers), ticker_grid.shape),
+    ):
+        raise ValueError("Validated path rows are not ordered by date and ticker")
+    values = np.abs(frame[list(price_columns)].to_numpy(dtype=float)).reshape(
+        -1,
+        ticker_count,
+        len(price_columns),
+    )
+    maxima = values.max(axis=(0, 2))
+    if not np.isfinite(maxima).all() or (maxima <= 0).any():
+        raise ValueError("Validated path contains an invalid price scale")
+    return {ticker: float(scale) for ticker, scale in zip(ordered_tickers, maxima)}
 
 
 def _execution_dates(frame: pd.DataFrame, start: str, end: str) -> pd.DatetimeIndex:
@@ -936,7 +1481,16 @@ def _require_same_dates(
     )
 
 
-def prepare_window_data(
+def _statistics_delta(
+    before: Mapping[str, int], after: Mapping[str, int]
+) -> dict[str, int]:
+    return {
+        key: int(after.get(key, 0) - before.get(key, 0))
+        for key in sorted(set(before) | set(after))
+    }
+
+
+def prepare_window_identity(
     *,
     project_root: Path,
     config: ExperimentConfig,
@@ -945,8 +1499,12 @@ def prepare_window_data(
     real_raw: pd.DataFrame,
     ticker_group: str | None = None,
     tickers: Sequence[str] | None = None,
+    fingerprint_store: TrainingFingerprintStore | None = None,
+    show_progress: bool = False,
 ) -> PreparedWindow:
-    """Load, validate, slice, and scale one multi-source experiment window."""
+    """Resolve one window's cache identity without materializing market frames."""
+
+    total_started = time.perf_counter()
     selected_group = ticker_group or config.active_ticker_groups[0]
     selected_tickers = tuple(tickers or config.tickers_for(selected_group))
     dataset_id = config.dataset_id_for(selected_group)
@@ -966,31 +1524,314 @@ def prepare_window_data(
         split.test_end,
         f"{split.name} real test",
     )
+
+    store = fingerprint_store or TrainingFingerprintStore(None)
+    timings: list[dict[str, Any]] = []
+    discovery_started = time.perf_counter()
     synthetic_files = discover_synthetic_datasets(project_root, config, selected_group)
-    unknown_labels = sorted(set(synthetic_files) - set(config.synthetic_model_labels))
+    unknown_labels = sorted(set(synthetic_files) - set(config.synthetic_variants))
     if unknown_labels:
         raise ValueError(
-            "Add reader-facing labels to synthetic_model_labels for: "
-            f"{unknown_labels}"
+            "Add reader-facing labels to the active study for: " f"{unknown_labels}"
+        )
+    equivalent_files_by_model: dict[str, list[Path]] = {}
+    dataset_root = synthetic_dataset_directory(project_root, config, selected_group)
+    for model_name, variant in config.synthetic_variants.items():
+        if variant.equivalent_source_model is None:
+            continue
+        equivalent_files_by_model[model_name] = sorted(
+            (dataset_root / variant.equivalent_source_model).glob("path*.csv"),
+            key=_synthetic_path_sort_key,
+        )
+    timings.append(
+        {
+            "phase": "source_discovery",
+            "elapsed_seconds": round(time.perf_counter() - discovery_started, 6),
+        }
+    )
+
+    training_source_files: dict[str, list[tuple[str, Path]]] = {}
+    if "real_trained" in config.training_group_kinds:
+        training_source_files["real_trained"] = [("real", path) for path in real_files]
+    for model_name in synthetic_files:
+        sources = [
+            *[("real", path) for path in real_files],
+            *[("synthetic", path) for path in synthetic_files[model_name]],
+        ]
+        if "synthetic" in config.training_group_kinds:
+            training_source_files[synthetic_group(model_name)] = sources
+        if "real_synthetic" in config.training_group_kinds:
+            training_source_files[real_synthetic_group(model_name)] = sources
+
+    semantic_topologies = dict(training_source_files)
+    equivalent_pairs: dict[str, tuple[str, str]] = {}
+    for model_name, equivalent_paths in equivalent_files_by_model.items():
+        current_name = f"__equivalent_current__{model_name}"
+        target_name = f"__equivalent_target__{model_name}"
+        semantic_topologies[current_name] = [
+            ("synthetic", path) for path in synthetic_files[model_name]
+        ]
+        semantic_topologies[target_name] = [
+            ("synthetic", path) for path in equivalent_paths
+        ]
+        equivalent_pairs[model_name] = (current_name, target_name)
+
+    raw_sha_started = time.perf_counter()
+    before_statistics = store.statistics()
+    source_paths = sorted(
+        {path for sources in semantic_topologies.values() for _, path in sources}
+    )
+    for path in tqdm(
+        source_paths,
+        desc=f"{split.name}/{selected_group}: hashing source files",
+        unit="file",
+        disable=not show_progress,
+    ):
+        store.digest_registry.digest(path)
+    after_statistics = store.statistics()
+    raw_sha_row: dict[str, Any] = {
+        "phase": "raw_sha",
+        "elapsed_seconds": round(time.perf_counter() - raw_sha_started, 6),
+    }
+    raw_sha_row.update(_statistics_delta(before_statistics, after_statistics))
+    timings.append(raw_sha_row)
+
+    fingerprint_started = time.perf_counter()
+    before_statistics = store.statistics()
+    if show_progress:
+        print(
+            f"{split.name}/{selected_group}: resolving semantic fingerprints "
+            "(cold entries parse canonical CSV rows)"
+        )
+    semantic_results = store.semantic_many(
+        semantic_topologies,
+        start=split.train_start,
+        end=split.val_end,
+    )
+    after_statistics = store.statistics()
+    fingerprint_row: dict[str, Any] = {
+        "phase": "semantic_fingerprint",
+        "elapsed_seconds": round(time.perf_counter() - fingerprint_started, 6),
+    }
+    fingerprint_row.update(_statistics_delta(before_statistics, after_statistics))
+    timings.append(fingerprint_row)
+    for model_name, (current_name, target_name) in equivalent_pairs.items():
+        if semantic_results[current_name] != semantic_results[target_name]:
+            variant = config.synthetic_variants[model_name]
+            raise ValueError(
+                f"Study {config.study_name!r} declares {model_name!r} equivalent "
+                f"to {variant.equivalent_source_model!r}, but their ordered "
+                f"canonical paths differ in window {split.name}"
+            )
+    fingerprints = {group: semantic_results[group] for group in training_source_files}
+
+    legacy_specs: dict[str, LegacyTrainingSourceSpec] = {}
+    if "real_trained" in training_source_files:
+        legacy_specs["real_trained"] = LegacyTrainingSourceSpec(
+            group="real_trained",
+            sources=tuple(training_source_files["real_trained"]),
+        )
+    for group, sources in training_source_files.items():
+        model_name = model_from_group(group)
+        if model_name is None:
+            continue
+        variant = config.synthetic_variants[model_name]
+        if config.study_name == STANDARD_STUDY:
+            legacy_group = group
+            legacy_sources = tuple(sources)
+            equivalent_source_model = variant.source_model
+        elif variant.equivalent_source_model is not None:
+            kind = training_group_kind(group)
+            legacy_group = f"{kind}::{variant.equivalent_source_model}"
+            legacy_sources = (
+                *[("real", path) for path in real_files],
+                *[
+                    ("synthetic", path)
+                    for path in equivalent_files_by_model[model_name]
+                ],
+            )
+            equivalent_source_model = variant.equivalent_source_model
+        else:
+            continue
+        legacy_specs[group] = LegacyTrainingSourceSpec(
+            group=legacy_group,
+            sources=tuple(legacy_sources),
+            equivalent_source_model=equivalent_source_model,
         )
 
-    synthetic_raw: dict[str, list[pd.DataFrame]] = {}
-    for model_name, paths in synthetic_files.items():
-        frames = []
-        for path in paths:
-            label = (
-                f"synthetic {split.name}/{selected_group}/{dataset_id}/"
-                f"{model_name}/{path.name}"
-            )
-            frame = _read_synthetic_path(path, selected_tickers, label)
-            check_calendar_coverage(
-                frame,
-                split.train_start,
-                split.val_end,
-                label,
-            )
-            frames.append(frame)
-        synthetic_raw[model_name] = frames
+    all_synthetic_files = sorted(
+        {path for paths in synthetic_files.values() for path in paths}
+    )
+    standard_files = sorted(
+        {
+            path
+            for source_model in config.studies[STANDARD_STUDY].synthetic_models
+            for path in (dataset_root / source_model).glob("path*.csv")
+        }
+    )
+    raw_set_started = time.perf_counter()
+    before_statistics = store.statistics()
+    if show_progress:
+        print(f"{split.name}/{selected_group}: resolving raw-file-set fingerprints")
+    data_fingerprint = store.raw_file_set(
+        project_root, [*real_files, *all_synthetic_files]
+    )
+    legacy_standard_data_fingerprint = store.raw_file_set(
+        project_root, [*real_files, *standard_files]
+    )
+    after_statistics = store.statistics()
+    raw_set_row: dict[str, Any] = {
+        "phase": "raw_file_set_fingerprint",
+        "elapsed_seconds": round(time.perf_counter() - raw_set_started, 6),
+    }
+    raw_set_row.update(_statistics_delta(before_statistics, after_statistics))
+    timings.append(raw_set_row)
+    timings.append(
+        {
+            "phase": "identity_total",
+            "elapsed_seconds": round(time.perf_counter() - total_started, 6),
+        }
+    )
+    return PreparedWindow(
+        split=split,
+        ticker_group=selected_group,
+        dataset_id=dataset_id,
+        tickers=selected_tickers,
+        real_files=list(real_files),
+        synthetic_files_by_model=synthetic_files,
+        real_pipeline={},
+        synthetic_pipelines={},
+        training_data_fingerprints=fingerprints,
+        data_fingerprint=data_fingerprint,
+        data_summary=pd.DataFrame(),
+        scale_summary=pd.DataFrame(),
+        study=config.study_name,
+        legacy_standard_data_fingerprint=legacy_standard_data_fingerprint,
+        training_source_files=training_source_files,
+        legacy_training_source_specs=legacy_specs,
+        equivalent_files_by_model=equivalent_files_by_model,
+        preparation_timings=timings,
+    )
+
+
+def resolve_legacy_training_cache_aliases(
+    *,
+    project_root: Path,
+    prepared: PreparedWindow,
+    fingerprint_store: TrainingFingerprintStore | None = None,
+    groups: Sequence[str] | None = None,
+) -> dict[str, TrainingCacheAlias]:
+    """Resolve only requested legacy identities and memoize them on the window."""
+
+    selected = tuple(groups or prepared.legacy_training_source_specs)
+    missing = {
+        group: prepared.legacy_training_source_specs[group]
+        for group in selected
+        if group not in prepared.legacy_training_cache_aliases
+        and group in prepared.legacy_training_source_specs
+    }
+    if not missing:
+        return prepared.legacy_training_cache_aliases
+    store = fingerprint_store or TrainingFingerprintStore(None)
+    started = time.perf_counter()
+    before_statistics = store.statistics()
+    fingerprints = store.legacy_many(
+        project_root,
+        {group: spec.sources for group, spec in missing.items()},
+        start=prepared.split.train_start,
+        end=prepared.split.val_end,
+    )
+    for group, spec in missing.items():
+        prepared.legacy_training_cache_aliases[group] = TrainingCacheAlias(
+            group=spec.group,
+            training_data_fingerprint=fingerprints[group],
+            equivalent_source_model=spec.equivalent_source_model,
+        )
+    after_statistics = store.statistics()
+    row: dict[str, Any] = {
+        "phase": "legacy_fingerprint",
+        "elapsed_seconds": round(time.perf_counter() - started, 6),
+    }
+    row.update(_statistics_delta(before_statistics, after_statistics))
+    prepared.preparation_timings.append(row)
+    return prepared.legacy_training_cache_aliases
+
+
+def prepare_window_data(
+    *,
+    project_root: Path,
+    config: ExperimentConfig,
+    split: TimeSplit,
+    real_files: Sequence[Path],
+    real_raw: pd.DataFrame,
+    ticker_group: str | None = None,
+    tickers: Sequence[str] | None = None,
+    fingerprint_store: TrainingFingerprintStore | None = None,
+    identity: PreparedWindow | None = None,
+    resolve_legacy_aliases: bool = True,
+    show_progress: bool = False,
+) -> PreparedWindow:
+    """Load, validate, slice, and scale one multi-source experiment window."""
+    materialization_started = time.perf_counter()
+    identity = identity or prepare_window_identity(
+        project_root=project_root,
+        config=config,
+        split=split,
+        real_files=real_files,
+        real_raw=real_raw,
+        ticker_group=ticker_group,
+        tickers=tickers,
+        fingerprint_store=fingerprint_store,
+        show_progress=show_progress,
+    )
+    if identity.split != split or identity.study != config.study_name:
+        raise ValueError("Window identity does not match requested split or study")
+    selected_group = identity.ticker_group
+    selected_tickers = identity.tickers
+    dataset_id = identity.dataset_id
+    synthetic_files = identity.synthetic_files_by_model
+    equivalent_files_by_model = identity.equivalent_files_by_model
+    if resolve_legacy_aliases:
+        resolve_legacy_training_cache_aliases(
+            project_root=project_root,
+            prepared=identity,
+            fingerprint_store=fingerprint_store,
+        )
+    if fingerprint_store is not None:
+        for path in {
+            *identity.real_files,
+            *(
+                source_path
+                for paths in identity.synthetic_files_by_model.values()
+                for source_path in paths
+            ),
+        }:
+            fingerprint_store.digest_registry.assert_unchanged(path)
+    dataframe_started = time.perf_counter()
+
+    unique_synthetic_paths = sorted(
+        {path for paths in synthetic_files.values() for path in paths},
+        key=lambda path: (path.parent.as_posix(), _synthetic_path_sort_key(path)),
+    )
+    synthetic_raw_by_path: dict[Path, pd.DataFrame] = {}
+    for path in tqdm(
+        unique_synthetic_paths,
+        desc=(f"{split.name}/{selected_group}: reading and validating synthetic paths"),
+        unit="path",
+        disable=not show_progress,
+    ):
+        label = (
+            f"synthetic {split.name}/{selected_group}/{dataset_id}/"
+            f"{path.parent.name}/{path.name}"
+        )
+        frame = _read_synthetic_path(path, selected_tickers, label)
+        check_calendar_coverage(
+            frame,
+            split.train_start,
+            split.val_end,
+            label,
+        )
+        synthetic_raw_by_path[path] = frame
 
     real_train_raw = slice_period(
         real_raw,
@@ -1014,61 +1855,87 @@ def prepare_window_data(
         time_window=config.time_window,
     )
 
-    synthetic_train_raw: dict[str, list[pd.DataFrame]] = {}
-    synthetic_valid_raw: dict[str, list[pd.DataFrame]] = {}
-    for model_name, frames in synthetic_raw.items():
-        synthetic_train_raw[model_name] = [
-            slice_period(
-                frame,
-                split.train_start,
-                split.train_end,
-                f"{split.name} synthetic {model_name} train path {index}",
-                minimum_dates=config.time_window + 1,
-            )
-            for index, frame in enumerate(frames)
-        ]
-        synthetic_valid_raw[model_name] = [
-            slice_evaluation_with_lookback(
-                frame,
-                split.val_start,
-                split.val_end,
-                f"{split.name} synthetic {model_name} validation path {index}",
-                time_window=config.time_window,
-            )
-            for index, frame in enumerate(frames)
-        ]
-
     expected_train_dates = _execution_dates(
         real_train_raw, split.train_start, split.train_end
     )
     expected_validation_dates = _execution_dates(
         real_valid_raw, split.val_start, split.val_end
     )
-    expected_test_dates = _execution_dates(
-        next(iter(synthetic_raw.values()))[0], split.test_start, split.test_end
-    )
-    _require_same_dates(
-        expected_test_dates,
-        _execution_dates(real_test_raw, split.test_start, split.test_end),
-        label=f"{split.name} real test",
-    )
-    for model_name in synthetic_files:
-        for path_index, frame in enumerate(synthetic_train_raw[model_name]):
-            _require_same_dates(
-                expected_train_dates,
-                _execution_dates(frame, split.train_start, split.train_end),
-                label=f"{split.name} synthetic {model_name} train path {path_index}",
-            )
-        for path_index, frame in enumerate(synthetic_valid_raw[model_name]):
-            _require_same_dates(
-                expected_validation_dates,
-                _execution_dates(frame, split.val_start, split.val_end),
-                label=(
-                    f"{split.name} synthetic {model_name} validation path "
-                    f"{path_index}"
-                ),
-            )
+    if synthetic_raw_by_path:
+        expected_test_dates = _execution_dates(
+            next(iter(synthetic_raw_by_path.values())),
+            split.test_start,
+            split.test_end,
+        )
+        _require_same_dates(
+            expected_test_dates,
+            _execution_dates(real_test_raw, split.test_start, split.test_end),
+            label=f"{split.name} real test",
+        )
+    synthetic_train_by_path: dict[Path, pd.DataFrame] = {}
+    synthetic_valid_by_path: dict[Path, pd.DataFrame] = {}
+    train_summary_by_path: dict[Path, dict[str, Any]] = {}
+    validation_summary_by_path: dict[Path, dict[str, Any]] = {}
+    for path, frame in tqdm(
+        synthetic_raw_by_path.items(),
+        total=len(synthetic_raw_by_path),
+        desc=f"{split.name}/{selected_group}: slicing and checking path grids",
+        unit="path",
+        disable=not show_progress,
+    ):
+        train_frame = slice_period(
+            frame,
+            split.train_start,
+            split.train_end,
+            f"{split.name} synthetic {path.parent.name}/{path.name} train",
+            minimum_dates=config.time_window + 1,
+        )
+        valid_frame = slice_evaluation_with_lookback(
+            frame,
+            split.val_start,
+            split.val_end,
+            f"{split.name} synthetic {path.parent.name}/{path.name} validation",
+            time_window=config.time_window,
+        )
+        _require_same_dates(
+            expected_train_dates,
+            _execution_dates(train_frame, split.train_start, split.train_end),
+            label=f"{split.name} synthetic {path.parent.name}/{path.name} train",
+        )
+        _require_same_dates(
+            expected_validation_dates,
+            _execution_dates(valid_frame, split.val_start, split.val_end),
+            label=(f"{split.name} synthetic {path.parent.name}/{path.name} validation"),
+        )
+        synthetic_train_by_path[path] = train_frame
+        synthetic_valid_by_path[path] = valid_frame
+        train_summary_by_path[path] = {
+            "first_date": train_frame["date"].min().date(),
+            "last_date": train_frame["date"].max().date(),
+            "dates_per_path": train_frame["date"].nunique(),
+        }
+        validation_rows = valid_frame["date"] >= pd.Timestamp(split.val_start)
+        validation_summary_by_path[path] = {
+            "last_date": valid_frame["date"].max().date(),
+            "dates_per_path": int(validation_rows.sum() // len(selected_tickers)),
+        }
+    synthetic_train_raw = {
+        model_name: [synthetic_train_by_path[path] for path in paths]
+        for model_name, paths in synthetic_files.items()
+    }
+    synthetic_valid_raw = {
+        model_name: [synthetic_valid_by_path[path] for path in paths]
+        for model_name, paths in synthetic_files.items()
+    }
 
+    preparation_timings = list(identity.preparation_timings)
+    preparation_timings.append(
+        {
+            "phase": "dataframe_materialization",
+            "elapsed_seconds": round(time.perf_counter() - dataframe_started, 6),
+        }
+    )
+    scaler_started = time.perf_counter()
     real_scaler = PriceScaleByTicker(selected_tickers, PRICE_COLUMNS).fit(
         [real_train_raw]
     )
@@ -1078,47 +1945,68 @@ def prepare_window_data(
         "real_test": real_scaler.transform(real_test_raw),
     }
     synthetic_pipelines: dict[str, dict[str, Any]] = {}
-    for model_name in synthetic_files:
-        scaler = PriceScaleByTicker(selected_tickers, PRICE_COLUMNS).fit(
-            synthetic_train_raw[model_name]
+    path_scales: dict[Path, dict[str, float]] = {}
+    for path, frame in tqdm(
+        synthetic_train_by_path.items(),
+        total=len(synthetic_train_by_path),
+        desc=f"{split.name}/{selected_group}: computing per-path scaler maxima",
+        unit="path",
+        disable=not show_progress,
+    ):
+        path_scales[path] = _path_price_scales(frame, selected_tickers, PRICE_COLUMNS)
+    for model_name, model_paths in tqdm(
+        synthetic_files.items(),
+        total=len(synthetic_files),
+        desc=f"{split.name}/{selected_group}: transforming subset variants",
+        unit="variant",
+        disable=not show_progress,
+    ):
+        scaler = PriceScaleByTicker(selected_tickers, PRICE_COLUMNS)
+        scaler.scales = {
+            ticker: max(path_scales[path][ticker] for path in model_paths)
+            for ticker in scaler.tickers
+        }
+        scaled_train_paths: list[pd.DataFrame] = []
+        scaled_train_min = np.inf
+        scaled_train_max = -np.inf
+        for frame in synthetic_train_raw[model_name]:
+            transformed = scaler.transform(frame)
+            frame_min, frame_max = _scaled_range(transformed, PRICE_COLUMNS)
+            scaled_train_min = min(scaled_train_min, frame_min)
+            scaled_train_max = max(scaled_train_max, frame_max)
+            scaled_train_paths.append(transformed)
+        validation_limit = min(
+            config.max_synthetic_validation_paths,
+            len(synthetic_valid_raw[model_name]),
         )
         synthetic_pipelines[model_name] = {
             "scaler": scaler,
-            "train_paths": [
-                scaler.transform(frame) for frame in synthetic_train_raw[model_name]
-            ],
+            "train_paths": scaled_train_paths,
             "synthetic_valid_paths": [
-                scaler.transform(frame) for frame in synthetic_valid_raw[model_name]
+                scaler.transform(frame)
+                for frame in synthetic_valid_raw[model_name][:validation_limit]
             ],
             "real_train": scaler.transform(real_train_raw),
             "real_valid": scaler.transform(real_valid_raw),
             "real_test": scaler.transform(real_test_raw),
+            "synthetic_train_range": (
+                float(scaled_train_min),
+                float(scaled_train_max),
+            ),
         }
 
-    training_source_files: dict[str, list[tuple[str, Path]]] = {
-        "real_trained": [("real", path) for path in real_files]
-    }
-    for model_name in synthetic_files:
-        sources = [
-            *[("real", path) for path in real_files],
-            *[("synthetic", path) for path in synthetic_files[model_name]],
-        ]
-        training_source_files[synthetic_group(model_name)] = sources
-        training_source_files[real_synthetic_group(model_name)] = sources
-    fingerprints = {
-        group: fingerprint_training_sources(
-            project_root=project_root,
-            sources=sources,
-            start=split.train_start,
-            end=split.val_end,
-        )
-        for group, sources in training_source_files.items()
-    }
+    training_source_files = identity.training_source_files
+    fingerprints = identity.training_data_fingerprints
+    legacy_aliases = identity.legacy_training_cache_aliases
 
     data_summary_rows: list[dict[str, Any]] = [
         {
             "window_id": split.name,
+            "study": config.study_name,
             "source": "Real data",
+            "model_name": None,
+            "synthetic_source_model": None,
+            "synthetic_path_count": None,
             "split": "train",
             "paths": 1,
             "first_date": real_train_raw["date"].min().date(),
@@ -1127,7 +2015,11 @@ def prepare_window_data(
         },
         {
             "window_id": split.name,
+            "study": config.study_name,
             "source": "Real data",
+            "model_name": None,
+            "synthetic_source_model": None,
+            "synthetic_path_count": None,
             "split": "validation",
             "paths": 1,
             "first_date": pd.Timestamp(split.val_start).date(),
@@ -1139,7 +2031,11 @@ def prepare_window_data(
         },
         {
             "window_id": split.name,
+            "study": config.study_name,
             "source": "Real data",
+            "model_name": None,
+            "synthetic_source_model": None,
+            "synthetic_path_count": None,
             "split": "test",
             "paths": 1,
             "first_date": pd.Timestamp(split.test_start).date(),
@@ -1153,7 +2049,11 @@ def prepare_window_data(
     scale_summary_rows = [
         {
             "window_id": split.name,
+            "study": config.study_name,
             "source": "Real data",
+            "model_name": None,
+            "synthetic_source_model": None,
+            "synthetic_path_count": None,
             "split": period,
             "range": _scaled_range(frame, PRICE_COLUMNS),
         }
@@ -1161,32 +2061,45 @@ def prepare_window_data(
     ]
     for model_name, pipeline in synthetic_pipelines.items():
         label = synthetic_model_label(config, model_name)
-        train_paths = synthetic_train_raw[model_name]
-        valid_paths = synthetic_valid_raw[model_name]
+        variant_metadata = synthetic_variant_metadata(config, model_name)
+        variant_columns = {
+            key: value for key, value in variant_metadata.items() if key != "study"
+        }
+        model_paths = synthetic_files[model_name]
+        train_statistics = [train_summary_by_path[path] for path in model_paths]
+        validation_statistics = [
+            validation_summary_by_path[path] for path in model_paths
+        ]
         data_summary_rows.extend(
             (
                 {
                     "window_id": split.name,
+                    "study": config.study_name,
                     "source": label,
+                    "model_name": model_name,
+                    **variant_columns,
                     "split": "synthetic train",
-                    "paths": len(train_paths),
-                    "first_date": min(x["date"].min() for x in train_paths).date(),
-                    "last_date": max(x["date"].max() for x in train_paths).date(),
+                    "paths": len(model_paths),
+                    "first_date": min(row["first_date"] for row in train_statistics),
+                    "last_date": max(row["last_date"] for row in train_statistics),
                     "dates_per_path": (
-                        f"{min(x['date'].nunique() for x in train_paths)}–"
-                        f"{max(x['date'].nunique() for x in train_paths)}"
+                        f"{min(row['dates_per_path'] for row in train_statistics)}–"
+                        f"{max(row['dates_per_path'] for row in train_statistics)}"
                     ),
                 },
                 {
                     "window_id": split.name,
+                    "study": config.study_name,
                     "source": label,
+                    "model_name": model_name,
+                    **variant_columns,
                     "split": "synthetic validation",
-                    "paths": len(valid_paths),
+                    "paths": len(model_paths),
                     "first_date": pd.Timestamp(split.val_start).date(),
-                    "last_date": max(x["date"].max() for x in valid_paths).date(),
+                    "last_date": max(row["last_date"] for row in validation_statistics),
                     "dates_per_path": (
-                        f"{min((x['date'] >= pd.Timestamp(split.val_start)).sum() // len(selected_tickers) for x in valid_paths)}–"
-                        f"{max((x['date'] >= pd.Timestamp(split.val_start)).sum() // len(selected_tickers) for x in valid_paths)}"
+                        f"{min(row['dates_per_path'] for row in validation_statistics)}–"
+                        f"{max(row['dates_per_path'] for row in validation_statistics)}"
                     ),
                 },
             )
@@ -1194,7 +2107,10 @@ def prepare_window_data(
         scale_summary_rows.extend(
             {
                 "window_id": split.name,
+                "study": config.study_name,
                 "source": label,
+                "model_name": model_name,
+                **variant_columns,
                 "split": period,
                 "range": _scaled_range(frame, PRICE_COLUMNS),
             }
@@ -1207,26 +2123,31 @@ def prepare_window_data(
         scale_summary_rows.append(
             {
                 "window_id": split.name,
+                "study": config.study_name,
                 "source": label,
+                "model_name": model_name,
+                **variant_columns,
                 "split": "synthetic train",
-                "range": (
-                    min(
-                        _scaled_range(frame, PRICE_COLUMNS)[0]
-                        for frame in pipeline["train_paths"]
-                    ),
-                    max(
-                        _scaled_range(frame, PRICE_COLUMNS)[1]
-                        for frame in pipeline["train_paths"]
-                    ),
-                ),
+                "range": pipeline["synthetic_train_range"],
             }
         )
 
-    all_synthetic_files = [path for paths in synthetic_files.values() for path in paths]
     data_summary = pd.DataFrame(data_summary_rows)
     data_summary.insert(1, "ticker_group", selected_group)
     scale_summary = pd.DataFrame(scale_summary_rows)
     scale_summary.insert(1, "ticker_group", selected_group)
+    preparation_timings.append(
+        {
+            "phase": "scaler_transform_and_summary",
+            "elapsed_seconds": round(time.perf_counter() - scaler_started, 6),
+        }
+    )
+    preparation_timings.append(
+        {
+            "phase": "materialization_total",
+            "elapsed_seconds": round(time.perf_counter() - materialization_started, 6),
+        }
+    )
     return PreparedWindow(
         split=split,
         ticker_group=selected_group,
@@ -1237,11 +2158,16 @@ def prepare_window_data(
         real_pipeline=real_pipeline,
         synthetic_pipelines=synthetic_pipelines,
         training_data_fingerprints=fingerprints,
-        data_fingerprint=_fingerprint_files(
-            project_root, [*real_files, *all_synthetic_files]
-        ),
+        data_fingerprint=identity.data_fingerprint,
         data_summary=data_summary,
         scale_summary=scale_summary,
+        study=config.study_name,
+        legacy_training_cache_aliases=legacy_aliases,
+        legacy_standard_data_fingerprint=identity.legacy_standard_data_fingerprint,
+        training_source_files=training_source_files,
+        legacy_training_source_specs=identity.legacy_training_source_specs,
+        equivalent_files_by_model=equivalent_files_by_model,
+        preparation_timings=preparation_timings,
     )
 
 
@@ -1324,9 +2250,19 @@ def resolve_experiment_paths(
     settings: RunSettings,
     prepared: PreparedWindow,
 ) -> ExperimentPaths:
+    if prepared.study != config.study_name:
+        raise ValueError(
+            f"Prepared study {prepared.study!r} does not match active study "
+            f"{config.study_name!r}"
+        )
     artifact_root = resolve_project_path(project_root, config.artifact_dir)
+    study_root = (
+        artifact_root
+        if config.study_name == STANDARD_STUDY
+        else artifact_root / config.study_name
+    )
     output_root = (
-        artifact_root / settings.mode / prepared.split.name / prepared.ticker_group
+        study_root / settings.mode / prepared.split.name / prepared.ticker_group
     )
     payload = {
         "split": asdict(prepared.split),
@@ -1342,6 +2278,8 @@ def resolve_experiment_paths(
         "commissions": settings.commission_map,
         "time_window": config.time_window,
     }
+    if config.study_name != STANDARD_STUDY:
+        payload["study"] = config.study_name
     experiment_id = _content_hash(payload)[:12]
     return ExperimentPaths(
         artifact_root=artifact_root,
@@ -1365,6 +2303,34 @@ def training_cache_key(
 ) -> tuple[str, dict[str, Any]]:
     if group not in prepared.training_data_fingerprints:
         raise KeyError(f"No training-data fingerprint for {group}")
+    payload = _training_cache_payload(
+        config=config,
+        settings=settings,
+        prepared=prepared,
+        paths=paths,
+        group=group,
+        group_identity=training_group_kind(group),
+        group_field="group_kind",
+        training_data_fingerprint=prepared.training_data_fingerprints[group],
+        commission=commission,
+        seed=seed,
+    )
+    return _content_hash(payload), payload
+
+
+def _training_cache_payload(
+    *,
+    config: ExperimentConfig,
+    settings: RunSettings,
+    prepared: PreparedWindow,
+    paths: ExperimentPaths,
+    group: str,
+    group_identity: str,
+    group_field: str,
+    training_data_fingerprint: str,
+    commission: float,
+    seed: int,
+) -> dict[str, Any]:
     base_env = environment_kwargs(config, 0.0, cwd=paths.experiment_root)
     base_env.pop("comission_fee_pct")
     payload: dict[str, Any] = {
@@ -1385,8 +2351,8 @@ def training_cache_key(
             if key not in {"cwd", "plot_on_terminal"}
         },
         "ppo": _semantic_ppo_config(ppo_kwargs(config)),
-        "training_data_fingerprint": prepared.training_data_fingerprints[group],
-        "group": group,
+        "training_data_fingerprint": training_data_fingerprint,
+        group_field: group_identity,
         "commission": float(commission),
         "seed": int(seed),
     }
@@ -1396,7 +2362,35 @@ def training_cache_key(
             "synthetic": 0.5,
             "within_synthetic": "uniform_by_path",
         }
-    return _content_hash(payload), payload
+    return payload
+
+
+def legacy_training_cache_key(
+    *,
+    config: ExperimentConfig,
+    settings: RunSettings,
+    prepared: PreparedWindow,
+    paths: ExperimentPaths,
+    group: str,
+    commission: float,
+    seed: int,
+) -> tuple[str, dict[str, Any], TrainingCacheAlias] | None:
+    alias = prepared.legacy_training_cache_aliases.get(group)
+    if alias is None:
+        return None
+    payload = _training_cache_payload(
+        config=config,
+        settings=settings,
+        prepared=prepared,
+        paths=paths,
+        group=group,
+        group_identity=alias.group,
+        group_field="group",
+        training_data_fingerprint=alias.training_data_fingerprint,
+        commission=commission,
+        seed=seed,
+    )
+    return _content_hash(payload), payload, alias
 
 
 def run_id(group: str, commission_name: str, seed: int) -> str:
@@ -1442,12 +2436,163 @@ def _status_semantic_cache_config(
     )
 
 
+SEMANTIC_TRAINING_ALIAS_SCHEMA = "semantic_training_cache_alias_v1"
+
+
+def _completed_training_cache_status(
+    status_path: Path,
+) -> dict[str, Any] | None:
+    if not status_path.is_file():
+        return None
+    try:
+        status = json.loads(status_path.read_text())
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+    run_dir = status_path.parent
+    if status.get("completed") is not True or not all(
+        path.is_file() for path in _cache_artifact_paths(run_dir)
+    ):
+        return None
+    return status
+
+
+class TrainingCacheIndex:
+    """Resolve cache keys with at most one full status-directory scan."""
+
+    def __init__(self, cache_root: Path) -> None:
+        self.cache_root = Path(cache_root).resolve()
+        self._by_key: dict[str, list[Path]] = {}
+        self._loaded = False
+        self.lookups = 0
+        self.statuses_scanned = 0
+        self.semantic_alias_hits = 0
+        self.scan_elapsed_seconds = 0.0
+
+    def _index_status(self, status_path: Path, status: Mapping[str, Any]) -> None:
+        semantic = _status_semantic_cache_config(status)
+        if semantic is None:
+            return
+        key = _content_hash(semantic)
+        paths = self._by_key.setdefault(key, [])
+        if status_path not in paths:
+            paths.append(status_path)
+
+    def _load(self) -> None:
+        if self._loaded:
+            return
+        started = time.perf_counter()
+        for status_path in sorted(self.cache_root.glob("*/status.json")):
+            self.statuses_scanned += 1
+            status = _completed_training_cache_status(status_path)
+            if status is not None:
+                self._index_status(status_path, status)
+        self.scan_elapsed_seconds += time.perf_counter() - started
+        self._loaded = True
+
+    def _semantic_alias_match(
+        self, preferred_run_dir: Path, cache_key: str
+    ) -> tuple[Path, dict[str, Any]] | None:
+        alias_path = preferred_run_dir / "semantic_alias.json"
+        if not alias_path.is_file():
+            return None
+        try:
+            alias = json.loads(alias_path.read_text())
+            target = (self.cache_root / str(alias["target_status"])).resolve()
+        except (OSError, UnicodeError, json.JSONDecodeError, KeyError, ValueError):
+            return None
+        try:
+            target.relative_to(self.cache_root)
+        except ValueError:
+            return None
+        semantic = alias.get("semantic_cache_config")
+        if (
+            alias.get("schema") != SEMANTIC_TRAINING_ALIAS_SCHEMA
+            or alias.get("semantic_cache_key") != cache_key
+            or not isinstance(semantic, dict)
+            or _content_hash(semantic) != cache_key
+        ):
+            return None
+        status = _completed_training_cache_status(target)
+        if status is None:
+            return None
+        enriched = dict(status)
+        enriched["_cache_resolved_via_semantic_alias"] = True
+        self.semantic_alias_hits += 1
+        return target, enriched
+
+    def find(
+        self, cache_key: str, preferred_run_dir: Path
+    ) -> tuple[Path, dict[str, Any]] | None:
+        self.lookups += 1
+        preferred_status = preferred_run_dir / "status.json"
+        status = _completed_training_cache_status(preferred_status)
+        if status is not None:
+            semantic = _status_semantic_cache_config(status)
+            if semantic is not None and _content_hash(semantic) == cache_key:
+                self._index_status(preferred_status, status)
+                return preferred_status, status
+        alias = self._semantic_alias_match(preferred_run_dir, cache_key)
+        if alias is not None:
+            return alias
+        self._load()
+        for status_path in self._by_key.get(cache_key, ()):
+            status = _completed_training_cache_status(status_path)
+            if status is not None:
+                return status_path, status
+        return None
+
+    def add(self, status_path: Path, status: Mapping[str, Any]) -> None:
+        self._index_status(status_path, status)
+
+    def statistics(self) -> dict[str, Any]:
+        return {
+            "training_cache_index_lookups": self.lookups,
+            "training_cache_statuses_scanned": self.statuses_scanned,
+            "training_cache_semantic_alias_hits": self.semantic_alias_hits,
+            "training_cache_index_scan_seconds": round(self.scan_elapsed_seconds, 6),
+        }
+
+
+def _write_semantic_training_alias(
+    *,
+    cache_root: Path,
+    planned_run_dir: Path,
+    semantic_cache_key: str,
+    semantic_cache_config: Mapping[str, Any],
+    target_status_path: Path,
+) -> None:
+    cache_root = Path(cache_root).resolve()
+    try:
+        relative_target = target_status_path.resolve().relative_to(cache_root)
+    except ValueError:
+        return
+    planned_run_dir.mkdir(parents=True, exist_ok=True)
+    _atomic_write_json(
+        planned_run_dir / "semantic_alias.json",
+        {
+            "schema": SEMANTIC_TRAINING_ALIAS_SCHEMA,
+            "semantic_cache_key": semantic_cache_key,
+            "semantic_cache_config": dict(semantic_cache_config),
+            "target_status": relative_target.as_posix(),
+            "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        },
+    )
+
+
 def find_compatible_training_cache(
     *,
     cache_root: Path,
     cache_key: str,
     preferred_run_dir: Path,
+    cache_index: TrainingCacheIndex | None = None,
 ) -> tuple[Path, dict[str, Any]] | None:
+    if cache_index is not None:
+        return cache_index.find(cache_key, preferred_run_dir)
+    alias = TrainingCacheIndex(cache_root)._semantic_alias_match(
+        preferred_run_dir, cache_key
+    )
+    if alias is not None:
+        return alias
     preferred_status = preferred_run_dir / "status.json"
     candidates = [preferred_status]
     candidates.extend(
@@ -1473,6 +2618,25 @@ def find_compatible_training_cache(
     return None
 
 
+def _find_preferred_training_cache(
+    *,
+    cache_root: Path,
+    cache_key: str,
+    preferred_run_dir: Path,
+) -> tuple[Path, dict[str, Any]] | None:
+    """Recheck the deterministic target under its lock without a cache scan."""
+
+    status_path = preferred_run_dir / "status.json"
+    status = _completed_training_cache_status(status_path)
+    if status is not None:
+        semantic = _status_semantic_cache_config(status)
+        if semantic is not None and _content_hash(semantic) == cache_key:
+            return status_path, status
+    return TrainingCacheIndex(cache_root)._semantic_alias_match(
+        preferred_run_dir, cache_key
+    )
+
+
 def plan_training_run(
     *,
     config: ExperimentConfig,
@@ -1485,6 +2649,9 @@ def plan_training_run(
     seed: int,
     use_cache: bool,
     force_retrain: bool,
+    project_root: Path | None = None,
+    fingerprint_store: TrainingFingerprintStore | None = None,
+    cache_index: TrainingCacheIndex | None = None,
 ) -> TrainingPlan:
     identifier = run_id(group, commission_name, seed)
     cache_key, cache_config = training_cache_key(
@@ -1497,17 +2664,69 @@ def plan_training_run(
         seed=seed,
     )
     planned_run_dir = (
-        paths.train_cache_root / f"{identifier}__{cache_key[:12]}"
+        paths.train_cache_root
+        / f"semantic_{training_group_kind(group)}__{cache_key[:12]}"
         if use_cache
         else paths.experiment_root / "uncached_runs" / identifier
     )
     cache_match = None
+    cache_match_type = None
+    legacy = None
+    legacy_cache_key = None
+    equivalent_model = None
     if use_cache and not force_retrain:
         cache_match = find_compatible_training_cache(
             cache_root=paths.train_cache_root,
             cache_key=cache_key,
             preferred_run_dir=planned_run_dir,
+            cache_index=cache_index,
         )
+        if cache_match is not None:
+            cache_match_type = (
+                "semantic_alias"
+                if cache_match[1].get("_cache_resolved_via_semantic_alias")
+                else "semantic"
+            )
+    if cache_match is None and use_cache and not force_retrain:
+        if (
+            project_root is not None
+            and group not in prepared.legacy_training_cache_aliases
+        ):
+            resolve_legacy_training_cache_aliases(
+                project_root=project_root,
+                prepared=prepared,
+                fingerprint_store=fingerprint_store,
+                groups=[group],
+            )
+        legacy = legacy_training_cache_key(
+            config=config,
+            settings=settings,
+            prepared=prepared,
+            paths=paths,
+            group=group,
+            commission=commission,
+            seed=seed,
+        )
+        legacy_cache_key = legacy[0] if legacy is not None else None
+        equivalent_model = (
+            legacy[2].equivalent_source_model if legacy is not None else None
+        )
+        if legacy_cache_key is not None:
+            cache_match = find_compatible_training_cache(
+                cache_root=paths.train_cache_root,
+                cache_key=legacy_cache_key,
+                preferred_run_dir=planned_run_dir,
+                cache_index=cache_index,
+            )
+            if cache_match is not None:
+                cache_match_type = "legacy_alias"
+                _write_semantic_training_alias(
+                    cache_root=paths.train_cache_root,
+                    planned_run_dir=planned_run_dir,
+                    semantic_cache_key=cache_key,
+                    semantic_cache_config=cache_config,
+                    target_status_path=cache_match[0],
+                )
     return TrainingPlan(
         group=group,
         commission_name=commission_name,
@@ -1520,6 +2739,11 @@ def plan_training_run(
         cache_match=cache_match,
         use_cache=use_cache,
         force_retrain=force_retrain,
+        legacy_cache_key=legacy_cache_key,
+        cache_match_type=cache_match_type,
+        cache_equivalent_model=(
+            equivalent_model if cache_match_type == "legacy_alias" else None
+        ),
     )
 
 
@@ -1752,12 +2976,20 @@ def _cached_record(
     status_path, cached_status = plan.cache_match
     record = dict(cached_status)
     run_dir = status_path.parent
+    resolved_cache_key = str(cached_status.get("cache_key", plan.cache_key))
     record.update(
         {
             "cache_hit": True,
-            "cache_key": plan.cache_key,
-            "cache_schema": TRAIN_CACHE_SCHEMA,
+            "cache_key": resolved_cache_key,
+            "semantic_cache_key": plan.cache_key,
+            "cache_schema": cached_status.get("cache_schema", TRAIN_CACHE_SCHEMA),
             "cache_dir": str(run_dir),
+            "training_cache_match_type": plan.cache_match_type or "semantic",
+            "training_cache_equivalent_model": plan.cache_equivalent_model,
+            "training_cache_source_group": cached_status.get("group", plan.group),
+            "training_cache_source_run_id": cached_status.get(
+                "run_id", plan.identifier
+            ),
             "best_model_path": str(run_dir / "best_model"),
             "training_data_fingerprint": prepared.training_data_fingerprints[
                 plan.group
@@ -1773,6 +3005,7 @@ def _cached_record(
             "commission": plan.commission,
             "seed": plan.seed,
             "run_id": plan.identifier,
+            **synthetic_variant_metadata(config, model_from_group(plan.group)),
         }
     )
     return record
@@ -1845,16 +3078,19 @@ def _train_one_run_unlocked(
     )
     model.save(last_model_path)
     _atomic_write_csv(pd.DataFrame(logger.records), run_dir / "training_log.csv")
-    _atomic_write_csv(
-        pd.DataFrame(validator.records), run_dir / "validation_log.csv"
-    )
+    _atomic_write_csv(pd.DataFrame(validator.records), run_dir / "validation_log.csv")
     runtime = _runtime_provenance(config)
     status = {
         "completed": True,
         "cache_hit": False,
         "cache_key": plan.cache_key,
+        "semantic_cache_key": plan.cache_key,
         "cache_schema": TRAIN_CACHE_SCHEMA,
         "cache_dir": str(run_dir),
+        "training_cache_match_type": "trained",
+        "training_cache_equivalent_model": None,
+        "training_cache_source_group": plan.group,
+        "training_cache_source_run_id": plan.identifier,
         "training_data_fingerprint": prepared.training_data_fingerprints[plan.group],
         "training_data_fingerprint_schema": TRAINING_DATA_FINGERPRINT_SCHEMA,
         "semantic_cache_config": plan.cache_config,
@@ -1875,6 +3111,7 @@ def _train_one_run_unlocked(
         "best_timestep": validator.best_timestep,
         "best_real_validation_reward": validator.best_score,
         "best_model_path": str(best_model_path),
+        **synthetic_variant_metadata(config, model_from_group(plan.group)),
     }
     _atomic_write_json(run_dir / "status.json", status)
     return status
@@ -1905,14 +3142,21 @@ def train_one_run(
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     with FileLock(lock_path):
         if not plan.force_retrain:
-            cache_match = find_compatible_training_cache(
+            cache_match = _find_preferred_training_cache(
                 cache_root=paths.train_cache_root,
                 cache_key=plan.cache_key,
                 preferred_run_dir=plan.planned_run_dir,
             )
             if cache_match is not None:
                 return _cached_record(
-                    replace(plan, cache_match=cache_match), prepared, config
+                    replace(
+                        plan,
+                        cache_match=cache_match,
+                        cache_match_type="semantic",
+                        cache_equivalent_model=None,
+                    ),
+                    prepared,
+                    config,
                 )
         return _train_one_run_unlocked(
             plan=plan,
@@ -1924,9 +3168,9 @@ def train_one_run(
         )
 
 
-_TRAINING_WORKER_STATE: tuple[
-    PreparedWindow, ExperimentConfig, RunSettings, ExperimentPaths
-] | None = None
+_TRAINING_WORKER_STATE: (
+    tuple[PreparedWindow, ExperimentConfig, RunSettings, ExperimentPaths] | None
+) = None
 
 
 def _initialize_training_worker(
@@ -1983,11 +3227,13 @@ def _execute_training_plan(plan: TrainingPlan) -> dict[str, Any]:
 def _training_timing(
     plan: TrainingPlan,
     prepared: PreparedWindow,
+    config: ExperimentConfig,
     settings: RunSettings,
     payload: Mapping[str, Any],
     *,
     execution_order: int,
 ) -> dict[str, Any]:
+    record = payload.get("record") or {}
     return {
         "execution_order": execution_order,
         "window_id": prepared.split.name,
@@ -1998,9 +3244,16 @@ def _training_timing(
         "model_name": model_from_group(plan.group),
         "commission_name": plan.commission_name,
         "seed": plan.seed,
-        "cache_hit": bool(payload.get("record", {}).get("cache_hit", False))
-        if payload.get("record")
-        else False,
+        **synthetic_variant_metadata(config, model_from_group(plan.group)),
+        "cache_hit": bool(record.get("cache_hit", False)),
+        "training_cache_match_type": record.get(
+            "training_cache_match_type", plan.cache_match_type or "miss"
+        ),
+        "training_cache_equivalent_model": record.get(
+            "training_cache_equivalent_model", plan.cache_equivalent_model
+        ),
+        "training_cache_key": record.get("cache_key", plan.cache_key),
+        "semantic_training_cache_key": plan.cache_key,
         "status": "completed" if payload["ok"] else "failed",
         "error_type": payload["error_type"],
         "error_message": payload["error_message"],
@@ -2035,7 +3288,10 @@ def _existing_uncached_record(
         {
             "cache_hit": False,
             "cache_key": plan.cache_key,
+            "semantic_cache_key": plan.cache_key,
             "cache_dir": str(plan.planned_run_dir),
+            "training_cache_match_type": "uncached",
+            "training_cache_equivalent_model": None,
             "best_model_path": str(plan.planned_run_dir / "best_model"),
             "training_data_fingerprint": prepared.training_data_fingerprints[
                 plan.group
@@ -2049,6 +3305,7 @@ def _existing_uncached_record(
             "commission": plan.commission,
             "seed": plan.seed,
             "run_id": plan.identifier,
+            **synthetic_variant_metadata(config, model_from_group(plan.group)),
         }
     )
     return record
@@ -2065,16 +3322,27 @@ def run_training_matrix(
     show_progress: bool = True,
     workers: int = 4,
     train_missing: bool = True,
+    project_root: Path | None = None,
+    fingerprint_store: TrainingFingerprintStore | None = None,
+    cache_index: TrainingCacheIndex | None = None,
+    materialize_prepared: Callable[[], PreparedWindow] | None = None,
 ) -> list[dict[str, Any]]:
     if workers <= 0:
         raise ValueError("workers must be positive")
-    groups = training_groups(prepared.model_names)
+    groups = training_groups(prepared.model_names, config.training_group_kinds)
     specs = [
         (group, commission_name, commission, seed)
         for commission_name, commission in settings.commissions
         for seed in settings.seeds
         for group in groups
     ]
+    lookup_started = time.perf_counter()
+    fingerprint_statistics_before = (
+        fingerprint_store.statistics() if fingerprint_store is not None else {}
+    )
+    cache_index_statistics_before = (
+        cache_index.statistics() if cache_index is not None else {}
+    )
     plans = [
         plan_training_run(
             config=config,
@@ -2087,6 +3355,9 @@ def run_training_matrix(
             seed=seed,
             use_cache=use_cache,
             force_retrain=force_retrain,
+            project_root=project_root,
+            fingerprint_store=fingerprint_store,
+            cache_index=cache_index,
         )
         for group, commission_name, commission, seed in tqdm(
             specs,
@@ -2095,6 +3366,33 @@ def run_training_matrix(
             disable=not show_progress,
         )
     ]
+    fingerprint_statistics_after = (
+        fingerprint_store.statistics() if fingerprint_store is not None else {}
+    )
+    cache_index_statistics_after = (
+        cache_index.statistics() if cache_index is not None else {}
+    )
+    cache_lookup_timing: dict[str, Any] = {
+        "phase": "training_cache_lookup",
+        "elapsed_seconds": round(time.perf_counter() - lookup_started, 6),
+    }
+    cache_lookup_timing.update(
+        {
+            f"fingerprint_{key}": value
+            for key, value in _statistics_delta(
+                fingerprint_statistics_before, fingerprint_statistics_after
+            ).items()
+        }
+    )
+    for key in sorted(
+        set(cache_index_statistics_before) | set(cache_index_statistics_after)
+    ):
+        cache_lookup_timing[key] = round(
+            float(cache_index_statistics_after.get(key, 0))
+            - float(cache_index_statistics_before.get(key, 0)),
+            6,
+        )
+    prepared.preparation_timings.append(cache_lookup_timing)
     records_by_id: dict[str, dict[str, Any]] = {}
     cache_hits: list[TrainingPlan] = []
     cache_misses: list[TrainingPlan] = []
@@ -2119,11 +3417,23 @@ def run_training_matrix(
         f"{len(cache_misses)} training run(s)"
     )
     if not train_missing and cache_misses:
-        raise MissingTrainingArtifactsError(
-            [plan.identifier for plan in cache_misses]
-        )
+        raise MissingTrainingArtifactsError([plan.identifier for plan in cache_misses])
     if not train_missing:
         return [records_by_id[plan.identifier] for plan in plans]
+
+    if (
+        cache_misses
+        and not prepared.is_materialized
+        and materialize_prepared is not None
+    ):
+        if show_progress:
+            print(
+                f"{prepared.split.name}/{prepared.ticker_group}: "
+                f"materializing data for {len(cache_misses)} training cache miss(es)"
+            )
+        prepared = materialize_prepared()
+        if not prepared.is_materialized:
+            raise RuntimeError("PreparedWindow materialization did not produce frames")
 
     paths.experiment_root.mkdir(parents=True, exist_ok=True)
     timing_path = paths.experiment_root / "run_timings.csv"
@@ -2144,6 +3454,7 @@ def run_training_matrix(
             _training_timing(
                 plan,
                 prepared,
+                config,
                 settings,
                 payload,
                 execution_order=len(timing_records) + 1,
@@ -2174,6 +3485,7 @@ def run_training_matrix(
                     _training_timing(
                         plan,
                         prepared,
+                        config,
                         settings,
                         payload,
                         execution_order=len(timing_records) + 1,
@@ -2222,6 +3534,7 @@ def run_training_matrix(
                             _training_timing(
                                 plan,
                                 prepared,
+                                config,
                                 settings,
                                 payload,
                                 execution_order=len(timing_records) + 1,
@@ -2286,6 +3599,44 @@ def _add_split_columns(
     return enriched
 
 
+def _concat_preserving_all_na_columns(
+    frames: Sequence[pd.DataFrame],
+) -> pd.DataFrame:
+    """Concatenate frames without letting all-NA inputs affect dtype inference."""
+
+    selected = list(frames)
+    if not selected:
+        return pd.DataFrame()
+    columns = list(
+        dict.fromkeys(column for frame in selected for column in frame.columns)
+    )
+    all_na_columns = [
+        column
+        for column in columns
+        if all(column not in frame or frame[column].isna().all() for frame in selected)
+    ]
+    trimmed = [
+        frame.drop(
+            columns=[column for column in frame.columns if frame[column].isna().all()]
+        )
+        for frame in selected
+    ]
+    combined = pd.concat(trimmed, ignore_index=True)
+    for column in all_na_columns:
+        combined[column] = pd.concat(
+            [
+                (
+                    frame[column]
+                    if column in frame
+                    else pd.Series(pd.NA, index=frame.index, dtype="object")
+                )
+                for frame in selected
+            ],
+            ignore_index=True,
+        )
+    return combined.reindex(columns=columns)
+
+
 INDEPENDENT_EVALUATION_ARTIFACTS = {
     "period_metrics": "period_metrics.csv",
     "equity_curves": "equity_curves.csv",
@@ -2300,6 +3651,82 @@ def _evaluation_environment_payload(
     payload.pop("cwd", None)
     payload.pop("plot_on_terminal", None)
     return _serializable(payload)
+
+
+def _frame_sequence_fingerprint(frames: Sequence[pd.DataFrame]) -> str:
+    """Hash the ordered frames actually supplied to an evaluation environment."""
+
+    digest = hashlib.sha256()
+    digest.update(b"evaluation_frames_v1\n")
+    for slot, frame in enumerate(frames):
+        normalized = frame.copy()
+        for column in normalized.columns:
+            if pd.api.types.is_datetime64_any_dtype(normalized[column]):
+                normalized[column] = pd.to_datetime(normalized[column]).astype("int64")
+        digest.update(
+            json.dumps(
+                {"slot": slot, "columns": list(normalized.columns)},
+                separators=(",", ":"),
+            ).encode()
+        )
+        digest.update(b"\n")
+        digest.update(
+            pd.util.hash_pandas_object(normalized, index=False)
+            .to_numpy(dtype="uint64")
+            .tobytes()
+        )
+        digest.update(b"\n")
+    return digest.hexdigest()
+
+
+def _independent_evaluation_data_fingerprint(
+    prepared: PreparedWindow, record: Mapping[str, Any] | None
+) -> str:
+    if record is None:
+        frames = [
+            prepared.real_pipeline[key] for key in ("train", "real_valid", "real_test")
+        ]
+    else:
+        group = str(record["group"])
+        model_name = record.get("model_name")
+        frames = [
+            _period_frame(prepared, group, model_name, period)
+            for period in ("train", "validation", "test")
+        ]
+    return _frame_sequence_fingerprint(frames)
+
+
+def _relabel_independent_evaluation_frames(
+    frames: Mapping[str, pd.DataFrame],
+    *,
+    config: ExperimentConfig,
+    record: Mapping[str, Any] | None,
+    commission_name: str,
+    commission: float,
+) -> dict[str, pd.DataFrame]:
+    relabeled = {name: frame.copy() for name, frame in frames.items()}
+    if record is None:
+        replacements = {
+            "commission_name": commission_name,
+            "commission": commission,
+        }
+    else:
+        group = str(record["group"])
+        replacements = {
+            "run_id": record["run_id"],
+            "agent": training_group_label(config, group),
+            "group": group,
+            "model_name": record.get("model_name"),
+            "commission_name": commission_name,
+            "commission": commission,
+            "seed": int(record["seed"]),
+            "best_timestep": int(record["best_timestep"]),
+        }
+    for frame in relabeled.values():
+        for column, value in replacements.items():
+            if column in frame.columns:
+                frame[column] = value
+    return relabeled
 
 
 def _read_evaluation_artifacts(
@@ -2442,9 +3869,7 @@ def _evaluate_policy_independent(
                 **result["metrics"],
             }
         )
-        for date, value in zip(
-            result["dates"], result["values"] / result["values"][0]
-        ):
+        for date, value in zip(result["dates"], result["values"] / result["values"][0]):
             equity_rows.append(
                 {
                     "date": pd.Timestamp(date),
@@ -2523,9 +3948,7 @@ def _evaluate_benchmark_independent(
                 **result["metrics"],
             }
         )
-        for date, value in zip(
-            result["dates"], result["values"] / result["values"][0]
-        ):
+        for date, value in zip(result["dates"], result["values"] / result["values"][0]):
             equity_rows.append(
                 {
                     "date": pd.Timestamp(date),
@@ -2559,6 +3982,57 @@ def _evaluate_benchmark_independent(
     }
 
 
+def _legacy_independent_evaluation_payload(
+    *,
+    prepared: PreparedWindow,
+    config: ExperimentConfig,
+    settings: RunSettings,
+    paths: ExperimentPaths,
+    record: Mapping[str, Any] | None,
+    commission_name: str,
+    commission: float,
+    model_hash: str | None,
+) -> dict[str, Any] | None:
+    is_benchmark = record is None
+    if is_benchmark:
+        identifier = f"buy_and_hold__{commission_name}"
+        group = "buy_and_hold"
+        training_data_fingerprint = None
+        training_cache_key = None
+        seed = settings.seeds[0]
+    else:
+        current_group = str(record["group"])
+        alias = prepared.legacy_training_cache_aliases.get(current_group)
+        if alias is None:
+            return None
+        identifier = str(record.get("training_cache_source_run_id", record["run_id"]))
+        group = str(record.get("training_cache_source_group", alias.group))
+        training_data_fingerprint = alias.training_data_fingerprint
+        training_cache_key = record.get("cache_key")
+        seed = int(record["seed"])
+    if prepared.legacy_standard_data_fingerprint is None:
+        return None
+    return {
+        "schema": LEGACY_INDEPENDENT_EVALUATION_CACHE_SCHEMA,
+        "kind": "buy_and_hold" if is_benchmark else "ppo",
+        "identifier": identifier,
+        "split": asdict(prepared.split),
+        "ticker_group": prepared.ticker_group,
+        "tickers": list(prepared.tickers),
+        "data_fingerprint": prepared.legacy_standard_data_fingerprint,
+        "training_data_fingerprint": training_data_fingerprint,
+        "training_cache_key": training_cache_key,
+        "model_sha256": model_hash,
+        "group": group,
+        "commission_name": commission_name,
+        "commission": commission,
+        "seed": seed,
+        "environment": _evaluation_environment_payload(
+            config, commission, cwd=paths.experiment_root
+        ),
+    }
+
+
 def _independent_evaluation_item(
     *,
     prepared: PreparedWindow,
@@ -2573,9 +4047,7 @@ def _independent_evaluation_item(
 ) -> tuple[dict[str, pd.DataFrame], dict[str, Any]]:
     is_benchmark = record is None
     identifier = (
-        f"buy_and_hold__{commission_name}"
-        if is_benchmark
-        else str(record["run_id"])
+        f"buy_and_hold__{commission_name}" if is_benchmark else str(record["run_id"])
     )
     model_hash = None
     if record is not None and use_cache:
@@ -2583,20 +4055,12 @@ def _independent_evaluation_item(
     payload = {
         "schema": INDEPENDENT_EVALUATION_CACHE_SCHEMA,
         "kind": "buy_and_hold" if is_benchmark else "ppo",
-        "identifier": identifier,
         "split": asdict(prepared.split),
-        "ticker_group": prepared.ticker_group,
         "tickers": list(prepared.tickers),
-        "data_fingerprint": prepared.data_fingerprint,
-        "training_data_fingerprint": (
-            None
-            if is_benchmark
-            else prepared.training_data_fingerprints[str(record["group"])]
+        "evaluation_data_fingerprint": _independent_evaluation_data_fingerprint(
+            prepared, record
         ),
-        "training_cache_key": None if is_benchmark else record.get("cache_key"),
         "model_sha256": model_hash,
-        "group": "buy_and_hold" if is_benchmark else record["group"],
-        "commission_name": commission_name,
         "commission": commission,
         "seed": settings.seeds[0] if is_benchmark else int(record["seed"]),
         "environment": _evaluation_environment_payload(
@@ -2604,7 +4068,19 @@ def _independent_evaluation_item(
         ),
     }
     cache_key = _content_hash(payload)
-    slug = re.sub(r"[^A-Za-z0-9_.-]+", "_", identifier).strip("_")
+    legacy_payload = _legacy_independent_evaluation_payload(
+        prepared=prepared,
+        config=config,
+        settings=settings,
+        paths=paths,
+        record=record,
+        commission_name=commission_name,
+        commission=commission,
+        model_hash=model_hash,
+    )
+    legacy_cache_key = (
+        _content_hash(legacy_payload) if legacy_payload is not None else None
+    )
     evaluation_cache_root = (
         paths.evaluation_cache_root
         if paths.evaluation_cache_root is not None
@@ -2614,11 +4090,24 @@ def _independent_evaluation_item(
         evaluation_cache_root
         / "independent"
         / f"{prepared.split.name}__{prepared.ticker_group}"
-        / f"{slug}__{cache_key[:12]}"
+        / f"semantic__{cache_key[:12]}"
     )
+    legacy_cache_dir = None
+    if legacy_payload is not None and legacy_cache_key is not None:
+        legacy_identifier = str(legacy_payload["identifier"])
+        legacy_slug = re.sub(r"[^A-Za-z0-9_.-]+", "_", legacy_identifier).strip("_")
+        legacy_cache_dir = (
+            evaluation_cache_root
+            / "independent"
+            / f"{prepared.split.name}__{prepared.ticker_group}"
+            / f"{legacy_slug}__{legacy_cache_key[:12]}"
+        )
     started = datetime.now(timezone.utc)
     started_clock = time.perf_counter()
     cache_hit = False
+    cache_match_type = "miss"
+    resolved_cache_key = cache_key
+    resolved_cache_dir = cache_dir
 
     def evaluate() -> dict[str, pd.DataFrame]:
         if record is None:
@@ -2650,6 +4139,19 @@ def _independent_evaluation_item(
                     schema=INDEPENDENT_EVALUATION_CACHE_SCHEMA,
                     artifact_names=INDEPENDENT_EVALUATION_ARTIFACTS,
                 )
+                if frames is not None:
+                    cache_match_type = "semantic"
+                elif legacy_cache_dir is not None and legacy_cache_key is not None:
+                    frames = _load_evaluation_cache(
+                        cache_dir=legacy_cache_dir,
+                        cache_key=legacy_cache_key,
+                        schema=LEGACY_INDEPENDENT_EVALUATION_CACHE_SCHEMA,
+                        artifact_names=INDEPENDENT_EVALUATION_ARTIFACTS,
+                    )
+                    if frames is not None:
+                        cache_match_type = "legacy_alias"
+                        resolved_cache_key = legacy_cache_key
+                        resolved_cache_dir = legacy_cache_dir
             if frames is not None:
                 cache_hit = True
             else:
@@ -2675,20 +4177,32 @@ def _independent_evaluation_item(
                     frames=frames,
                     metadata=metadata,
                 )
+                cache_match_type = "evaluated"
     else:
         frames = evaluate()
+        cache_match_type = "disabled"
+
+    frames = _relabel_independent_evaluation_frames(
+        frames,
+        config=config,
+        record=record,
+        commission_name=commission_name,
+        commission=commission,
+    )
 
     timing = {
         "window_id": prepared.split.name,
         "ticker_group": prepared.ticker_group,
         "identifier": identifier,
         "kind": payload["kind"],
-        "group": payload["group"],
+        "group": "buy_and_hold" if is_benchmark else record["group"],
         "commission_name": commission_name,
         "seed": payload["seed"],
-        "evaluation_cache_key": cache_key,
-        "evaluation_cache_dir": str(cache_dir) if use_cache else "",
+        "evaluation_cache_key": resolved_cache_key,
+        "semantic_evaluation_cache_key": cache_key,
+        "evaluation_cache_dir": str(resolved_cache_dir) if use_cache else "",
         "evaluation_cache_hit": cache_hit,
+        "evaluation_cache_match_type": cache_match_type,
         "status": "completed",
         "started_at_utc": started.isoformat(),
         "finished_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -2709,7 +4223,7 @@ def evaluate_window(
     show_progress: bool = True,
 ) -> WindowResult:
     """Evaluate cached/trained policies and persist notebook-ready artifacts."""
-    groups = training_groups(prepared.model_names)
+    groups = training_groups(prepared.model_names, config.training_group_kinds)
     group_labels = {group: training_group_label(config, group) for group in groups}
     ppo_frames: list[dict[str, pd.DataFrame]] = []
     benchmark_frames: list[dict[str, pd.DataFrame]] = []
@@ -2779,8 +4293,10 @@ def evaluate_window(
                 key: timing[key]
                 for key in (
                     "evaluation_cache_key",
+                    "semantic_evaluation_cache_key",
                     "evaluation_cache_dir",
                     "evaluation_cache_hit",
+                    "evaluation_cache_match_type",
                 )
             }
         )
@@ -2788,9 +4304,7 @@ def evaluate_window(
         cache_hits += int(timing["evaluation_cache_hit"])
         evaluated += int(not timing["evaluation_cache_hit"])
         progress.update(1)
-        progress.set_postfix(
-            cache_hits=cache_hits, evaluated=evaluated, failed=failed
-        )
+        progress.set_postfix(cache_hits=cache_hits, evaluated=evaluated, failed=failed)
     for commission_name, commission in settings.commissions:
         try:
             frames, timing = _independent_evaluation_item(
@@ -2842,9 +4356,7 @@ def evaluate_window(
         cache_hits += int(timing["evaluation_cache_hit"])
         evaluated += int(not timing["evaluation_cache_hit"])
         progress.update(1)
-        progress.set_postfix(
-            cache_hits=cache_hits, evaluated=evaluated, failed=failed
-        )
+        progress.set_postfix(cache_hits=cache_hits, evaluated=evaluated, failed=failed)
     progress.close()
 
     ppo_rows = pd.concat(
@@ -2864,11 +4376,14 @@ def evaluate_window(
         [frames["portfolio_weights"] for frames in ppo_frames], ignore_index=True
     )
 
-    ppo_period = _add_split_columns(
-        ppo_rows,
-        prepared.split,
-        prepared.ticker_group,
-        prepared.dataset_id,
+    ppo_period = _enrich_variant_columns(
+        _add_split_columns(
+            ppo_rows,
+            prepared.split,
+            prepared.ticker_group,
+            prepared.dataset_id,
+        ),
+        config,
     )
     test_metrics = ppo_period.loc[ppo_period["period"] == "test"].reset_index(drop=True)
     test_days = len(
@@ -2883,24 +4398,33 @@ def evaluate_window(
         config.rolling_schedule is not None
         and test_days < config.rolling_schedule.test_days
     )
-    benchmark = _add_split_columns(
-        benchmark_rows,
-        prepared.split,
-        prepared.ticker_group,
-        prepared.dataset_id,
+    benchmark = _enrich_variant_columns(
+        _add_split_columns(
+            benchmark_rows,
+            prepared.split,
+            prepared.ticker_group,
+            prepared.dataset_id,
+        ),
+        config,
     )
-    backtest = pd.concat([ppo_period, benchmark], ignore_index=True)
-    equity = _add_split_columns(
-        equity_rows,
-        prepared.split,
-        prepared.ticker_group,
-        prepared.dataset_id,
+    backtest = _concat_preserving_all_na_columns([ppo_period, benchmark])
+    equity = _enrich_variant_columns(
+        _add_split_columns(
+            equity_rows,
+            prepared.split,
+            prepared.ticker_group,
+            prepared.dataset_id,
+        ),
+        config,
     )
-    weights = _add_split_columns(
-        weight_rows,
-        prepared.split,
-        prepared.ticker_group,
-        prepared.dataset_id,
+    weights = _enrich_variant_columns(
+        _add_split_columns(
+            weight_rows,
+            prepared.split,
+            prepared.ticker_group,
+            prepared.dataset_id,
+        ),
+        config,
     )
 
     metric_columns = [
@@ -2918,6 +4442,7 @@ def evaluate_window(
     aggregate.columns = [f"{metric}_{stat}" for metric, stat in aggregate.columns]
     aggregate = aggregate.reset_index()
     aggregate["agent"] = aggregate["group"].map(group_labels)
+    aggregate = _enrich_variant_columns(aggregate, config)
 
     paired_rows: list[dict[str, Any]] = []
     for commission_name, _ in settings.commissions:
@@ -2940,6 +4465,7 @@ def evaluate_window(
                         "model_label": synthetic_model_label(config, model_name),
                         "training_group": group,
                         "training_group_label": group_labels[group],
+                        **synthetic_variant_metadata(config, model_name),
                     }
                     for metric in metric_columns:
                         row[f"delta_{metric}"] = float(
@@ -2974,11 +4500,14 @@ def evaluate_window(
     representative_runs = pd.DataFrame(representatives).reset_index(drop=True)
 
     paths.experiment_root.mkdir(parents=True, exist_ok=True)
-    run_table = _add_split_columns(
-        pd.DataFrame(updated_records),
-        prepared.split,
-        prepared.ticker_group,
-        prepared.dataset_id,
+    run_table = _enrich_variant_columns(
+        _add_split_columns(
+            pd.DataFrame(updated_records),
+            prepared.split,
+            prepared.ticker_group,
+            prepared.dataset_id,
+        ),
+        config,
     )
     artifacts = {
         "run_table.csv": run_table,
@@ -2997,7 +4526,8 @@ def evaluate_window(
     for filename, frame in artifacts.items():
         _atomic_write_csv(frame, paths.experiment_root / filename)
     _atomic_write_csv(
-        pd.DataFrame(timings), paths.experiment_root / "evaluation_timings.csv"
+        _enrich_variant_columns(pd.DataFrame(timings), config),
+        paths.experiment_root / "evaluation_timings.csv",
     )
     model_references = [
         {
@@ -3008,6 +4538,22 @@ def evaluate_window(
             "commission_name": record["commission_name"],
             "seed": int(record["seed"]),
             "best_model_path": record["best_model_path"],
+            "training_cache_key": record.get("cache_key"),
+            "semantic_training_cache_key": record.get("semantic_cache_key"),
+            "training_cache_dir": record.get("cache_dir"),
+            "training_cache_match_type": record.get("training_cache_match_type"),
+            "training_cache_equivalent_model": record.get(
+                "training_cache_equivalent_model"
+            ),
+            "evaluation_cache_key": record.get("evaluation_cache_key"),
+            "semantic_evaluation_cache_key": record.get(
+                "semantic_evaluation_cache_key"
+            ),
+            "evaluation_cache_dir": record.get("evaluation_cache_dir"),
+            "evaluation_cache_match_type": record.get("evaluation_cache_match_type"),
+            **synthetic_variant_metadata(
+                config, model_from_group(str(record["group"]))
+            ),
         }
         for record in updated_records
     ]
@@ -3152,9 +4698,7 @@ def _evaluate_continuous_chain(
                 ),
                 "boundary_turnover": float(turnovers[0]) if len(turnovers) else np.nan,
                 "boundary_fee": (
-                    initial_value * (1.0 - float(trf_mus[0]))
-                    if len(trf_mus)
-                    else 0.0
+                    initial_value * (1.0 - float(trf_mus[0])) if len(trf_mus) else 0.0
                 ),
             }
         )
@@ -3236,6 +4780,29 @@ def _evaluate_continuous_chain(
     }
 
 
+def _relabel_continuous_evaluation_frames(
+    frames: Mapping[str, pd.DataFrame],
+    *,
+    config: ExperimentConfig,
+    record: Mapping[str, Any],
+) -> dict[str, pd.DataFrame]:
+    relabeled = {name: frame.copy() for name, frame in frames.items()}
+    group = str(record["group"])
+    replacements = {
+        "agent": training_group_label(config, group),
+        "group": group,
+        "model_name": record.get("model_name"),
+        "commission_name": record["commission_name"],
+        "commission": float(record["commission"]),
+        "seed": int(record["seed"]),
+    }
+    for frame in relabeled.values():
+        for column, value in replacements.items():
+            if column in frame.columns:
+                frame[column] = value
+    return relabeled
+
+
 def evaluate_continuous_test_chains(
     *,
     window_results: Sequence[WindowResult],
@@ -3302,25 +4869,52 @@ def evaluate_continuous_test_chains(
         group, commission_name, seed = key
         commission = float(records[0]["commission"])
         window_payloads = []
+        legacy_window_payloads = []
+        legacy_compatible = True
+        legacy_groups: list[str] = []
         for window, record in zip(windows, records):
+            model_sha256 = (
+                _sha256_file(_model_archive_path(record["best_model_path"]))
+                if use_cache
+                else None
+            )
             window_payloads.append(
                 {
                     "split": asdict(window.split),
-                    "data_fingerprint": window.prepared.data_fingerprint,
-                    "training_cache_key": record.get("cache_key"),
-                    "model_sha256": (
-                        _sha256_file(_model_archive_path(record["best_model_path"]))
-                        if use_cache
-                        else None
+                    "evaluation_data_fingerprint": _frame_sequence_fingerprint(
+                        [
+                            _period_frame(
+                                window.prepared,
+                                group,
+                                record.get("model_name"),
+                                "test",
+                            )
+                        ]
                     ),
-                    "best_timestep": int(record["best_timestep"]),
+                    "model_sha256": model_sha256,
                 }
             )
+            alias = window.prepared.legacy_training_cache_aliases.get(group)
+            legacy_data_fingerprint = window.prepared.legacy_standard_data_fingerprint
+            if alias is None or legacy_data_fingerprint is None:
+                legacy_compatible = False
+            else:
+                legacy_group = str(
+                    record.get("training_cache_source_group", alias.group)
+                )
+                legacy_groups.append(legacy_group)
+                legacy_window_payloads.append(
+                    {
+                        "split": asdict(window.split),
+                        "data_fingerprint": legacy_data_fingerprint,
+                        "training_cache_key": record.get("cache_key"),
+                        "model_sha256": model_sha256,
+                        "best_timestep": int(record["best_timestep"]),
+                    }
+                )
         payload = {
             "schema": CONTINUOUS_EVALUATION_CACHE_SCHEMA,
-            "ticker_group": ticker_group,
-            "group": group,
-            "commission_name": commission_name,
+            "tickers": list(windows[0].tickers),
             "commission": commission,
             "seed": seed,
             "initial_amount": config.initial_amount,
@@ -3331,22 +4925,54 @@ def evaluate_continuous_test_chains(
             "windows": window_payloads,
         }
         cache_key = _content_hash(payload)
+        legacy_payload = None
+        if legacy_compatible and len(set(legacy_groups)) == 1:
+            legacy_payload = {
+                "schema": LEGACY_CONTINUOUS_EVALUATION_CACHE_SCHEMA,
+                "ticker_group": ticker_group,
+                "group": legacy_groups[0],
+                "commission_name": commission_name,
+                "commission": commission,
+                "seed": seed,
+                "initial_amount": config.initial_amount,
+                "reward_scaling": config.reward_scaling,
+                "environment": _evaluation_environment_payload(
+                    config, commission, cwd=windows[0].experiment_root
+                ),
+                "windows": legacy_window_payloads,
+            }
+        legacy_cache_key = (
+            _content_hash(legacy_payload) if legacy_payload is not None else None
+        )
         identifier = re.sub(
             r"[^A-Za-z0-9_.-]+",
             "_",
             f"{ticker_group}__{group}__{commission_name}__seed_{seed}",
         ).strip("_")
         cache_dir = (
-            Path(evaluation_cache_root)
-            / "continuous"
-            / f"{identifier}__{cache_key[:12]}"
+            Path(evaluation_cache_root) / "continuous" / f"semantic__{cache_key[:12]}"
             if evaluation_cache_root is not None
             else Path()
         )
+        legacy_cache_dir = None
+        if legacy_payload is not None and legacy_cache_key is not None:
+            legacy_identifier = re.sub(
+                r"[^A-Za-z0-9_.-]+",
+                "_",
+                f"{ticker_group}__{legacy_groups[0]}__{commission_name}__seed_{seed}",
+            ).strip("_")
+            legacy_cache_dir = (
+                Path(evaluation_cache_root)
+                / "continuous"
+                / f"{legacy_identifier}__{legacy_cache_key[:12]}"
+            )
         started = datetime.now(timezone.utc)
         started_clock = time.perf_counter()
         frames = None
         cache_hit = False
+        cache_match_type = "miss"
+        resolved_cache_key = cache_key
+        resolved_cache_dir = cache_dir
         try:
             if use_cache:
                 lock_path = Path(str(cache_dir) + ".lock")
@@ -3359,6 +4985,22 @@ def evaluate_continuous_test_chains(
                             schema=CONTINUOUS_EVALUATION_CACHE_SCHEMA,
                             artifact_names=CONTINUOUS_EVALUATION_ARTIFACTS,
                         )
+                        if frames is not None:
+                            cache_match_type = "semantic"
+                        elif (
+                            legacy_cache_dir is not None
+                            and legacy_cache_key is not None
+                        ):
+                            frames = _load_evaluation_cache(
+                                cache_dir=legacy_cache_dir,
+                                cache_key=legacy_cache_key,
+                                schema=LEGACY_CONTINUOUS_EVALUATION_CACHE_SCHEMA,
+                                artifact_names=CONTINUOUS_EVALUATION_ARTIFACTS,
+                            )
+                            if frames is not None:
+                                cache_match_type = "legacy_alias"
+                                resolved_cache_key = legacy_cache_key
+                                resolved_cache_dir = legacy_cache_dir
                     if frames is not None:
                         cache_hit = True
                     else:
@@ -3387,10 +5029,12 @@ def evaluate_continuous_test_chains(
                             frames=frames,
                             metadata=metadata,
                         )
+                        cache_match_type = "evaluated"
             else:
                 frames = _evaluate_continuous_chain(
                     ordered_results=windows, records=records, config=config
                 )
+                cache_match_type = "disabled"
         except Exception as error:
             failed += 1
             timings.append(
@@ -3399,9 +5043,13 @@ def evaluate_continuous_test_chains(
                     "group": group,
                     "commission_name": commission_name,
                     "seed": seed,
-                    "evaluation_cache_key": cache_key,
-                    "evaluation_cache_dir": str(cache_dir) if use_cache else "",
+                    "evaluation_cache_key": resolved_cache_key,
+                    "semantic_evaluation_cache_key": cache_key,
+                    "evaluation_cache_dir": (
+                        str(resolved_cache_dir) if use_cache else ""
+                    ),
                     "evaluation_cache_hit": False,
+                    "evaluation_cache_match_type": cache_match_type,
                     "status": "failed",
                     "error_type": type(error).__name__,
                     "error_message": str(error),
@@ -3416,6 +5064,9 @@ def evaluate_continuous_test_chains(
             )
             progress.close()
             raise
+        frames = _relabel_continuous_evaluation_frames(
+            frames, config=config, record=records[0]
+        )
         for name in CONTINUOUS_EVALUATION_ARTIFACTS:
             collected[name].append(frames[name])
         timings.append(
@@ -3424,9 +5075,11 @@ def evaluate_continuous_test_chains(
                 "group": group,
                 "commission_name": commission_name,
                 "seed": seed,
-                "evaluation_cache_key": cache_key,
-                "evaluation_cache_dir": str(cache_dir) if use_cache else "",
+                "evaluation_cache_key": resolved_cache_key,
+                "semantic_evaluation_cache_key": cache_key,
+                "evaluation_cache_dir": str(resolved_cache_dir) if use_cache else "",
                 "evaluation_cache_hit": cache_hit,
+                "evaluation_cache_match_type": cache_match_type,
                 "status": "completed",
                 "started_at_utc": started.isoformat(),
                 "finished_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -3436,15 +5089,18 @@ def evaluate_continuous_test_chains(
         cache_hits += int(cache_hit)
         evaluated += int(not cache_hit)
         progress.update(1)
-        progress.set_postfix(
-            cache_hits=cache_hits, evaluated=evaluated, failed=failed
-        )
+        progress.set_postfix(cache_hits=cache_hits, evaluated=evaluated, failed=failed)
     progress.close()
     combined = {
-        name: pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+        name: _enrich_variant_columns(
+            pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(),
+            config,
+        )
         for name, frames in collected.items()
     }
-    combined["continuous_evaluation_timings"] = pd.DataFrame(timings)
+    combined["continuous_evaluation_timings"] = _enrich_variant_columns(
+        pd.DataFrame(timings), config
+    )
     return combined
 
 
@@ -3471,6 +5127,7 @@ def run_window(
         real_raw=real_raw,
         ticker_group=ticker_group,
         tickers=tickers,
+        show_progress=show_progress,
     )
     paths = resolve_experiment_paths(
         project_root=project_root,
@@ -3481,6 +5138,10 @@ def run_window(
     paths.experiment_root.mkdir(parents=True, exist_ok=True)
     metadata = {
         "experiment_id": paths.experiment_id,
+        "study": config.study_name,
+        "synthetic_variants": {
+            name: asdict(variant) for name, variant in config.synthetic_variants.items()
+        },
         "split": asdict(split),
         "ticker_group": ticker_group,
         "tickers": list(tickers),
@@ -3491,9 +5152,7 @@ def run_window(
         "training_data_fingerprints": prepared.training_data_fingerprints,
     }
     _atomic_write_json(paths.experiment_root / "experiment_config.json", metadata)
-    _atomic_write_csv(
-        prepared.data_summary, paths.experiment_root / "data_summary.csv"
-    )
+    _atomic_write_csv(prepared.data_summary, paths.experiment_root / "data_summary.csv")
     _atomic_write_csv(
         prepared.scale_summary, paths.experiment_root / "scale_summary.csv"
     )
@@ -3524,13 +5183,29 @@ def _combine_frames(results: Sequence[WindowResult], attribute: str) -> pd.DataF
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
+def _write_preparation_timings(prepared: PreparedWindow, experiment_root: Path) -> None:
+    rows = [
+        {
+            "window_id": prepared.split.name,
+            "ticker_group": prepared.ticker_group,
+            "study": prepared.study,
+            **row,
+        }
+        for row in prepared.preparation_timings
+    ]
+    _atomic_write_csv(pd.DataFrame(rows), experiment_root / "preparation_timings.csv")
+
+
 def run_experiment_suite(
     *,
     project_root: Path,
     config: ExperimentConfig,
     mode: str,
+    study: str = STANDARD_STUDY,
     split_names: Sequence[str] | None = None,
     ticker_group_names: Sequence[str] | None = None,
+    include_datasets: Sequence[str] | None = None,
+    exclude_datasets: Sequence[str] | None = None,
     use_cache: bool = True,
     force_retrain: bool = False,
     show_progress: bool = True,
@@ -3544,6 +5219,21 @@ def run_experiment_suite(
     if workers <= 0:
         raise ValueError("workers must be positive")
     project_root = Path(project_root).resolve()
+    include_names = tuple(
+        dict.fromkeys(str(name).strip() for name in include_datasets or ())
+    )
+    exclude_names = tuple(
+        dict.fromkeys(str(name).strip() for name in exclude_datasets or ())
+    )
+    config = config.for_study(study).select_synthetic_variants(
+        include=include_names,
+        exclude=exclude_names,
+    )
+    dataset_selection = {
+        "mode": "include" if include_names else "exclude" if exclude_names else "all",
+        "selectors": list(include_names or exclude_names),
+        "selected_variants": list(config.synthetic_variants),
+    }
     settings = config.resolve_run_settings(mode)
     ticker_groups = config.select_ticker_groups(ticker_group_names)
     real_data = {
@@ -3562,10 +5252,20 @@ def run_experiment_suite(
         for split in splits:
             case_specs.append((ticker_group, tickers, split))
 
+    artifact_root = resolve_project_path(project_root, config.artifact_dir)
+    fingerprint_store = TrainingFingerprintStore(
+        artifact_root / "fingerprint_cache" / "v1" if use_cache else None
+    )
+    training_cache_index = TrainingCacheIndex(artifact_root / "train_cache")
     training_cases: list[TrainingCaseResult] = []
     missing_training_run_ids: list[str] = []
     for ticker_group, tickers, split in case_specs:
-        prepared = prepare_window_data(
+        if show_progress:
+            print(
+                f"{split.name}/{ticker_group}: preparing source fingerprints "
+                "and training-cache identity"
+            )
+        identity = prepare_window_identity(
             project_root=project_root,
             config=config,
             split=split,
@@ -3573,36 +5273,58 @@ def run_experiment_suite(
             real_raw=real_data[ticker_group][1],
             ticker_group=ticker_group,
             tickers=tickers,
+            fingerprint_store=fingerprint_store,
+            show_progress=show_progress,
         )
         paths = resolve_experiment_paths(
             project_root=project_root,
             config=config,
             settings=settings,
-            prepared=prepared,
+            prepared=identity,
         )
         paths.experiment_root.mkdir(parents=True, exist_ok=True)
         metadata = {
             "experiment_id": paths.experiment_id,
+            "study": config.study_name,
+            "synthetic_variants": {
+                name: asdict(variant)
+                for name, variant in config.synthetic_variants.items()
+            },
+            "dataset_selection": dataset_selection,
             "split": asdict(split),
             "ticker_group": ticker_group,
             "tickers": list(tickers),
-            "synthetic_dataset_id": prepared.dataset_id,
+            "synthetic_dataset_id": identity.dataset_id,
             "config": config.to_mapping(),
             "run_settings": asdict(settings),
-            "data_fingerprint": prepared.data_fingerprint,
-            "training_data_fingerprints": prepared.training_data_fingerprints,
+            "data_fingerprint": identity.data_fingerprint,
+            "training_data_fingerprints": identity.training_data_fingerprints,
         }
         _atomic_write_json(paths.experiment_root / "experiment_config.json", metadata)
-        _atomic_write_csv(
-            prepared.data_summary, paths.experiment_root / "data_summary.csv"
-        )
-        _atomic_write_csv(
-            prepared.scale_summary, paths.experiment_root / "scale_summary.csv"
-        )
+        materialized: PreparedWindow | None = None
+
+        def materialize() -> PreparedWindow:
+            nonlocal materialized
+            if materialized is None:
+                materialized = prepare_window_data(
+                    project_root=project_root,
+                    config=config,
+                    split=split,
+                    real_files=real_data[ticker_group][0],
+                    real_raw=real_data[ticker_group][1],
+                    ticker_group=ticker_group,
+                    tickers=tickers,
+                    fingerprint_store=fingerprint_store,
+                    identity=identity,
+                    resolve_legacy_aliases=False,
+                    show_progress=show_progress,
+                )
+            return materialized
+
         train_missing = normalized_stage in {"all", "train"}
         try:
             run_records = run_training_matrix(
-                prepared=prepared,
+                prepared=identity,
                 config=config,
                 settings=settings,
                 paths=paths,
@@ -3611,21 +5333,51 @@ def run_experiment_suite(
                 show_progress=show_progress,
                 workers=workers,
                 train_missing=train_missing,
+                project_root=project_root,
+                fingerprint_store=fingerprint_store,
+                cache_index=training_cache_index,
+                materialize_prepared=materialize,
             )
         except MissingTrainingArtifactsError as error:
             missing_training_run_ids.extend(
                 f"{split.name}/{ticker_group}/{run_id}" for run_id in error.run_ids
             )
+            _write_preparation_timings(identity, paths.experiment_root)
             continue
+        if materialized is not None:
+            _atomic_write_csv(
+                materialized.data_summary, paths.experiment_root / "data_summary.csv"
+            )
+            _atomic_write_csv(
+                materialized.scale_summary,
+                paths.experiment_root / "scale_summary.csv",
+            )
+            timing_source = materialized
+        elif normalized_stage == "train" and not all(
+            (paths.experiment_root / name).is_file()
+            for name in ("data_summary.csv", "scale_summary.csv")
+        ):
+            rebuilt = materialize()
+            _atomic_write_csv(
+                rebuilt.data_summary, paths.experiment_root / "data_summary.csv"
+            )
+            _atomic_write_csv(
+                rebuilt.scale_summary, paths.experiment_root / "scale_summary.csv"
+            )
+            timing_source = rebuilt
+        else:
+            timing_source = identity
+        _write_preparation_timings(timing_source, paths.experiment_root)
         training_cases.append(
             TrainingCaseResult(
                 split=split,
                 ticker_group=ticker_group,
-                dataset_id=prepared.dataset_id,
+                dataset_id=identity.dataset_id,
                 tickers=tuple(tickers),
                 experiment_root=paths.experiment_root,
                 experiment_id=paths.experiment_id,
                 run_records=[dict(record) for record in run_records],
+                identity=identity,
             )
         )
 
@@ -3633,6 +5385,10 @@ def run_experiment_suite(
         raise MissingTrainingArtifactsError(missing_training_run_ids)
 
     if normalized_stage == "train":
+        fingerprint_statistics = {
+            **fingerprint_store.statistics(),
+            **training_cache_index.statistics(),
+        }
         return ExperimentSuiteResult(
             manifest_path=None,
             suite_root=None,
@@ -3643,10 +5399,27 @@ def run_experiment_suite(
             continuous_metrics=pd.DataFrame(),
             training_cases=training_cases,
             stage=normalized_stage,
+            dataset_selection=dataset_selection,
+            fingerprint_statistics=fingerprint_statistics,
         )
 
     results: list[WindowResult] = []
     for (ticker_group, tickers, split), trained in zip(case_specs, training_cases):
+        identity = trained.identity
+        if identity is None:
+            identity = prepare_window_identity(
+                project_root=project_root,
+                config=config,
+                split=split,
+                real_files=real_data[ticker_group][0],
+                real_raw=real_data[ticker_group][1],
+                ticker_group=ticker_group,
+                tickers=tickers,
+                fingerprint_store=fingerprint_store,
+                show_progress=show_progress,
+            )
+        if show_progress:
+            print(f"{split.name}/{ticker_group}: materializing data for evaluation")
         prepared = prepare_window_data(
             project_root=project_root,
             config=config,
@@ -3655,6 +5428,10 @@ def run_experiment_suite(
             real_raw=real_data[ticker_group][1],
             ticker_group=ticker_group,
             tickers=tickers,
+            fingerprint_store=fingerprint_store,
+            identity=identity,
+            resolve_legacy_aliases=False,
+            show_progress=show_progress,
         )
         paths = resolve_experiment_paths(
             project_root=project_root,
@@ -3666,19 +5443,24 @@ def run_experiment_suite(
             raise RuntimeError(
                 "Experiment identity changed between train and evaluation"
             )
-        results.append(
-            evaluate_window(
-                prepared=prepared,
-                config=config,
-                settings=settings,
-                paths=paths,
-                run_records=trained.run_records,
-                use_cache=use_cache,
-                force_reevaluate=force_retrain,
-                show_progress=show_progress,
-            )
+        result = evaluate_window(
+            prepared=prepared,
+            config=config,
+            settings=settings,
+            paths=paths,
+            run_records=trained.run_records,
+            use_cache=use_cache,
+            force_reevaluate=force_retrain,
+            show_progress=show_progress,
         )
+        results.append(result)
+        _write_preparation_timings(prepared, paths.experiment_root)
     suite_payload = {
+        "study": config.study_name,
+        "synthetic_variants": {
+            name: asdict(variant) for name, variant in config.synthetic_variants.items()
+        },
+        "dataset_selection": dataset_selection,
         "mode": settings.mode,
         "windows": [
             {
@@ -3695,8 +5477,12 @@ def run_experiment_suite(
         "config": config.to_mapping(),
     }
     suite_id = _content_hash(suite_payload)[:12]
-    artifact_root = resolve_project_path(project_root, config.artifact_dir)
-    suite_root = artifact_root / settings.mode / "suites" / suite_id
+    study_root = (
+        artifact_root
+        if config.study_name == STANDARD_STUDY
+        else artifact_root / config.study_name
+    )
+    suite_root = study_root / settings.mode / "suites" / suite_id
     suite_root.mkdir(parents=True, exist_ok=True)
     test_metrics = _combine_frames(results, "test_metrics")
     aggregate = _combine_frames(results, "aggregate_summary")
@@ -3727,10 +5513,40 @@ def run_experiment_suite(
     _atomic_write_csv(paired, suite_root / "paired_deltas.csv")
     for name, frame in continuous_artifacts.items():
         _atomic_write_csv(frame, suite_root / f"{name}.csv")
+    fingerprint_statistics = {
+        **fingerprint_store.statistics(),
+        **training_cache_index.statistics(),
+    }
     manifest = {
         "suite_id": suite_id,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         **suite_payload,
+        "fingerprint_statistics": fingerprint_statistics,
+        "cache_provenance": [
+            {
+                "window_id": result.split.name,
+                "ticker_group": result.ticker_group,
+                "run_id": record["run_id"],
+                "group": record["group"],
+                "training_cache_key": record.get("cache_key"),
+                "semantic_training_cache_key": record.get("semantic_cache_key"),
+                "training_cache_dir": record.get("cache_dir"),
+                "training_cache_match_type": record.get("training_cache_match_type"),
+                "training_cache_equivalent_model": record.get(
+                    "training_cache_equivalent_model"
+                ),
+                "evaluation_cache_key": record.get("evaluation_cache_key"),
+                "semantic_evaluation_cache_key": record.get(
+                    "semantic_evaluation_cache_key"
+                ),
+                "evaluation_cache_dir": record.get("evaluation_cache_dir"),
+                "evaluation_cache_match_type": record.get(
+                    "evaluation_cache_match_type"
+                ),
+            }
+            for result in results
+            for record in result.run_records
+        ],
         "combined_artifacts": {
             "test_metrics": str(suite_root / "test_metrics.csv"),
             "aggregate_summary": str(suite_root / "aggregate_summary.csv"),
@@ -3740,7 +5556,7 @@ def run_experiment_suite(
     }
     manifest_path = suite_root / "manifest.json"
     _atomic_write_json(manifest_path, manifest)
-    latest_path = artifact_root / settings.mode / "latest_suite.json"
+    latest_path = study_root / settings.mode / "latest_suite.json"
     latest_path.parent.mkdir(parents=True, exist_ok=True)
     _atomic_write_json(
         latest_path,
@@ -3756,4 +5572,6 @@ def run_experiment_suite(
         continuous_metrics=continuous_artifacts["continuous_metrics"],
         training_cases=training_cases,
         stage=normalized_stage,
+        dataset_selection=dataset_selection,
+        fingerprint_statistics=fingerprint_statistics,
     )

@@ -1,0 +1,6 @@
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+
+[sandbox_workspace_write]
+exclude_slash_tmp = false
+writable_roots = ["/private/tmp"]

@@ -21,14 +21,20 @@ def positive_int(value: str) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Train and evaluate real-only, synthetic-only, and balanced "
-            "real+synthetic PPO policies across chronological time windows."
+            "Train and evaluate a configured PPO study across chronological "
+            "time windows."
         )
     )
     parser.add_argument(
         "--config",
         default="configs/synthetic_vs_real.json",
         help="JSON experiment config, relative to the project root by default.",
+    )
+    parser.add_argument(
+        "--study",
+        choices=("standard", "path-count"),
+        default="standard",
+        help="Experiment matrix defined in the config (default: standard).",
     )
     parser.add_argument(
         "--mode",
@@ -48,8 +54,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--workers",
         type=positive_int,
-        default=4,
-        help="Parallel PPO training processes, each limited to one CPU (default: 4).",
+        default=1,
+        help="Parallel PPO training processes, each limited to one CPU (default: 1).",
     )
     parser.add_argument(
         "--window",
@@ -64,6 +70,27 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Run only this named ticker group; repeat to select multiple groups. "
             "Defaults to active_ticker_groups in the config."
+        ),
+    )
+    dataset_selection = parser.add_mutually_exclusive_group()
+    dataset_selection.add_argument(
+        "--include-dataset",
+        action="append",
+        dest="include_datasets",
+        metavar="DATASET",
+        help=(
+            "Train only this synthetic variant or source model; repeat to include "
+            "multiple datasets. Real-only remains included."
+        ),
+    )
+    dataset_selection.add_argument(
+        "--exclude-dataset",
+        action="append",
+        dest="exclude_datasets",
+        metavar="DATASET",
+        help=(
+            "Exclude this synthetic variant or source model; repeat to exclude "
+            "multiple datasets. Real-only remains included."
         ),
     )
     parser.add_argument(
@@ -100,9 +127,12 @@ def main(argv: list[str] | None = None) -> int:
     suite = run_experiment_suite(
         project_root=project_root,
         config=config,
+        study=args.study,
         mode=args.mode,
         split_names=args.windows,
         ticker_group_names=args.ticker_groups,
+        include_datasets=args.include_datasets,
+        exclude_datasets=args.exclude_datasets,
         use_cache=not args.no_cache,
         force_retrain=args.force_retrain,
         show_progress=not args.quiet,
@@ -111,10 +141,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     cases = suite.window_results or suite.training_cases
     summary = {
+        "study": args.study,
+        "dataset_selection": suite.dataset_selection,
         "stage": suite.stage,
         "workers": args.workers,
         "manifest": str(suite.manifest_path) if suite.manifest_path else None,
         "suite_root": str(suite.suite_root) if suite.suite_root else None,
+        "fingerprint_statistics": suite.fingerprint_statistics,
         "cases": [
             {
                 "window_id": result.split.name,

@@ -1,0 +1,81 @@
+{
+  "created_at_utc": "2026-08-21T05:50:27.141931+00:00",
+  "schema": "semantic_training_cache_alias_v1",
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "episode_source_sampling": {
+      "real": 0.5,
+      "synthetic": 0.5,
+      "within_synthetic": "uniform_by_path"
+    },
+    "eval_freq": 20000,
+    "group_kind": "real_synthetic",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 0,
+    "tickers": [
+      "AAPL",
+      "AMGN",
+      "CRM",
+      "CSCO",
+      "IBM",
+      "INTC",
+      "MSFT",
+      "NKE",
+      "VZ",
+      "WMT"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2018-07-03",
+      "2020-07-06"
+    ],
+    "training_data_fingerprint": "999243b23600b1930c2b0758d27695b0759eac5b82675462291ba520bb8c4924",
+    "validation": [
+      "2020-07-06",
+      "2021-01-04"
+    ]
+  },
+  "semantic_cache_key": "632adcaef5704a5278b00c1786943d365a6909deeecee15017eec6e8ba3f59db",
+  "target_status": "real_synthetic_armd_returns_reconstructed_adjusted_hlc_55321377__no_fee__seed_0__b48751dd3899/status.json"
+}

@@ -42,39 +42,111 @@
     "independent",
     "continuous"
   ],
-  "synthetic_model_labels": {
-    "armd__single_path": "ARMD (single path)",
-    "armd_direct_adjusted_hlc": "ARMD (Direct)",
-    "armd_returns_reconstructed_adjusted_hlc": "ARMD (Returns)",
-    "cndiff__50_paths": "CN-Diff (50 paths)",
-    "dva__mean_of_50_paths": "DVA (mean of 50 paths)",
-    "dva__50_paths": "DVA (50 paths)",
-    "dva__3_paths": "DVA (3 paths)",
-    "nsdiff__50_paths": "NS-Diff (50 paths)",
-    "timediff__50_paths": "Time-Diff (50 paths)"
-  },
   "time_window": 50,
   "initial_amount": 100000,
   "reward_scaling": 100,
   "max_train_evaluation_paths": 3,
   "max_synthetic_validation_paths": 3,
   "device": "cpu",
-  "run_modes": {
-    "smoke": {
-      "seeds": [0, 1],
-      "total_timesteps": 4096,
-      "eval_freq": 2048,
-      "commissions": {
-        "with_fee": 0.0025
+  "studies": {
+    "standard": {
+      "training_groups": [
+        "real_trained",
+        "synthetic",
+        "real_synthetic"
+      ],
+      "synthetic_models": {
+        "armd__single_path": "ARMD (single path)",
+        "armd_direct_adjusted_hlc": "ARMD (Direct)",
+        "armd_returns_reconstructed_adjusted_hlc": "ARMD (Returns)",
+        "cndiff__50_paths": "CN-Diff (50 paths)",
+        "dva__mean_of_50_paths": "DVA (mean of 50 paths)",
+        "dva__50_paths": "DVA (50 paths)",
+        "dva__3_paths": "DVA (3 paths)",
+        "nsdiff__50_paths": "NS-Diff (50 paths)",
+        "timediff__50_paths": "Time-Diff (50 paths)"
+      },
+      "run_modes": {
+        "smoke": {
+          "seeds": [0, 1],
+          "total_timesteps": 4096,
+          "eval_freq": 2048,
+          "commissions": {
+            "with_fee": 0.0025
+          }
+        },
+        "full": {
+          "seeds": [0],
+          "total_timesteps": 200000,
+          "eval_freq": 20000,
+          "commissions": {
+            "no_fee": 0.0,
+            "with_fee": 0.0025
+          }
+        }
       }
     },
-    "full": {
-      "seeds": [0],
-      "total_timesteps": 200000,
-      "eval_freq": 20000,
-      "commissions": {
-        "no_fee": 0.0,
-        "with_fee": 0.0025
+    "path-count": {
+      "training_groups": [
+        "real_trained",
+        "real_synthetic"
+      ],
+      "synthetic_path_subsets": {
+        "nsdiff__500_paths": {
+          "label": "NS-Diff",
+          "counts": [
+            10,
+            50,
+            100,
+            250,
+            500
+          ],
+          "equivalent_source_models": {}
+        },
+        "cndiff__500_paths": {
+          "label": "CN-Diff",
+          "counts": [
+            10,
+            50,
+            100,
+            250,
+            500
+          ],
+          "equivalent_source_models": {}
+        },
+        "timediff__500_paths": {
+          "label": "Time-Diff",
+          "counts": [
+            10,
+            50,
+            100,
+            250,
+            500
+          ],
+          "equivalent_source_models": {}
+        }
+      },
+      "run_modes": {
+        "smoke": {
+          "seeds": [
+            0
+          ],
+          "total_timesteps": 4096,
+          "eval_freq": 2048,
+          "commissions": {
+            "with_fee": 0.0025
+          }
+        },
+        "full": {
+          "seeds": [
+            0
+          ],
+          "total_timesteps": 200000,
+          "eval_freq": 20000,
+          "commissions": {
+            "with_fee": 0.0025
+          }
+        }
       }
     }
   }

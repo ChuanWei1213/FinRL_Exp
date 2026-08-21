@@ -1,0 +1,81 @@
+{
+  "created_at_utc": "2026-08-21T05:54:48.868505+00:00",
+  "schema": "semantic_training_cache_alias_v1",
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0025,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "episode_source_sampling": {
+      "real": 0.5,
+      "synthetic": 0.5,
+      "within_synthetic": "uniform_by_path"
+    },
+    "eval_freq": 20000,
+    "group_kind": "real_synthetic",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 0,
+    "tickers": [
+      "AAPL",
+      "AMGN",
+      "CRM",
+      "CSCO",
+      "IBM",
+      "INTC",
+      "MSFT",
+      "NKE",
+      "VZ",
+      "WMT"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2022-04-04",
+      "2024-04-08"
+    ],
+    "training_data_fingerprint": "33caee02757398324fb0300dc991b03ce121c160f871c8b65167b08666210373",
+    "validation": [
+      "2024-04-08",
+      "2024-10-07"
+    ]
+  },
+  "semantic_cache_key": "5cfedc048ef00e6d3b9302fd93a80183a4a268bca1050b56c7898118bd2a9eb4",
+  "target_status": "real_synthetic_nsdiff__50_paths_c63fbd5a__with_fee__seed_0__48a708dc39f9/status.json"
+}

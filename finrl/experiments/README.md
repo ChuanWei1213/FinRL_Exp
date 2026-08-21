@@ -1,6 +1,7 @@
 # Synthetic vs. Real PPO 實驗
 
-這套 runner 用相同的 PPO 設定，比較三種訓練資料組別：
+這套 runner 用相同的 PPO pipeline 執行可設定的 studies。預設 `standard`
+study 比較三種訓練資料組別：
 
 - `real_trained`：只使用真實資料。
 - `synthetic::<model>`：只使用該 generator model 的合成資料；若有多條 path，每條 path 等權抽樣。
@@ -41,7 +42,16 @@ data/synthetic/
 - `ticker_groups`：ticker group 與成分股。
 - `active_ticker_groups`：沒有指定 `--ticker-group` 時預設執行的 group。
 - `synthetic_datasets`：每個 ticker group 對應的 `dataset_id`。
-- `synthetic_model_labels`：要納入實驗的 model 目錄名稱與圖表顯示名稱。存在於資料夾、但未列在此處的 model 不會執行。
+- `studies.standard.synthetic_models`：standard study 要納入的 model 目錄名稱與顯示名稱。存在於資料夾、但未列在此處的 model 不會執行。
+
+每個 study 都在 `studies` 內設定自己的 `training_groups`、`run_modes`，以及
+`synthetic_models` 或 `synthetic_path_subsets`。舊的頂層
+`synthetic_model_labels`、`run_modes` 格式不再接受。
+
+`path-count` study 對同一 source model 取排序後的 nested prefixes，例如
+`data[:10]`、`data[:50]`。如果某個 prefix 與 standard dataset 相同，可以用
+`equivalent_source_models` 明示等價關係；runner 會逐 window 比對 ordered
+canonical paths，完全相同才允許共用舊 cache。
 
 目前預設為 `chosen_10`，資料 preflight 結果為 10 個真實資料檔、2 個 ARMD model、18 個 rolling windows；第一個 test 是 `2020-07-06` 至 `2020-10-01`，最後一個 test 是 `2024-10-07` 至 `2024-12-31`。
 
@@ -141,7 +151,8 @@ venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
   --window wf_504_126_63_000__test_20200706_20201001
 ```
 
-跑完整設定。預設為 3 seeds、200,000 timesteps，同時執行 `no_fee` 與 `with_fee`：
+跑完整設定。Standard full 預設為 1 seed、200,000 timesteps，同時執行
+`no_fee` 與 `with_fee`：
 
 ```bash
 venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
@@ -150,6 +161,47 @@ venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
   --stage all \
   --workers 4
 ```
+
+執行 path-count ablation。每個 window 為 1 個 real-only 加上 5 個
+Real+Synthetic PPO runs；smoke/full 都固定 seed `0` 與 fee `0.0025`：
+
+```bash
+venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
+  --config configs/synthetic_vs_real.json \
+  --study path-count \
+  --mode smoke \
+  --stage all \
+  --workers 4
+```
+
+目前設定要求 `nsdiff__500_paths` 至少包含 500 個 `path*.csv`；缺少時
+preflight 會直接指出所需 source model 或 path 數量。
+
+預設會訓練 study 中配置的所有 synthetic datasets。可用 include 或 exclude
+限制單次執行，兩者不能同時使用；選擇只影響 synthetic variants，real-only
+baseline 仍會保留：
+
+```bash
+# Standard：只訓練指定 models
+venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
+  --study standard \
+  --include-dataset nsdiff__50_paths \
+  --include-dataset timediff__50_paths
+
+# Path-count：source model ID 會選取該 source 的全部 counts
+venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
+  --study path-count \
+  --include-dataset nsdiff__500_paths
+
+# 也可排除單一完整 variant ID
+venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
+  --study path-count \
+  --exclude-dataset nsdiff__500_paths__first_10_paths
+```
+
+`--include-dataset` 和 `--exclude-dataset` 都可重複指定。未知 ID 會在讀取或
+訓練資料前直接報錯；CLI summary、experiment metadata 與 suite manifest 會
+記錄 selection mode、selectors 和最後選中的 variants。
 
 只跑特定 ticker group：
 
@@ -173,10 +225,12 @@ venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
 - `--stage all`：預設流程；先完成所有選定 window 的訓練，再統一執行 independent/continuous evaluation 與結果合併。
 - `--stage train`：只建立 training cache，不執行 evaluation，也不更新 `latest_suite.json`。
 - `--stage evaluate`：要求所有 training artifacts 已存在，只執行 evaluation 與合併；缺少模型時會列出 run IDs 後停止。
-- `--workers 4`：同時執行的 PPO process 數量，預設 4；每個 worker 限制為單一 CPU thread。可用 `--workers 1` 進行循序除錯。
+- `--workers <N>`：同時執行的 PPO process 數量，預設 1；每個 worker 限制為單一 CPU thread。可用 `--workers 1` 進行循序除錯。
+- `--include-dataset <id>`：只保留指定 variant 或 source model；可重複指定。
+- `--exclude-dataset <id>`：排除指定 variant 或 source model；可重複指定，不能與 include 同時使用。
 - `--quiet`：隱藏 tqdm progress bar，保留狀態訊息；適合寫入 server log。
-- `--force-retrain`：在 `all/train` 重新訓練；同時略過 evaluation cache。搭配 `evaluate` 時保留模型、只強制重算 evaluation。
-- `--no-cache`：不讀寫 training 或 evaluation cache；模型仍寫到該實驗的 `uncached_runs/`，正式結果檔照常產生。
+- `--force-retrain`：在 `all/train` 重新訓練；同時略過 evaluation cache。搭配 `evaluate` 時保留模型、只強制重算 evaluation。Fingerprint cache 仍可使用，因為它不包含模型訓練結果。
+- `--no-cache`：不讀寫 training、evaluation 或 persistent fingerprint cache；同一 process 內仍會去重 source SHA 與 fingerprint 工作。模型寫到該實驗的 `uncached_runs/`，正式結果檔照常產生。
 
 若要明確分兩階段執行：
 
@@ -193,7 +247,11 @@ venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
   --stage evaluate
 ```
 
-平行訓練的 tqdm 由主程序顯示完成的 PPO runs；worker 不各自輸出 progress bar。Evaluation 另有每個 window 的 independent bar，以及 suite 層級的 continuous-chain bar，postfix 會顯示 cache hits 與實際執行數。
+平行訓練的 tqdm 由主程序顯示完成的 PPO runs；worker 不各自輸出 progress bar。
+需要 materialize 資料時，runner 會依序顯示讀取/驗證 synthetic paths、切割並
+檢查 date grids、計算 per-path scaler maxima，以及轉換 subset variants 的
+progress bars。Evaluation 另有每個 window 的 independent bar，以及 suite
+層級的 continuous-chain bar，postfix 會顯示 cache hits 與實際執行數。
 
 若使用 `tmux`：
 
@@ -215,7 +273,42 @@ venv/bin/python -m finrl.experiments.run_synthetic_vs_real \
 results/ppo_synthetic_vs_real/train_cache/
 ```
 
-Cache key 只依賴會影響訓練結果的內容，包括 train/validation 日期、實際訓練資料 fingerprint、ticker group、資料組別、PPO/environment 設定、fee 與 seed。Test 日期、evaluation mode 和 continuous test 的初始持倉不在 key 內，因此相同訓練條件可安全重用模型。
+新 cache key 只依賴會影響訓練結果的語意內容，包括 train/validation 日期、
+ordered source-path canonical rows、training group 類型、PPO/environment 設定、
+fee 與 seed。Study、model 名稱、檔名與來源目錄不在 key 內，因此
+`nsdiff__50_paths` 與經驗證等價的 `nsdiff__500_paths[:50]` 可以共用模型。
+Path 的數量與順序仍在 fingerprint 中，因為 seeded episode sampling 會受 path
+index 影響。
+
+Runner 會先找新的 semantic key；找不到時，standard runs 與配置
+`equivalent_source_models` 的 path-count variants 會再計算舊版
+path-sensitive key。舊 entry 命中後直接使用原本的模型與 logs，不會複製或
+改寫舊 cache。Legacy 命中時，預期的 semantic cache 目錄只會新增一個小型
+`semantic_alias.json`，指向原本的 `status.json`；下一次可直接循 alias 命中，
+不必重算 legacy fingerprint。Alias target 未完成或缺少模型/logs 時會被忽略。
+
+Fingerprint 的持久化衍生 cache 位於：
+
+```text
+results/ppo_synthetic_vs_real/fingerprint_cache/v1/
+```
+
+每次 suite 都會對每個 source file 完整計算一次 raw SHA-256，並在 hash 前後
+檢查檔案狀態；同一 suite 中途改檔會立即失敗。SHA、ordered source topology
+與 train/validation 日期共同定位已算過的 semantic/legacy fingerprint，因此
+warm run 不需再次做 Decimal canonical CSV parsing。單一 process 內，同一檔案
+即使被多個 windows、training groups 或 nested path prefixes 使用，也只計算
+一次 raw SHA；nested prefixes 會共用共同前綴的 canonical parsing。
+
+Training 第一輪先建立輕量 identity 並檢查所有 runs。若 `--stage train` 全部
+cache hit，且既有 `data_summary.csv`、`scale_summary.csv` 完整，就不讀 synthetic
+dataframe、不 fit scaler、也不做 transforms；缺 summary 時才 materialize 重建。
+`--stage all` 仍保留全 windows training barrier，之後 evaluation 每個 window
+只 materialize 一次。現有 `train_cache/*/status.json` 在一個 suite 中最多完整
+掃描一次。
+
+Test 日期、evaluation mode 和 continuous test 的初始持倉不在 training key
+內，因此相同訓練條件可安全重用模型。
 
 每個完成的 cache entry 會包含：
 
@@ -229,6 +322,12 @@ status.json
 
 正常重跑時，runner 會先顯示 cache hit 與需要訓練的數量。資料內容或訓練 config 改變後，fingerprint/key 會改變，不需要手動清空舊 cache。
 
+每個 window 的 `preparation_timings.csv` 會記錄 discovery、raw SHA、semantic /
+legacy fingerprint hits 與 computations、training-cache lookup、dataframe
+materialization、scaler/transform 和總耗時。CLI summary 與 suite manifest 的
+`fingerprint_statistics` 則提供 suite 累計數字。`fingerprint_cache/v1/` 可安全
+刪除；它不含模型或正式實驗 artifacts，下一次執行會自動重建。
+
 ## 6.1 Evaluation cache
 
 Evaluation cache 位於：
@@ -241,7 +340,8 @@ results/ppo_synthetic_vs_real/evaluation_cache/
 
 - Independent evaluation 以單一 window 的 PPO run 為 cache 單位；Buy & Hold 則以 window × fee 為單位。
 - Continuous evaluation 以完整 `(ticker_group, group, fee, seed)` test chain 為單位，chain 內仍依時間順序承接 portfolio value、actual weights 與 last action。
-- Cache key 包含模型內容、資料 fingerprint、日期、fee、seed 與 evaluation environment。模型或資料改變時只重算受影響項目。
+- Semantic cache key 包含模型內容、實際 evaluation frames、日期、fee、seed 與 evaluation environment，不包含 study、group ID 或顯示名稱。
+- Independent 與 continuous evaluation 都會 fallback 至經驗證等價 run 的舊 standard cache；載入後只把 group、model 與 label 改成目前 variant，數值結果不變。
 - 每個 entry 的 `status.json` 必須為 `completed: true`，且所有 CSV artifacts 都存在且可讀，才會視為 cache hit；中斷或損壞的 entry 會自動重算。
 - 每個 window 會輸出 `evaluation_timings.csv`，suite 另有 `continuous_evaluation_timings.csv`，記錄 cache hit 與耗時。
 
@@ -252,6 +352,17 @@ results/ppo_synthetic_vs_real/evaluation_cache/
 ```text
 results/ppo_synthetic_vs_real/<smoke|full>/latest_suite.json
 ```
+
+Path-count 使用相同 artifact 格式，但放在獨立目錄方便同一 source model 的
+path counts 比較：
+
+```text
+results/ppo_synthetic_vs_real/path-count/<smoke|full>/latest_suite.json
+```
+
+兩個 studies 共用頂層的 `train_cache/` 與 `evaluation_cache/`。Final suite
+CSV/JSON 不直接複製舊 study；runner 會從共用 cache 重新組裝，確保 `study`、
+`synthetic_source_model`、`synthetic_path_count` 與 cache provenance 正確。
 
 Suite 層級的主要輸出：
 

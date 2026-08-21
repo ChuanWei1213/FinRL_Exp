@@ -288,15 +288,31 @@ class PriceScaleByTicker:
         self.scales: dict[str, float] = {}
 
     def fit(self, frames: Sequence[pd.DataFrame]) -> "PriceScaleByTicker":
-        pooled = pd.concat(list(frames), ignore_index=True)
-        actual = sorted(pooled["tic"].unique())
+        frame_list = list(frames)
+        if not frame_list:
+            raise ValueError("Scaler requires at least one frame")
+        actual_tickers: set[str] = set()
+        ticker_indexes = {ticker: index for index, ticker in enumerate(self.tickers)}
+        maxima = np.full(len(self.tickers), -np.inf, dtype=float)
+        for frame in frame_list:
+            frame_tickers = frame["tic"].astype(str)
+            actual_tickers.update(frame_tickers.unique())
+            indexes = frame_tickers.map(ticker_indexes)
+            known = indexes.notna().to_numpy()
+            if not known.any():
+                continue
+            values = np.abs(frame[self.columns].to_numpy(dtype=float))
+            row_maxima = values.max(axis=1)
+            np.maximum.at(
+                maxima,
+                indexes.to_numpy(dtype=float)[known].astype(np.intp),
+                row_maxima[known],
+            )
+        actual = sorted(actual_tickers)
         if actual != self.tickers:
             raise ValueError(f"Scaler expected {self.tickers}, got {actual}")
-        for ticker in self.tickers:
-            values = pooled.loc[pooled["tic"] == ticker, self.columns].to_numpy(
-                dtype=float
-            )
-            scale = float(np.abs(values).max())
+        for ticker, scale_value in zip(self.tickers, maxima):
+            scale = float(scale_value)
             if not np.isfinite(scale) or scale <= 0:
                 raise ValueError(f"Invalid scale for {ticker}: {scale}")
             self.scales[ticker] = scale
@@ -306,11 +322,11 @@ class PriceScaleByTicker:
         if not self.scales:
             raise RuntimeError("Scaler must be fit before transform")
         transformed = frame.copy()
-        for ticker, scale in self.scales.items():
-            mask = transformed["tic"] == ticker
-            transformed.loc[mask, self.columns] = (
-                transformed.loc[mask, self.columns] / scale
-            )
+        divisors = transformed["tic"].map(self.scales)
+        known = divisors.notna().to_numpy()
+        values = transformed[self.columns].to_numpy(dtype=float, copy=True)
+        values[known] /= divisors.to_numpy(dtype=float)[known, None]
+        transformed[self.columns] = values
         return transformed
 
 
