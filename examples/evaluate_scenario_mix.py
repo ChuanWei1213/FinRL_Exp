@@ -10,6 +10,10 @@ Run from FinRL_Exp/:
         --test 2020-01-02 2025-12-31 \
         --out results/scenario_mix/v1_test2025
 
+Adding runs later (e.g. new groups) into an existing output folder:
+    python examples/evaluate_scenario_mix.py ... --out results/scenario_mix/v1_test2025 \
+        --only B70_seed0 B70_seed1 B70_seed2 B90_seed0 B90_seed1 B90_seed2
+
 Output mirrors the training layout, so summarize_scenario_mix.py and the notebook read it:
     <out>/<group>_seed<k>/{config.json, summary.csv, <group>_seed<k>_test_daily.csv,
                            <group>_seed<k>_valid.csv (copied), buy_hold_*_test_daily.csv}
@@ -36,6 +40,8 @@ def main():
     ap.add_argument("--prices", type=Path, required=True)
     ap.add_argument("--test", nargs=2, default=["2020-01-02", "2025-12-31"])
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--only", nargs="+", default=None,
+                    help="evaluate only these run folders, e.g. B70_seed0 B70_seed1 (default: all)")
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--torch-threads", type=int, default=1)
     cli = ap.parse_args()
@@ -44,14 +50,17 @@ def main():
     from stable_baselines3 import PPO
     torch.set_num_threads(cli.torch_threads)
 
-    if cli.out.exists() and any(cli.out.iterdir()):
-        raise FileExistsError(f"{cli.out} is not empty")
     market = S.MarketData(cli.prices, TICKERS)
     if market.dates[-1] < pd.Timestamp(cli.test[1]) - pd.Timedelta(days=7):
         raise ValueError(f"prices end {market.dates[-1].date()} before test end {cli.test[1]}")
     periods = S.test_periods(*cli.test)
 
     runs = sorted(p for p in cli.runs.iterdir() if p.is_dir() and (p / "config.json").exists())
+    if cli.only:
+        runs = [p for p in runs if p.name in set(cli.only)]
+    clash = [p.name for p in runs if (cli.out / p.name).exists()]
+    if clash:
+        raise FileExistsError(f"already evaluated in {cli.out}: {clash}; use --only to pick new runs")
     if not runs:
         raise ValueError(f"no runs found in {cli.runs}")
     baselines = []

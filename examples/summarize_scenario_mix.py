@@ -6,10 +6,12 @@ Outputs (in --root):
     all_runs.csv            one row per (group, seed, period) + buy & hold baselines
     by_group.csv            mean / std / n over seeds for every metric
     validation_curves.csv   validation final value vs timesteps for every run
-    fig_equity.png          2020-2022 portfolio value: seed mean (line) and range (band)
+    fig_equity.png          test-period portfolio value: seed mean (line) and range (band)
     fig_drawdown.png        drawdown over time
     fig_stock_weight.png    total stock weight (1 - cash) over time
     fig_covid.png           2020-02-01 .. 2020-06-30 zoom of value and stock weight
+    fig_2022.png / fig_2025.png  same zoom for the 2022 bear market / 2025 sell-off (if in range)
+    Stock-weight panels overlay the real 10-stock average price (right axis).
 """
 import argparse
 import re
@@ -85,6 +87,19 @@ def print_table(agg: pd.DataFrame):
         print(pd.DataFrame(rows).to_string(index=False))
 
 
+EVENTS = {"fig_covid.png": ("COVID window", "2020-02-01", "2020-06-30"),
+          "fig_2022.png": ("2022 bear market", "2022-01-01", "2022-10-31"),
+          "fig_2025.png": ("2025 sell-off", "2025-02-15", "2025-06-30")}
+
+
+def real_price(d: pd.DataFrame) -> pd.Series | None:
+    """10-stock equal-weight average price (start = 1), recovered from the 1/10 buy-and-hold
+    curve: its value is the mean of the stocks' relative prices times a constant build-up
+    cost factor, so dividing by the first value gives the average price exactly."""
+    bh = d[d.group == "buy_hold_1_10"].drop_duplicates("date").set_index("date").value
+    return None if bh.empty else bh / bh.iloc[0]
+
+
 def plots(d: pd.DataFrame, root: Path):
     import matplotlib
     matplotlib.use("Agg")
@@ -95,6 +110,7 @@ def plots(d: pd.DataFrame, root: Path):
     if "cash_weight" in d:
         d["stock_weight"] = 1 - d["cash_weight"]
     groups = ordered_groups(d.group.unique())
+    price = real_price(d)
 
     def band(ax, col, data, title):
         for g in groups:
@@ -110,24 +126,42 @@ def plots(d: pd.DataFrame, root: Path):
         ax.grid(alpha=.3)
         ax.legend()
 
+    def overlay_price(ax, lo=None, hi=None):
+        """Real 10-stock average price on a right axis, for stock-weight panels."""
+        if price is None:
+            return
+        p = price if lo is None else price[(price.index >= lo) & (price.index <= hi)]
+        ax2 = ax.twinx()
+        ax2.plot(p.index, p.values, color="dimgray", lw=1.3, alpha=.75, label="10-stock avg price (real, start = 1)")
+        ax.set_ylabel("total stock weight")
+        ax2.set_ylabel("avg stock price (start = 1)", color="dimgray")
+        ax2.tick_params(axis="y", colors="dimgray")
+        h1, l1 = ax.get_legend_handles_labels()
+        h2, l2 = ax2.get_legend_handles_labels()
+        ax.legend(h1 + h2, l1 + l2, fontsize=8, loc="upper left")
+
     for col, name, title in [("value", "fig_equity.png", "Portfolio value over the test period (start = 1, after build-up cost)"),
                              ("drawdown", "fig_drawdown.png", "Drawdown"),
-                             ("stock_weight", "fig_stock_weight.png", "Total stock weight (1 - cash)")]:
+                             ("stock_weight", "fig_stock_weight.png", "Total stock weight (1 - cash) with real stock price")]:
         fig, ax = plt.subplots(figsize=(11, 4.5))
         band(ax, col, d, title)
+        if col == "stock_weight":
+            overlay_price(ax)
         fig.tight_layout()
         fig.savefig(root / name, dpi=130)
         plt.close(fig)
 
-    covid = d[(d.date >= "2020-02-01") & (d.date <= "2020-06-30")]
-    if covid.empty:
-        return
-    fig, axes = plt.subplots(2, 1, figsize=(11, 7), sharex=True)
-    band(axes[0], "value", covid, "COVID window: portfolio value")
-    band(axes[1], "stock_weight", covid, "COVID window: total stock weight")
-    fig.tight_layout()
-    fig.savefig(root / "fig_covid.png", dpi=130)
-    plt.close(fig)
+    for name, (label, lo, hi) in EVENTS.items():
+        w = d[(d.date >= lo) & (d.date <= hi)]
+        if w.empty:
+            continue
+        fig, axes = plt.subplots(2, 1, figsize=(11, 7), sharex=True)
+        band(axes[0], "value", w, f"{label}: portfolio value")
+        band(axes[1], "stock_weight", w, f"{label}: total stock weight")
+        overlay_price(axes[1], lo, hi)
+        fig.tight_layout()
+        fig.savefig(root / name, dpi=130)
+        plt.close(fig)
 
 
 def main():
@@ -140,6 +174,9 @@ def main():
     agg.to_csv(root / "by_group.csv")
     if v is not None:
         v.to_csv(root / "validation_curves.csv", index=False)
+        # Older runs only logged valid_final_value (= their selection score); fill so mixed folders work.
+        if "valid_score" in v:
+            v["valid_score"] = v["valid_score"].fillna(v["valid_final_value"])
         col = "valid_score" if "valid_score" in v else "valid_final_value"
         best = v.loc[v.groupby(["group", "seed"])[col].idxmax()]
         show = [c for c in ["group", "seed", "timesteps", "valid_final_value", "valid_score",
