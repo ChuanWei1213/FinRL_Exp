@@ -1,0 +1,31 @@
+{
+  "prices": "../TimeDiff/datasets/dow10/prices_2004.csv",
+  "synthetic": "../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz",
+  "out": "results/scenario_mix/v1_test2025/B50_seed0",
+  "train": [
+    "2010-01-01",
+    "2017-12-31"
+  ],
+  "valid": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "test": [
+    "2020-01-02",
+    "2025-12-31"
+  ],
+  "groups": [
+    "B50"
+  ],
+  "seeds": [
+    0
+  ],
+  "timesteps": 500000,
+  "eval_freq": 25000,
+  "commission": 0.0025,
+  "k_max": 21,
+  "device": "cpu",
+  "torch_threads": 1,
+  "prices_test": "../TimeDiff/datasets/dow10/prices_2004_2025.csv",
+  "evaluated_from": "results/scenario_mix/v1/B50_seed0/B50_seed0.zip"
+}

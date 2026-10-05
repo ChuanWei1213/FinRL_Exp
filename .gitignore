@@ -173,6 +173,8 @@ results/ppo_synthetic_vs_real/*
 results/scenario_mix/*
 !results/scenario_mix/v1/
 !results/scenario_mix/v1/**
+!results/scenario_mix/v1_test2025/
+!results/scenario_mix/v1_test2025/**
 
 # Share the intrinsic-reward semantic training cache across machines while
 # keeping smoke/full reports and duplicated experiment artifacts local.

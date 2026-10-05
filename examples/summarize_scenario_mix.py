@@ -19,7 +19,9 @@ import numpy as np
 import pandas as pd
 
 GROUP_ORDER = ["A", "B20", "B50", "buy_hold_1_11", "buy_hold_1_10"]
-PERIOD_ORDER = ["2020", "2021", "2022", "2020-2022"]
+def period_order(periods):
+    periods = sorted(set(map(str, periods)))
+    return [p for p in periods if "-" not in p] + [p for p in periods if "-" in p]
 KEY_METRICS = ["return", "max_drawdown", "worst_21d_return", "ann_vol", "sharpe_0rf",
                "mean_stock_weight", "mean_daily_turnover"]
 
@@ -51,12 +53,19 @@ def load(root: Path):
     return s, pd.concat(dailies, ignore_index=True), (pd.concat(valids, ignore_index=True) if valids else None)
 
 
+def ordered_groups(present):
+    present = list(present)
+    extra = sorted(g for g in present if g not in GROUP_ORDER)
+    base = [g for g in GROUP_ORDER if g in present]
+    return [g for g in base if not g.startswith("buy_hold")] + extra + [g for g in base if g.startswith("buy_hold")]
+
+
 def aggregate(s: pd.DataFrame) -> pd.DataFrame:
     cols = [c for c in KEY_METRICS if c in s.columns]
     agg = s.groupby(["period", "group"])[cols].agg(["mean", "std", "count"])
     agg = agg.reindex(pd.MultiIndex.from_product(
-        [[p for p in PERIOD_ORDER if p in s.period.unique()],
-         [g for g in GROUP_ORDER if g in s.group.unique()]], names=["period", "group"]))
+        [period_order(s.period.unique()),
+         ordered_groups(s.group.unique())], names=["period", "group"]))
     return agg
 
 
@@ -85,7 +94,7 @@ def plots(d: pd.DataFrame, root: Path):
     d["drawdown"] = d.groupby(["group", "seed"]).value.transform(lambda v: v / v.cummax() - 1)
     if "cash_weight" in d:
         d["stock_weight"] = 1 - d["cash_weight"]
-    groups = [g for g in GROUP_ORDER if g in d.group.unique()]
+    groups = ordered_groups(d.group.unique())
 
     def band(ax, col, data, title):
         for g in groups:
@@ -101,7 +110,7 @@ def plots(d: pd.DataFrame, root: Path):
         ax.grid(alpha=.3)
         ax.legend()
 
-    for col, name, title in [("value", "fig_equity.png", "Portfolio value (start = 1, after build-up cost)"),
+    for col, name, title in [("value", "fig_equity.png", "Portfolio value over the test period (start = 1, after build-up cost)"),
                              ("drawdown", "fig_drawdown.png", "Drawdown"),
                              ("stock_weight", "fig_stock_weight.png", "Total stock weight (1 - cash)")]:
         fig, ax = plt.subplots(figsize=(11, 4.5))
@@ -111,6 +120,8 @@ def plots(d: pd.DataFrame, root: Path):
         plt.close(fig)
 
     covid = d[(d.date >= "2020-02-01") & (d.date <= "2020-06-30")]
+    if covid.empty:
+        return
     fig, axes = plt.subplots(2, 1, figsize=(11, 7), sharex=True)
     band(axes[0], "value", covid, "COVID window: portfolio value")
     band(axes[1], "stock_weight", covid, "COVID window: total stock weight")
@@ -129,9 +140,19 @@ def main():
     agg.to_csv(root / "by_group.csv")
     if v is not None:
         v.to_csv(root / "validation_curves.csv", index=False)
-        best = v.loc[v.groupby(["group", "seed"]).valid_final_value.idxmax()]
+        col = "valid_score" if "valid_score" in v else "valid_final_value"
+        best = v.loc[v.groupby(["group", "seed"])[col].idxmax()]
+        show = [c for c in ["group", "seed", "timesteps", "valid_final_value", "valid_score",
+                            "valid_stock_weight_std"] if c in best]
         print("\nselected checkpoints (timesteps of best validation):")
-        print(best[["group", "seed", "timesteps", "valid_final_value"]].to_string(index=False))
+        print(best[show].to_string(index=False))
+    crash = [pd.read_csv(f) for f in root.glob("*/*_crash_response.csv")]
+    if crash:
+        c = pd.concat(crash, ignore_index=True)
+        c.to_csv(root / "crash_response_all.csv", index=False)
+        print("\ncrash response (mean total stock weight; training-period episodes, k=10):")
+        print(c.groupby(["group", "source", "scenario"], dropna=False)[
+            ["pre", "early_crash", "late_crash", "change_late_vs_pre"]].mean().round(4).to_string())
     print_table(agg)
     plots(d, root)
     print(f"\nwrote all_runs.csv, by_group.csv, figures to {root}")

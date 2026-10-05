@@ -211,27 +211,36 @@ class ScenarioMixEnv(gym.Env):
         self.last_source = None
         self._inner = None
 
+    def frame_synthetic(self, j, k):
+        """Frame for synthetic path j with k real trading days before the generated 21."""
+        m, W = self.m, self.obs_days
+        a = int(self.syn.anchor_idx[j])
+        s = a - k
+        rows = slice(s - W + 1, a + 1)
+        fut_dates = pd.bdate_range(m.dates[a] + pd.offsets.BDay(1), periods=self.horizon)
+        dates = np.r_[m.dates[rows].to_numpy(), fut_dates.to_numpy()]
+        close = np.vstack([m.close[rows], self.syn.close[j]])
+        high = np.vstack([m.high[rows], self.syn.high[j]])
+        low = np.vstack([m.low[rows], self.syn.low[j]])
+        return episode_frame(dates, close, high, low, m.tickers)
+
+    def frame_real(self, s, k):
+        """Frame for a real episode whose trading starts after row s."""
+        m, W = self.m, self.obs_days
+        rows = slice(s - W + 1, s + k + self.horizon + 1)
+        return episode_frame(m.dates[rows], m.close[rows], m.high[rows], m.low[rows], m.tickers)
+
     def _build(self):
         k = int(self.rng.integers(0, self.k_max + 1))
-        m, W = self.m, self.obs_days
         if self.p and self.rng.random() < self.p:
             j = int(self.rng.choice(self._syn_ok[k]))
-            a = int(self.syn.anchor_idx[j])
-            s = a - k
-            rows = slice(s - W + 1, a + 1)
-            fut_dates = pd.bdate_range(m.dates[a] + pd.offsets.BDay(1), periods=self.horizon)
-            dates = np.r_[m.dates[rows].to_numpy(), fut_dates.to_numpy()]
-            close = np.vstack([m.close[rows], self.syn.close[j]])
-            high = np.vstack([m.high[rows], self.syn.high[j]])
-            low = np.vstack([m.low[rows], self.syn.low[j]])
+            frame = self.frame_synthetic(j, k)
             self.last_source = ("synthetic", int(self.syn.scenario[j]), k)
         else:
             s = int(self.rng.choice(self._real_starts[k]))
-            rows = slice(s - W + 1, s + k + self.horizon + 1)
-            dates, close, high, low = m.dates[rows], m.close[rows], m.high[rows], m.low[rows]
+            frame = self.frame_real(s, k)
             self.last_source = ("real", None, k)
-        frame = episode_frame(dates, close, high, low, m.tickers)
-        return _InnerEpisode(frame, len(m.tickers), self.commission, W)
+        return _InnerEpisode(frame, len(self.m.tickers), self.commission, self.obs_days)
 
     def reset(self, *, seed=None, options=None):
         if seed is not None:
@@ -285,6 +294,18 @@ def buy_and_hold(market: MarketData, start, end, commission, include_cash=True):
     return pd.DataFrame({"date": market.dates[s - 1:e + 1], "value": value})
 
 
+def test_periods(start: str, end: str) -> dict[str, tuple[str, str]]:
+    """One entry per calendar year inside [start, end] plus the whole range, e.g.
+    {'2020': ('2020-01-02', '2020-12-31'), ..., '2020-2025': ('2020-01-02', '2025-12-31')}."""
+    a, b = pd.Timestamp(start), pd.Timestamp(end)
+    out = {}
+    for y in range(a.year, b.year + 1):
+        lo, hi = max(a, pd.Timestamp(f"{y}-01-01")), min(b, pd.Timestamp(f"{y}-12-31"))
+        out[str(y)] = (lo.strftime("%Y-%m-%d"), hi.strftime("%Y-%m-%d"))
+    out[f"{a.year}-{b.year}"] = (a.strftime("%Y-%m-%d"), b.strftime("%Y-%m-%d"))
+    return out
+
+
 def period_metrics(daily: pd.DataFrame, periods: dict[str, tuple[str, str]]) -> pd.DataFrame:
     out = []
     d = daily.set_index("date")
@@ -306,3 +327,46 @@ def period_metrics(daily: pd.DataFrame, periods: dict[str, tuple[str, str]]) -> 
             row["mean_daily_turnover"] = float(seg.loc[a:].turnover.mean())
         out.append(row)
     return pd.DataFrame(out)
+
+
+def crash_response(policy, env: "ScenarioMixEnv", *, n_per_scenario=100, k=10, seed=0):
+    """Does the policy cut stock exposure once a synthetic crash starts?
+
+    Each test episode has k real trading days, then the 21 generated days.
+    Reports mean total stock weight for: pre (steps 1..k, real), early (first 5
+    crash days) and late (crash days 6..21), per scenario, plus the same windows on
+    real episodes as a baseline. Uses only training-period episodes (diagnostic).
+    """
+    rng = np.random.default_rng(seed)
+    n_assets = len(env.m.tickers)
+
+    def run(frame):
+        inner = _InnerEpisode(frame, n_assets, env.commission, env.obs_days)
+        obs, _ = inner.reset()
+        obs = normalize_obs(obs)
+        weights, done = [], False
+        while not done:
+            obs, _, done, _, _ = inner.step(policy(obs))
+            obs = normalize_obs(obs)
+            weights.append(1 - inner.env._final_weights[-1][0])
+        return np.asarray(weights)
+
+    rows = []
+    sources = [("real", None)]
+    if env.syn is not None:
+        sources += [("synthetic", int(sc)) for sc in np.unique(env.syn.scenario)]
+    for kind, sc in sources:
+        ws = []
+        for _ in range(n_per_scenario):
+            if kind == "real":
+                frame = env.frame_real(int(rng.choice(env._real_starts[k])), k)
+            else:
+                pool = np.intersect1d(env._syn_ok[k], np.flatnonzero(env.syn.scenario == sc))
+                frame = env.frame_synthetic(int(rng.choice(pool)), k)
+            ws.append(run(frame))
+        w = np.stack(ws)                                   # [n, k + 21]
+        rows.append({"source": kind, "scenario": sc, "n": len(w),
+                     "pre": w[:, :k].mean(), "early_crash": w[:, k:k + 5].mean(),
+                     "late_crash": w[:, k + 5:].mean(),
+                     "change_late_vs_pre": w[:, k + 5:].mean() - w[:, :k].mean()})
+    return pd.DataFrame(rows)
