@@ -1,0 +1,16 @@
+group,seed,max_abs_diff_valid_final_value,label
+A,0,0.0,sharpe
+A,1,0.0,sharpe
+A,2,0.0,sharpe
+B20,0,0.0,sharpe
+B20,1,0.0,sharpe
+B20,2,0.0,sharpe
+B50,0,0.0,sharpe
+B50,1,0.0,sharpe
+B50,2,0.0,sharpe
+B70,0,0.0,sharpe
+B70,1,0.0,sharpe
+B70,2,0.0,sharpe
+B90,0,0.0,sharpe
+B90,1,0.0,sharpe
+B90,2,0.0,sharpe

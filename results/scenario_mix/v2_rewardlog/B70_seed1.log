@@ -1,0 +1,21 @@
+B70 seed 1 t=25000: valid 1.4033
+B70 seed 1 t=50000: valid 1.4079
+B70 seed 1 t=75000: valid 1.3901
+B70 seed 1 t=100000: valid 1.3938
+B70 seed 1 t=125000: valid 1.4047
+B70 seed 1 t=150000: valid 1.4191
+B70 seed 1 t=175000: valid 1.4453
+B70 seed 1 t=200000: valid 1.4584
+B70 seed 1 t=225000: valid 1.4627
+B70 seed 1 t=250000: valid 1.4639
+B70 seed 1 t=275000: valid 1.4488
+B70 seed 1 t=300000: valid 1.4121
+B70 seed 1 t=325000: valid 1.4126
+B70 seed 1 t=350000: valid 1.4096
+B70 seed 1 t=375000: valid 1.4069
+B70 seed 1 t=400000: valid 1.3964
+B70 seed 1 t=425000: valid 1.3949
+B70 seed 1 t=450000: valid 1.4015
+B70 seed 1 t=475000: valid 1.4069
+B70 seed 1 t=500000: valid 1.4143
+done

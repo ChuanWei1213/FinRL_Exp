@@ -1,0 +1,40 @@
+{
+  "prices": "../TimeDiff/datasets/dow10/prices_2004.csv",
+  "synthetic": "../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz",
+  "out": "results/scenario_mix/v2_sharpe/B20_seed0",
+  "train": [
+    "2010-01-01",
+    "2017-12-31"
+  ],
+  "valid": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "test": [
+    "2020-01-01",
+    "2022-12-31"
+  ],
+  "groups": [
+    "B20"
+  ],
+  "custom_group": [
+    [
+      "B20",
+      "0.2"
+    ]
+  ],
+  "seeds": [
+    0
+  ],
+  "timesteps": 500000,
+  "eval_freq": 25000,
+  "commission": 0.0025,
+  "k_max": 21,
+  "device": "cpu",
+  "log_std_init": -2.0,
+  "ent_coef": 0.0,
+  "select_metric": "sharpe",
+  "tensorboard": null,
+  "crash_diag_n": 100,
+  "torch_threads": 1
+}

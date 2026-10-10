@@ -1,0 +1,23 @@
+{
+  "prices": "../TimeDiff/datasets/dow10/prices_2004.csv",
+  "synthetic": "../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz",
+  "group": "B70",
+  "p": 0.7,
+  "seed": 2,
+  "out": "results/scenario_mix/v3_nocost/B70_seed2",
+  "train": [
+    "2010-01-01",
+    "2017-12-31"
+  ],
+  "valid": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "timesteps": 500000,
+  "eval_freq": 25000,
+  "commission": 0.0025,
+  "train_commission": 0.0,
+  "k_max": 21,
+  "log_std_init": -2.0,
+  "ent_coef": 0.0
+}

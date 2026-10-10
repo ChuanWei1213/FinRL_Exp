@@ -1,0 +1,20 @@
+group  seed    source  scenario   n    pre  early_crash  late_crash  change_late_vs_pre
+  B90     0      real       NaN 100 0.9111       0.9108      0.9113              0.0002
+  B90     0 synthetic       0.0 100 0.9116       0.9109      0.9091             -0.0025
+  B90     0 synthetic       1.0 100 0.9117       0.9107      0.9067             -0.0050
+  B90     0 synthetic       2.0 100 0.9121       0.9107      0.9052             -0.0069
+done B90 seed 0: valid 1.1216
+                         return  max_drawdown  worst_21d_return  ann_vol  sharpe_0rf  mean_stock_weight  mean_daily_turnover
+period    group                                                                                                             
+2020      B90            0.1805       -0.2436           -0.2385   0.3013      0.5485             0.9115               0.0082
+          buy_hold_1_10  0.2045       -0.2668           -0.2621   0.3351      0.5530                NaN                  NaN
+          buy_hold_1_11  0.1859       -0.2440           -0.2396   0.3023      0.5619                NaN                  NaN
+2020-2022 B90            0.1196       -0.2680           -0.2385   0.2234      0.1685             0.9091               0.0072
+          buy_hold_1_10  0.1403       -0.2844           -0.2621   0.2515      0.1741                NaN                  NaN
+          buy_hold_1_11  0.1276       -0.2661           -0.2396   0.2291      0.1747                NaN                  NaN
+2021      B90            0.1732       -0.0645           -0.0429   0.1158      1.3790             0.9068               0.0058
+          buy_hold_1_10  0.2036       -0.0791           -0.0575   0.1351      1.3724                NaN                  NaN
+          buy_hold_1_11  0.1880       -0.0733           -0.0532   0.1253      1.3746                NaN                  NaN
+2022      B90           -0.1916       -0.2680           -0.1338   0.2131     -1.0019             0.9091               0.0076
+          buy_hold_1_10 -0.2134       -0.2843           -0.1494   0.2428     -0.9929                NaN                  NaN
+          buy_hold_1_11 -0.1997       -0.2661           -0.1391   0.2241     -0.9977                NaN                  NaN

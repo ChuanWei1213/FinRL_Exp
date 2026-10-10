@@ -1,0 +1,21 @@
+B50 seed 1 t=25000: valid 1.4183
+B50 seed 1 t=50000: valid 1.4219
+B50 seed 1 t=75000: valid 1.4124
+B50 seed 1 t=100000: valid 1.4211
+B50 seed 1 t=125000: valid 1.4343
+B50 seed 1 t=150000: valid 1.4437
+B50 seed 1 t=175000: valid 1.4209
+B50 seed 1 t=200000: valid 1.4248
+B50 seed 1 t=225000: valid 1.4274
+B50 seed 1 t=250000: valid 1.4297
+B50 seed 1 t=275000: valid 1.4220
+B50 seed 1 t=300000: valid 1.4045
+B50 seed 1 t=325000: valid 1.4057
+B50 seed 1 t=350000: valid 1.3903
+B50 seed 1 t=375000: valid 1.3779
+B50 seed 1 t=400000: valid 1.3752
+B50 seed 1 t=425000: valid 1.3503
+B50 seed 1 t=450000: valid 1.3606
+B50 seed 1 t=475000: valid 1.3754
+B50 seed 1 t=500000: valid 1.3700
+done

@@ -175,6 +175,20 @@ results/scenario_mix/*
 !results/scenario_mix/v1/**
 !results/scenario_mix/v1_test2025/
 !results/scenario_mix/v1_test2025/**
+!results/scenario_mix/v2_sharpe/
+!results/scenario_mix/v2_sharpe/**
+!results/scenario_mix/v2_sharpe_test2025/
+!results/scenario_mix/v2_sharpe_test2025/**
+!results/scenario_mix/compare_selection/
+!results/scenario_mix/compare_selection/**
+!results/scenario_mix/compare_train_cost/
+!results/scenario_mix/compare_train_cost/**
+# Logged reruns: keep logs/curves/evaluations, leave the per-step checkpoints local.
+!results/scenario_mix/v2_rewardlog/
+!results/scenario_mix/v2_rewardlog/**
+!results/scenario_mix/v3_nocost/
+!results/scenario_mix/v3_nocost/**
+results/scenario_mix/*/*/ckpt/
 
 # Share the intrinsic-reward semantic training cache across machines while
 # keeping smoke/full reports and duplicated experiment artifacts local.

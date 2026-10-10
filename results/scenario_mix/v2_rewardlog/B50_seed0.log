@@ -1,0 +1,21 @@
+B50 seed 0 t=25000: valid 1.4383
+B50 seed 0 t=50000: valid 1.4207
+B50 seed 0 t=75000: valid 1.4004
+B50 seed 0 t=100000: valid 1.3929
+B50 seed 0 t=125000: valid 1.3676
+B50 seed 0 t=150000: valid 1.3972
+B50 seed 0 t=175000: valid 1.3792
+B50 seed 0 t=200000: valid 1.3605
+B50 seed 0 t=225000: valid 1.3595
+B50 seed 0 t=250000: valid 1.3752
+B50 seed 0 t=275000: valid 1.3852
+B50 seed 0 t=300000: valid 1.3648
+B50 seed 0 t=325000: valid 1.3982
+B50 seed 0 t=350000: valid 1.3738
+B50 seed 0 t=375000: valid 1.3722
+B50 seed 0 t=400000: valid 1.4016
+B50 seed 0 t=425000: valid 1.3819
+B50 seed 0 t=450000: valid 1.3805
+B50 seed 0 t=475000: valid 1.3405
+B50 seed 0 t=500000: valid 1.3433
+done

@@ -1,0 +1,21 @@
+B90 seed 2 t=25000: valid 1.4243
+B90 seed 2 t=50000: valid 1.4026
+B90 seed 2 t=75000: valid 1.4007
+B90 seed 2 t=100000: valid 1.3886
+B90 seed 2 t=125000: valid 1.3683
+B90 seed 2 t=150000: valid 1.4072
+B90 seed 2 t=175000: valid 1.4140
+B90 seed 2 t=200000: valid 1.4226
+B90 seed 2 t=225000: valid 1.3893
+B90 seed 2 t=250000: valid 1.3849
+B90 seed 2 t=275000: valid 1.3920
+B90 seed 2 t=300000: valid 1.3993
+B90 seed 2 t=325000: valid 1.3984
+B90 seed 2 t=350000: valid 1.3959
+B90 seed 2 t=375000: valid 1.4068
+B90 seed 2 t=400000: valid 1.3974
+B90 seed 2 t=425000: valid 1.4210
+B90 seed 2 t=450000: valid 1.4167
+B90 seed 2 t=475000: valid 1.4084
+B90 seed 2 t=500000: valid 1.4051
+done

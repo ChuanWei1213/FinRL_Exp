@@ -1,0 +1,22 @@
+{
+  "prices": "../TimeDiff/datasets/dow10/prices_2004.csv",
+  "synthetic": "../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz",
+  "group": "B20",
+  "p": 0.2,
+  "seed": 1,
+  "out": "results/scenario_mix/v2_rewardlog/B20_seed1",
+  "train": [
+    "2010-01-01",
+    "2017-12-31"
+  ],
+  "valid": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "timesteps": 500000,
+  "eval_freq": 25000,
+  "commission": 0.0025,
+  "k_max": 21,
+  "log_std_init": -2.0,
+  "ent_coef": 0.0
+}

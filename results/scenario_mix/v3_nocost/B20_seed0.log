@@ -1,0 +1,21 @@
+B20 seed 0 t=25000: valid 1.4145
+B20 seed 0 t=50000: valid 1.4113
+B20 seed 0 t=75000: valid 1.4019
+B20 seed 0 t=100000: valid 1.4042
+B20 seed 0 t=125000: valid 1.3904
+B20 seed 0 t=150000: valid 1.4138
+B20 seed 0 t=175000: valid 1.3939
+B20 seed 0 t=200000: valid 1.3984
+B20 seed 0 t=225000: valid 1.4102
+B20 seed 0 t=250000: valid 1.4145
+B20 seed 0 t=275000: valid 1.4075
+B20 seed 0 t=300000: valid 1.4047
+B20 seed 0 t=325000: valid 1.3973
+B20 seed 0 t=350000: valid 1.3991
+B20 seed 0 t=375000: valid 1.3937
+B20 seed 0 t=400000: valid 1.3830
+B20 seed 0 t=425000: valid 1.3946
+B20 seed 0 t=450000: valid 1.4088
+B20 seed 0 t=475000: valid 1.3988
+B20 seed 0 t=500000: valid 1.3988
+done
