@@ -171,6 +171,7 @@ results/ppo_synthetic_vs_real/*
 
 !results/scenario_mix/
 results/scenario_mix/*
+!results/scenario_mix/README.md
 !results/scenario_mix/v1/
 !results/scenario_mix/v1/**
 !results/scenario_mix/v1_test2025/
