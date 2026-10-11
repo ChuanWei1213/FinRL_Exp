@@ -1,0 +1,7 @@
+{
+  "run": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/trf_ablation_20261011/paired_fixed/B70_seed0",
+  "checkpoints": 20,
+  "prices_sha256": "7c52d084e8bfb689d5138c97429d0b63c0707120ab9f32d330d6adb1cfcfbedc",
+  "test_prices_sha256": "87883b88ba476bc8d97644c7e6c98662f62033389519af49fde857325158e56e",
+  "legacy_ref": "8fa237e3^"
+}

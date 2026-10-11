@@ -1,0 +1,242 @@
+{
+  "paired_legacy/A_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:21.156865+00:00"
+  },
+  "paired_fixed/A_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:26.826578+00:00"
+  },
+  "v2_rewardlog/A_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:33:06.500334+00:00"
+  },
+  "v3_nocost/A_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:33:06.319059+00:00"
+  },
+  "paired_legacy/B20_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:20.846282+00:00"
+  },
+  "paired_fixed/B20_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:26.944660+00:00"
+  },
+  "v2_rewardlog/B20_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:33:06.429876+00:00"
+  },
+  "v3_nocost/B20_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:33:06.564719+00:00"
+  },
+  "paired_legacy/B50_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:54.375286+00:00"
+  },
+  "paired_fixed/B50_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:47:04.399759+00:00"
+  },
+  "v2_rewardlog/B50_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:33:34.512511+00:00"
+  },
+  "v3_nocost/B50_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:33:34.471895+00:00"
+  },
+  "paired_legacy/B70_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:47:44.325580+00:00"
+  },
+  "paired_fixed/B70_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:09.289541+00:00"
+  },
+  "v2_rewardlog/B70_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:09.296272+00:00"
+  },
+  "v3_nocost/B70_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:09.296799+00:00"
+  },
+  "paired_legacy/B90_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:02:50.897235+00:00"
+  },
+  "paired_fixed/B90_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:00:58.116478+00:00"
+  },
+  "v2_rewardlog/B90_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:21.159728+00:00"
+  },
+  "v3_nocost/B90_seed0": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:21.160692+00:00"
+  },
+  "paired_legacy/A_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:03:03.493314+00:00"
+  },
+  "paired_fixed/A_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:58:49.603085+00:00"
+  },
+  "v2_rewardlog/A_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:26.949260+00:00"
+  },
+  "v3_nocost/A_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:46:26.949989+00:00"
+  },
+  "paired_legacy/B20_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:03:07.345040+00:00"
+  },
+  "paired_fixed/B20_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:03:43.615011+00:00"
+  },
+  "v2_rewardlog/B20_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:47:04.401266+00:00"
+  },
+  "v3_nocost/B20_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:47:04.406334+00:00"
+  },
+  "paired_legacy/B50_seed1": {
+    "state": "failed: Command '['/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/bin/python', '-u', '-m', 'analysis.scenario_mix.trf_ablation', 'evaluate', '--run', '/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/trf_ablation_20261011/paired_legacy/B50_seed1', '--prices', '/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/datasets/dow10/prices_2004.csv', '--test-prices', '/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/datasets/dow10/prices_2004_2025.csv', '--out', '/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/trf_ablation_20261011/evaluations/paired_legacy/B50_seed1']' returned non-zero exit status 1.",
+    "updated_utc": "2026-10-11T16:03:43.127920+00:00"
+  },
+  "paired_fixed/B50_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:01:24.769042+00:00"
+  },
+  "v2_rewardlog/B50_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:58:49.617971+00:00"
+  },
+  "v3_nocost/B50_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T15:58:49.625452+00:00"
+  },
+  "paired_legacy/B70_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:14:42.535997+00:00"
+  },
+  "paired_fixed/B70_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:20:33.500961+00:00"
+  },
+  "v2_rewardlog/B70_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:01:24.772466+00:00"
+  },
+  "v3_nocost/B70_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:01:24.774000+00:00"
+  },
+  "paired_legacy/B90_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:20:50.922199+00:00"
+  },
+  "paired_fixed/B90_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:22:35.506252+00:00"
+  },
+  "v2_rewardlog/B90_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:03:03.498717+00:00"
+  },
+  "v3_nocost/B90_seed1": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:03:03.499322+00:00"
+  },
+  "paired_legacy/A_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:22:36.010565+00:00"
+  },
+  "paired_fixed/A_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:22:35.901423+00:00"
+  },
+  "v2_rewardlog/A_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:03:43.133018+00:00"
+  },
+  "v3_nocost/A_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:03:43.134281+00:00"
+  },
+  "paired_legacy/B20_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:21:12.925691+00:00"
+  },
+  "paired_fixed/B20_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:21:23.171399+00:00"
+  },
+  "v2_rewardlog/B20_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:14:42.538572+00:00"
+  },
+  "v3_nocost/B20_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:14:42.541798+00:00"
+  },
+  "paired_legacy/B50_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:23:32.256811+00:00"
+  },
+  "paired_fixed/B50_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:23:34.833736+00:00"
+  },
+  "v2_rewardlog/B50_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:20:50.931980+00:00"
+  },
+  "v3_nocost/B50_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:20:50.932609+00:00"
+  },
+  "paired_legacy/B70_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:23:27.139549+00:00"
+  },
+  "paired_fixed/B70_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:23:31.082074+00:00"
+  },
+  "v2_rewardlog/B70_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:21:23.173987+00:00"
+  },
+  "v3_nocost/B70_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:21:23.176219+00:00"
+  },
+  "paired_legacy/B90_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:21:23.178096+00:00"
+  },
+  "paired_fixed/B90_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:21:23.178893+00:00"
+  },
+  "v2_rewardlog/B90_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:21:23.179510+00:00"
+  },
+  "v3_nocost/B90_seed2": {
+    "state": "complete",
+    "updated_utc": "2026-10-11T16:21:23.185196+00:00"
+  }
+}

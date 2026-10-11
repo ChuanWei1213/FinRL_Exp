@@ -1,0 +1,249 @@
+{
+  "status": "passed",
+  "completed_utc": "2026-10-11T16:40:37.564231+00:00",
+  "data": {
+    "prices": {
+      "rows": 46590,
+      "stocks": 10,
+      "start": "2004-07-01",
+      "end": "2022-12-30"
+    },
+    "test_prices": {
+      "rows": 54110,
+      "stocks": 10,
+      "start": "2004-07-01",
+      "end": "2025-12-31"
+    },
+    "synthetic": {
+      "shape": [
+        6039,
+        21,
+        10
+      ],
+      "scenario_counts": {
+        "0": 2013,
+        "1": 2013,
+        "2": 2013
+      }
+    }
+  },
+  "checkpoints_verified": 1200,
+  "daily_files": 7200,
+  "training_runs": 30,
+  "max_daily_cash_weight_difference": 2.288169623776426e-07,
+  "paired_episode_sequences": 15,
+  "validation_rows": 2400,
+  "evaluation_rows": 19200,
+  "training": [
+    {
+      "label": "paired_legacy",
+      "group": "A",
+      "seed": 0,
+      "episodes": 16950,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "A",
+      "seed": 1,
+      "episodes": 16942,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "A",
+      "seed": 2,
+      "episodes": 16928,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B20",
+      "seed": 0,
+      "episodes": 16895,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B20",
+      "seed": 1,
+      "episodes": 16910,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B20",
+      "seed": 2,
+      "episodes": 16906,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B50",
+      "seed": 0,
+      "episodes": 16895,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B50",
+      "seed": 1,
+      "episodes": 16910,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B50",
+      "seed": 2,
+      "episodes": 16906,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B70",
+      "seed": 0,
+      "episodes": 16895,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B70",
+      "seed": 1,
+      "episodes": 16910,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B70",
+      "seed": 2,
+      "episodes": 16906,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B90",
+      "seed": 0,
+      "episodes": 16895,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B90",
+      "seed": 1,
+      "episodes": 16910,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_legacy",
+      "group": "B90",
+      "seed": 2,
+      "episodes": 16906,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "A",
+      "seed": 0,
+      "episodes": 16950,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "A",
+      "seed": 1,
+      "episodes": 16942,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "A",
+      "seed": 2,
+      "episodes": 16928,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B20",
+      "seed": 0,
+      "episodes": 16895,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B20",
+      "seed": 1,
+      "episodes": 16910,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B20",
+      "seed": 2,
+      "episodes": 16906,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B50",
+      "seed": 0,
+      "episodes": 16895,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B50",
+      "seed": 1,
+      "episodes": 16910,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B50",
+      "seed": 2,
+      "episodes": 16906,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B70",
+      "seed": 0,
+      "episodes": 16895,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B70",
+      "seed": 1,
+      "episodes": 16910,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B70",
+      "seed": 2,
+      "episodes": 16906,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B90",
+      "seed": 0,
+      "episodes": 16895,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B90",
+      "seed": 1,
+      "episodes": 16910,
+      "actual_timesteps": 532480
+    },
+    {
+      "label": "paired_fixed",
+      "group": "B90",
+      "seed": 2,
+      "episodes": 16906,
+      "actual_timesteps": 532480
+    }
+  ]
+}

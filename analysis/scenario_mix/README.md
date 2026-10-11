@@ -37,6 +37,41 @@ venv/bin/python -m analysis.scenario_mix.compare_checkpoint_runs \
 
 這些路徑是範例，需先準備工作副本。工具仍會依原行為覆寫同名衍生 CSV／圖表；搬移本身沒有重建任何歷史報表。
 
+## TRF 修正前後的成對實驗
+
+`run_trf_ablation.py` 在不同 process 執行舊模型重測，以及新舊 TRF 各 15 組的完整重訓。舊版交易 `step` 取自 `8fa237e3` 的 parent，只在實驗 process 內暫時切換，不改寫正式環境或歷史結果。
+
+```bash
+MPLCONFIGDIR=/private/tmp/finrl-trf-mpl \
+XDG_CACHE_HOME=/private/tmp/finrl-trf-cache \
+venv/bin/python -m analysis.scenario_mix.run_trf_ablation \
+  --prices ../TimeDiff/datasets/dow10/prices_2004.csv \
+  --test-prices ../TimeDiff/datasets/dow10/prices_2004_2025.csv \
+  --synthetic ../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz \
+  --out results/scenario_mix/trf_ablation_20261011 --workers 8
+
+venv/bin/python -m analysis.scenario_mix.summarize_trf_ablation \
+  --root results/scenario_mix/trf_ablation_20261011
+
+venv/bin/python -m analysis.scenario_mix.plot_trf_ablation \
+  --report results/scenario_mix/trf_ablation_20261011/report
+
+venv/bin/python -m analysis.scenario_mix.audit_trf_ablation \
+  --root results/scenario_mix/trf_ablation_20261011
+```
+
+亦可指定 `--stage historical` 或 `--stage training`。已完成的工作以 `completed.json` 辨識並跳過；未完成訓練不會假裝能從缺少 RNG 狀態的 checkpoint 精確接續，需使用新輸出位置從頭重跑。`manifest.json` 記錄資料雜湊、套件版本與預算，拒絕在不同設定下混用同一輸出目錄。
+
+上述訓練命令記錄本輪的輸出位置；提交後的 Git HEAD 已不同，若要重新執行整批訓練，請將 `--out` 改成新目錄，後續彙整命令的 `--root`／`--report` 也指向該目錄。檢查與重新彙整已保存結果則可直接使用本輪目錄。
+
+`trf_ablation.py` 提供單組 `train`／`evaluate` 入口。回測只推論一次動作，再以兩種成本程式執行相同動作，逐步檢查上一個目標 action 一致；新公式結果另以測試確認等同正式 `run_continuous`。可選 QuantStats 終端圖表停用，避免其 SciPy 套件影響無圖形的 worker；訓練 reward 與回測指標仍由原 NumPy／Pandas 程式計算。
+
+輸出依序分為 `paired_legacy`／`paired_fixed` 訓練、`evaluations` 逐 checkpoint 評估與每日 CSV、`report` 最終比較。未完成時可在彙整命令加 `--partial`，產生明確標示為部分結果的 `progress/README.md`；正式報告要求全部 60 組模型系列評估完成，不能用進度報告代替。
+
+`audit_trf_ablation.py` 在完整批次結束後檢查輸入與模型雜湊、ZIP 完整性、模型內的實際步數、episode 步數、成對抽樣序列及報表完整性，成功時寫入 `audit.json`。版本管理保留新訓練 checkpoint、逐日壓縮 CSV、指標彙整與最終報表，讓完整性及 Sharpe 檢查所需的結果一併保存；工作鎖、進度報告與 worker log 留在本地。原始價格與合成資料仍依 manifest 所記錄的路徑及 SHA-256 取得。
+
+Sharpe 比較另輸出 `report/sharpe_comparison.csv`（各組、選模規則與期間的平均、標準差及改善種子數）與 `report/sharpe_by_seed.csv`。沿用原本的日 log-return、年化 252 日、零無風險利率定義；Sharpe 與其差值均無單位。終點模型圖同時呈現報酬、最大回撤、Sharpe 與持股。
+
 ## 研究 notebook
 
 主要檔案為 [`scenario_mix_v1_summary.ipynb`](scenario_mix_v1_summary.ipynb)。舊的 [`analysis/scenario_mix_v1_summary.ipynb`](../scenario_mix_v1_summary.ipynb) 是指向它的相對符號連結，因此兩個路徑開啟的是同一份 notebook，沒有另一份需要同步的分析實作。

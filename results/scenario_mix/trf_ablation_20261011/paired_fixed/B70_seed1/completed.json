@@ -1,0 +1,8 @@
+{
+  "variant": "fixed",
+  "elapsed_seconds": 1110.5802910327911,
+  "legacy_ref": "8fa237e3^",
+  "python": "3.10.20 (main, Jul 22 2026, 11:17:08) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "prices_sha256": "7c52d084e8bfb689d5138c97429d0b63c0707120ab9f32d330d6adb1cfcfbedc",
+  "synthetic_sha256": "da21274c1662c8c9c023248610516197f35fd611f08cda5311ab197408958edd"
+}

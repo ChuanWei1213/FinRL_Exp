@@ -1,0 +1,48 @@
+{
+  "recorded_utc": "2026-10-11T15:43:06.208303+00:00",
+  "note": "Core environment and training sources stayed unchanged throughout the batch. Worker CLI output locks were added during scheduling. A cash-weight verification tolerance was changed from 2e-7 to 1e-6 after observing float32 normalization error 2.28816962e-7, and an independent analytic weight check was added. These changes affect scheduling/verification only, not training, policy actions, fee formulas, or recorded metrics. The affected evaluation was rerun in full.",
+  "sha256": {
+    "finrl/experiments/scenario_mix.py": "b9459ec00e90f15630961fdd54638bd03ffaaf2ca40290a113743b379d11dca1",
+    "finrl/experiments/scenario_mix_common.py": "5ff401a2d8053ca3d534338f7b665291b9ec2287b646d821c4854aee4dd9db57",
+    "finrl/experiments/train_scenario_mix_logged.py": "f8732389af271acf4f84b8686a62e968a64de0ba46dc7f1ba6307442d97298e9",
+    "finrl/meta/env_portfolio_optimization/env_portfolio_optimization.py": "a711c3d097f352e91c73b215be37a46579bd985b7b5c2d8f38f9664f57a8f2b7"
+  },
+  "worker_snapshot_during_batch": {
+    "recorded_utc": "2026-10-11T15:43:06.208303+00:00",
+    "sha256": "44754ae6f72ed3af14a16f2774eb1fb4a8211bec45b415fcc77d5df7587b4335"
+  },
+  "final_recorded_utc": "2026-10-11T16:23:34.658696+00:00",
+  "analysis_tool_sha256": {
+    "analysis/scenario_mix/audit_trf_ablation.py": "ce56f9732c46df2f4dca7a38163615954c39b524dc0c1f60197165173856c2ef",
+    "analysis/scenario_mix/plot_trf_ablation.py": "710b9e3bcffd48ad10359de9cb72aaeb8eac3de3b3ea31fec0be0a90512042e6",
+    "analysis/scenario_mix/run_trf_ablation.py": "8ecf99a8ad77e99e2d42adf7f6c7ec0adeb7056034c0fd87117272c53194d848",
+    "analysis/scenario_mix/summarize_trf_ablation.py": "803fdd77e418fecef60f00dd9eb9d8824b8567949304a01d9b880436f1f5e321",
+    "analysis/scenario_mix/trf_ablation.py": "43db5a1d92ff8842d39f005e96eac5ebf4e08cc49e2773bee5dffbcbe200468d"
+  },
+  "report_updates": [
+    {
+      "updated_at": "2026-10-12T00:37:14.190735+08:00",
+      "scope": "Add Sharpe to report tables and paired-retraining figure; all original result CSVs remain byte-identical. Original analysis_tool_sha256 above records the initial experiment version.",
+      "sha256": {
+        "analysis/scenario_mix/summarize_trf_ablation.py": "3c29bcb20dd78d631365f8493182b6c8738a4a04c84ca12cb69bb4008476a037",
+        "analysis/scenario_mix/plot_trf_ablation.py": "fc2440bf2d55b72b2dadad5d1ecb93cda3f680a10403d85589545c53dca437a5",
+        "results/scenario_mix/trf_ablation_20261011/report/analysis.md": "a8019506ecef0959cb1496496d952de6fbb5452c19dc2cbe46c8e1bbf7c21d86",
+        "results/scenario_mix/trf_ablation_20261011/report/sharpe_comparison.csv": "21219306875c22303dfc8b8acfacbf94907042c875cce8bd6b114e66ac506081",
+        "results/scenario_mix/trf_ablation_20261011/report/sharpe_by_seed.csv": "cc87220d77218eba102a009ca14a1ecb3e0e55636e7f9b3ae93304be1893201b",
+        "results/scenario_mix/trf_ablation_20261011/report/paired_retraining_final.png": "7913a65810bbbfd428e315e3a419d428c749b1255b099573d07eb98d01398dba"
+      },
+      "validation": "sharpe_report_audit.json"
+    },
+    {
+      "updated_at": "2026-10-12T00:43:05.096131+08:00",
+      "scope": "Commit packaging: include all 7,200 daily CSVs, document preserved external inputs and fresh-output reruns, remove the pending-commit note. No training or evaluation values changed.",
+      "sha256": {
+        ".gitignore": "7855aaccd653226907e91d785ce28c24612a4418740addb4174f900471085238",
+        "analysis/scenario_mix/README.md": "6fa3e2fce009c1181a4f7c0ca7e3952c24a800ae48e21eccdff577669e408588",
+        "results/scenario_mix/trf_ablation_20261011/report/analysis.md": "b2199ca786a9dbbac1ba69b0fdccb373441ae55653b0a8221f310a71c65de841",
+        "results/scenario_mix/trf_ablation_20261011/commit_validation.json": "3bc3366518511fa15a3ec46f36e783d614963edb444af9405786830165a84494"
+      },
+      "validation": "commit_validation.json"
+    }
+  ]
+}

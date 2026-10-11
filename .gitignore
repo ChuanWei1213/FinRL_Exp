@@ -190,6 +190,14 @@ results/scenario_mix/*
 !results/scenario_mix/v3_nocost/
 !results/scenario_mix/v3_nocost/**
 
+# Full paired TRF rerun: preserve checkpoints, daily evidence, metrics, and report.
+!results/scenario_mix/trf_ablation_20261011/
+!results/scenario_mix/trf_ablation_20261011/**
+results/scenario_mix/trf_ablation_20261011/progress/
+results/scenario_mix/trf_ablation_20261011/logs/
+results/scenario_mix/trf_ablation_20261011/**/.evaluation.lock
+results/scenario_mix/trf_ablation_20261011/**/.*.training.lock
+
 # Share the intrinsic-reward semantic training cache across machines while
 # keeping smoke/full reports and duplicated experiment artifacts local.
 # !results/ppo_portfolio_intrinsic_reward_ablation/

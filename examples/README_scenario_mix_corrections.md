@@ -77,9 +77,11 @@ Buy-and-hold 使用獨立的解析式，沒有呼叫這段 TRF；價格資料、
 
 ## 重跑前的資料需求
 
-本地 v2/v3 logging 目錄目前只有 CSV 與設定，未包含 `ckpt/step_*.zip`；設定中的 TimeDiff 價格與 `paths.npz` 路徑目前也不存在。應先從原訓練機器取回模型與資料。若 v3 checkpoint 已遺失，必須重跑才能重建模型，這是產物遺失造成的需求，不是 TRF 修正使零成本訓練失效。
+初次修正時，本地 v2/v3 logging 目錄缺少 checkpoint 與原始資料。2026-10-11 已由 `257bf771` 補齊 600 個 `ckpt/step_*.zip`，並補回兩份價格 CSV 與 `paths.npz`；後續新舊 TRF 對照另存於 `results/scenario_mix/trf_ablation_20261011/`，入口見 [分析工具](../analysis/scenario_mix/README.md#trf-修正前後的成對實驗)。v3 現有模型可直接重新驗證與測試，無須因資料曾缺少而重訓。
 
-本次修正保留既有歷史結果，不啟動整批重訓／回測。
+`8fa237e3` 程式修正本身保留既有歷史結果；後續實驗也使用獨立目錄，不覆寫原始紀錄。
+
+2026-10-12 已完成 600 個舊 checkpoint 重測、新舊 TRF 各 15 組完整重訓與驗證；[結果與解讀](../results/scenario_mix/trf_ablation_20261011/report/analysis.md)分開呈現成本重算、重新選模與學習結果的影響。
 
 ## 驗證
 

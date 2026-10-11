@@ -1,0 +1,44 @@
+{
+  "git_head": "257bf7715e70934ff73f2533c2563d593676672a",
+  "legacy_ref": "5117f70e01d1c349982e9fbebc6b91132e4a11cf",
+  "python": "3.10.20 (main, Jul 22 2026, 11:17:08) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "executable": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/bin/python",
+  "env_sha256": "a711c3d097f352e91c73b215be37a46579bd985b7b5c2d8f38f9664f57a8f2b7",
+  "prices": {
+    "path": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/datasets/dow10/prices_2004.csv",
+    "sha256": "7c52d084e8bfb689d5138c97429d0b63c0707120ab9f32d330d6adb1cfcfbedc"
+  },
+  "test_prices": {
+    "path": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/datasets/dow10/prices_2004_2025.csv",
+    "sha256": "87883b88ba476bc8d97644c7e6c98662f62033389519af49fde857325158e56e"
+  },
+  "synthetic": {
+    "path": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10_cond/rl_paths/paths.npz",
+    "sha256": "da21274c1662c8c9c023248610516197f35fd611f08cda5311ab197408958edd"
+  },
+  "protocol": {
+    "groups": {
+      "A": 0.0,
+      "B20": 0.2,
+      "B50": 0.5,
+      "B70": 0.7,
+      "B90": 0.9
+    },
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "nominal_steps": 500000,
+    "actual_steps": 532480,
+    "eval_freq": 25000,
+    "commission": 0.0025,
+    "quantstats": "optional terminal reports disabled"
+  },
+  "versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.2.3",
+    "torch": "2.13.0",
+    "stable_baselines3": "2.9.0"
+  }
+}

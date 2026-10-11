@@ -1,8 +1,8 @@
 # Scenario-mix 各版本實驗總覽
 
-整理日期：2026-10-11。依據 `TimeDiff-mix` 分支截至 `31f3e7cd` 的程式、各 run 的 `config.json`、CSV 與本地模型檔盤點。
+更新日期：2026-10-12。歷史版本依據 `TimeDiff-mix` 的程式、各 run 的 `config.json`、CSV 與本地模型檔盤點；`257bf771` 補齊模型後，已另行完成 TRF 對照實驗。
 
-目前共有 **6 個訓練／回測結果目錄、2 個比較報表目錄**。以下記錄已執行實驗的設定，不以目前 CLI 預設值代替歷史設定。各目錄保留的績效仍來自 **TRF 修正前**；`8fa237e3` 修正成本公式與 reward 步數對齊、`31f3e7cd` 整理入口，都沒有重新產生這些實驗結果。目前沒有修正後的新一輪完整結果。
+歷史版本共有 **6 個訓練／回測結果目錄、2 個比較報表目錄**。以下記錄實際執行設定，不以目前 CLI 預設值代替歷史設定。這些舊目錄仍保留 **TRF 修正前**的績效；修正後的新一輪結果另存於 [trf_ablation_20261011](trf_ablation_20261011/report/analysis.md)，包含 600 個舊 checkpoint 重測與 30 組完整成對重訓。
 
 ## 1. 版本與研究問題
 
@@ -228,7 +228,7 @@ v3 訓練費率為零，TRF 修正不改變其訓練 reward；訓練採固定步
 
 完整修正依據與測試記錄見 [TRF 與 reward 步數修正說明](../../examples/README_scenario_mix_corrections.md)。
 
-## 7. 重現入口與目前缺少的產物
+## 7. 重現入口與本地產物
 
 | 工作 | 正式入口 |
 |---|---|
@@ -240,11 +240,15 @@ v3 訓練費率為零，TRF 修正不改變其訓練 reward；訓練採固定步
 
 完整參數與輸入格式見 [訓練／回測入口](../../finrl/experiments/README_scenario_mix.md) 及 [分析入口](../../analysis/scenario_mix/README.md)。舊 `examples/` 命令保留相容入口。重跑應使用新輸出目錄，以區別修正前後結果。
 
-本次盤點時的本地狀態：
+本地產物狀態（2026-10-12 更新）：
 
 - v1 與 v2 Sharpe 各有 15 個最佳模型；延長回測目錄使用其來源模型。
-- v2 reward logging／v3 的全部 checkpoint 不在本地；應先從原訓練機器取回。若 v3 模型已遺失，重訓是為了重建產物，不是因零成本訓練被 TRF 修正判定失效。
-- 設定中的兩份 TimeDiff 價格 CSV 與 `paths.npz` 目前均不在記錄的相對位置；只有 CSV 績效表不足以重現訓練或回測。
+- `257bf771` 已加入 v2 reward logging／v3 各 300 個 checkpoint，覆蓋所有組別、seed 與 20 個訓練階段；全部 ZIP 完整性與實際步數皆已核對。
+- 兩份 TimeDiff 價格 CSV 與 `paths.npz` 已補回原設定路徑，通過價格完整性與合成路徑錨點檢查；後續實驗記錄輸入 SHA-256。
 - [第一輪研究 notebook](../../analysis/scenario_mix/scenario_mix_v1_summary.ipynb) 分析 v1 的 **2020–2022**；輸出位置為 `analysis/scenario_mix_v1_export/`。這是分析產物目錄，不是另一個 scenario-mix 訓練版本。
 
-本文件整理既有實驗與產物，沒有啟動重訓、重新回測或覆寫歷史報表。
+本文件上方各版目錄仍保留修正前的歷史結果。TRF 成對實驗已完成，另存於 `trf_ablation_20261011/`：新舊 TRF 各 15 組從頭訓練，每組實際 532,480 步；連同舊模型，共 1,200 個 checkpoint 均完成兩種成本下的 validation 與測試。15 對訓練的 episode 抽樣完全一致，模型與輸入雜湊等檢查全部通過。
+
+- [實驗解讀與完整圖表](trf_ablation_20261011/report/analysis.md)：固定策略成本效果小，但重訓影響因組別與種子而異。
+- [所有選模規則的比較表](trf_ablation_20261011/report/README.md)：final value、Sharpe 與終點模型。
+- [完整性檢查](trf_ablation_20261011/audit.json)：模型、實際步數、逐日檔案與成對設定。

@@ -1,0 +1,12 @@
+{
+  "updated_at": "2026-10-12T00:36:47.230587+08:00",
+  "source": "existing completed TRF evaluations; no retraining or inference rerun",
+  "sharpe_definition": "mean(daily log returns) / sample_std(ddof=1) * sqrt(252), rf=0",
+  "existing_csv_files_byte_unchanged": 13,
+  "group_rule_period_rows_checked": 120,
+  "paired_seed_rule_period_rows": 360,
+  "sharpe_values_recomputed_from_daily": 720,
+  "daily_files_read": 144,
+  "max_absolute_recalculation_error": 9.547918011776346e-15,
+  "status": "passed"
+}

@@ -1,0 +1,11 @@
+{
+  "run": "paired_legacy/B50_seed1",
+  "stage": "evaluation, step_400000, GFC",
+  "original_max_cash_weight_difference": 2.28816962e-07,
+  "original_atol": 2e-07,
+  "final_atol": 1e-06,
+  "action_equality_check": "Exact array equality preserved at every step",
+  "additional_check": "Both versions must agree with normalized target weights times price relatives, computed independently in float64, within 1e-6",
+  "resolution": "All 20 checkpoints reevaluated successfully; training was not repeated",
+  "tests": "33 passed in 7.72s"
+}

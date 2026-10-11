@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "checked_at": "2026-10-12T00:42:25.733561+08:00",
+  "unit_tests": {
+    "passed": 33,
+    "seconds": 3.6
+  },
+  "full_audit": "audit.json",
+  "regenerated_artifacts_byte_identical": [
+    "README.md",
+    "episode_pairing.csv",
+    "evaluations.csv",
+    "fixed_checkpoint_deltas.csv",
+    "fixed_policy_cost_effect.png",
+    "historical_reproduction.csv",
+    "last_step_seed_spread.csv",
+    "paired_retraining_deltas.csv",
+    "paired_retraining_final.png",
+    "pipeline_decomposition.csv",
+    "selected_checkpoints.csv",
+    "selected_group_summary.csv",
+    "selected_results.csv",
+    "selection_changes.csv",
+    "sharpe_by_seed.csv",
+    "sharpe_comparison.csv",
+    "stress_period_summary.csv",
+    "validation.csv"
+  ],
+  "sharpe_summary_rows": 120,
+  "sharpe_values_recomputed_from_daily": 720,
+  "max_absolute_sharpe_error": 9.547918011776346e-15,
+  "markdown_local_links": "passed",
+  "versioned_daily_files": 7200,
+  "new_checkpoint_files": 600,
+  "analysis_tool_sha256": {
+    "analysis/scenario_mix/audit_trf_ablation.py": "ce56f9732c46df2f4dca7a38163615954c39b524dc0c1f60197165173856c2ef",
+    "analysis/scenario_mix/plot_trf_ablation.py": "fc2440bf2d55b72b2dadad5d1ecb93cda3f680a10403d85589545c53dca437a5",
+    "analysis/scenario_mix/run_trf_ablation.py": "8ecf99a8ad77e99e2d42adf7f6c7ec0adeb7056034c0fd87117272c53194d848",
+    "analysis/scenario_mix/summarize_trf_ablation.py": "3c29bcb20dd78d631365f8493182b6c8738a4a04c84ca12cb69bb4008476a037",
+    "analysis/scenario_mix/trf_ablation.py": "43db5a1d92ff8842d39f005e96eac5ebf4e08cc49e2773bee5dffbcbe200468d"
+  },
+  "report_sha256": {
+    "README.md": "c02f75434c96557c193d7ef8d872b710b1b0c66b83489bb382cbbea328c654eb",
+    "analysis.md": "b2199ca786a9dbbac1ba69b0fdccb373441ae55653b0a8221f310a71c65de841",
+    "episode_pairing.csv": "47c531a825c97ef44c9399e0c2adc5e446968d102d25d36f3a6e24695fd8ce5c",
+    "evaluations.csv": "e19e9a40af741c37bfb07147c517994728814ffb6bc5f1687d8fd058611f0533",
+    "fixed_checkpoint_deltas.csv": "7fa27199454d69265fa513bd67bdca3bc965463540882433889d4a2a93dab815",
+    "fixed_policy_cost_effect.png": "87784e4b9c849b7ee36ab2ae6420bf9a6fe75e821403c52c48df64693125ece7",
+    "historical_reproduction.csv": "7d234868acfe9c916f6f7dffdd250a87ba877777420c13435e0fab3a827e3c30",
+    "last_step_seed_spread.csv": "d8dd9df31dd2e04c3974be6b0ca387c2125ebf9fed55f18cf70e8ffa23ba9173",
+    "paired_retraining_deltas.csv": "61f4634580cd19e54ee5b619ebb462121f9c8fa5a2f710f26249d88b0f33bfcc",
+    "paired_retraining_final.png": "7913a65810bbbfd428e315e3a419d428c749b1255b099573d07eb98d01398dba",
+    "pipeline_decomposition.csv": "753008c6690c0dbdcb3adf8a85004accc4be2ece81a1da147c6952c0e2e6f5f8",
+    "selected_checkpoints.csv": "8b861c61162535514238d75d7e91a9e9adc8d56c008518d417f40b347257e2ce",
+    "selected_group_summary.csv": "cbdc14a78426b4a3d77331719e92f3eb79082b7f6991c0e688ae4a01682c616c",
+    "selected_results.csv": "f360d323d000dfcd244c6aae194bffc753c7b6f4ea158f700aa1d548cd8bf007",
+    "selection_changes.csv": "d41dc0e9f0f4402b32b8e86fe90fd14ccf3f3568deb05ed20ebbd1fd0a71f868",
+    "sharpe_by_seed.csv": "cc87220d77218eba102a009ca14a1ecb3e0e55636e7f9b3ae93304be1893201b",
+    "sharpe_comparison.csv": "21219306875c22303dfc8b8acfacbf94907042c875cce8bd6b114e66ac506081",
+    "stress_period_summary.csv": "fa35b612ee65ad11c78c23c2becbbe2b60d1b7e6cda514c43b7f0182fa2ae634",
+    "validation.csv": "55c470835d44b44563933f2110c57ec7956a132db55445b2e85d16cd194dbe4f"
+  }
+}

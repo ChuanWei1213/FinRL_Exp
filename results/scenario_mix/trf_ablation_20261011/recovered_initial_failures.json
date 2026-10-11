@@ -1,0 +1,11 @@
+[
+  {
+    "job": [
+      "paired_legacy",
+      "B50",
+      1,
+      "legacy"
+    ],
+    "error": "Command '['/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/bin/python', '-u', '-m', 'analysis.scenario_mix.trf_ablation', 'evaluate', '--run', '/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/trf_ablation_20261011/paired_legacy/B50_seed1', '--prices', '/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/datasets/dow10/prices_2004.csv', '--test-prices', '/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/datasets/dow10/prices_2004_2025.csv', '--out', '/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/trf_ablation_20261011/evaluations/paired_legacy/B50_seed1']' returned non-zero exit status 1."
+  }
+]
