@@ -1,5 +1,7 @@
 # Synthetic vs. Real PPO 實驗
 
+Scenario-mix 的正式訓練、回測入口與相容性說明請見 [Scenario-mix 實驗入口](README_scenario_mix.md)。以下內容為 Synthetic-vs-Real pipeline。
+
 這套 runner 用相同的 PPO pipeline 執行可設定的 studies。預設 `standard`
 study 比較三種訓練資料組別：
 

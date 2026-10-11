@@ -25,7 +25,7 @@ setup(
     author_email="contact@ai4finance.org",
     url="https://github.com/AI4Finance-Foundation/FinRL",
     license="MIT",
-    packages=find_packages(),
+    packages=find_packages(exclude=("analysis", "analysis.*")),
     description="FinRL: Financial Reinforcement Learning Framework.",
     long_description="Version 0.3.5 notes: stable version, code refactoring, more tutorials, clear documentation",
     # It is developed by `AI4Finance`_. \

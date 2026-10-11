@@ -2,6 +2,10 @@
 
 本文件適用於 `results/scenario_mix/` 的 v2、v3 歷史結果。修正程式不會讓既有 CSV、模型或圖表自動變成修正後的實驗結果；舊結果應保留供稽核，新實驗使用另一個輸出目錄。
 
+訓練與回測的正式入口已移至 `finrl.experiments`，舊 `examples/` 命令仍相容；對照表與完整用法見 [Scenario-mix 實驗入口](../finrl/experiments/README_scenario_mix.md)。此次入口整理不改變本文件記錄的修正、實驗設定或歷史結果。
+
+彙整、比較與繪圖工具現位於 [`analysis/scenario_mix/`](../analysis/scenario_mix/README.md)，下文的舊腳本名稱仍可使用。搬移不改變指標、步數對齊、選模規則或歷史結果的適用範圍。
+
 ## 修正內容
 
 ### TRF 成本

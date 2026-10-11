@@ -1,3 +1,11 @@
+## Scenario-mix 正式入口
+
+Scenario-mix 的訓練與回測已移入 `finrl.experiments`，用法與各入口差異見 [Scenario-mix 實驗說明](../finrl/experiments/README_scenario_mix.md)。
+
+本目錄的 `train_scenario_mix_ppo.py`、`log_training_rewards.py`、`evaluate_scenario_mix.py`、`evaluate_checkpoints.py` 保留為相容入口。既有參數、實驗設定及輸出格式維持不變；新程式請從套件匯入共用邏輯。
+
+彙整、比較、繪圖與研究 notebook 已集中到 [`analysis/scenario_mix/`](../analysis/scenario_mix/README.md)。本目錄的 `summarize_scenario_mix.py`、`compare_selection_metrics.py`、`compare_checkpoint_runs.py`、`plot_reward_curves.py` 同樣保留為相容入口。
+
 ## FinRL Stock Trading 2026 Tutorial
 
 ### Step 1: Clone the Repository
