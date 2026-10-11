@@ -15,10 +15,16 @@ Outputs (in --out):
 """
 import argparse
 import re
+import sys
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from finrl.experiments.scenario_mix_reporting import (
+    align_checkpoint_evaluations,
+    load_training_history,
+)
 
 GROUPS = ["A", "B20", "B50", "B70", "B90"]
 COLORS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100"]  # fixed categorical order
@@ -38,11 +44,7 @@ def load(root: Path) -> pd.DataFrame:
     out = []
     for d in sorted(p for p in root.iterdir() if p.is_dir() and (p / "valid.csv").exists()):
         g, seed = re.match(r"(.+)_seed(\d+)$", d.name).groups()
-        v = pd.read_csv(d / "valid.csv")
-        ep = pd.read_csv(d / "episodes.csv")
-        f = int(v.timesteps.iloc[0])
-        ep["bucket"] = (np.ceil(ep.timesteps / f) * f).astype(int)
-        v["train_real"] = v.timesteps.map(ep[ep.source == "real"].groupby("bucket").reward.mean())
+        v = load_training_history(d)
         out.append(v.assign(group=g, seed=int(seed)))
     return pd.concat(out, ignore_index=True)
 
@@ -55,7 +57,9 @@ def main():
     runs = dict(s.split("=", 1) for s in cli.run)
     cli.out.mkdir(parents=True, exist_ok=True)
     tr = {lab: load(Path(r)) for lab, r in runs.items()}
-    ev = {lab: pd.read_csv(Path(r) / "checkpoint_eval.csv").astype({"period": str}) for lab, r in runs.items()}
+    ev = {lab: align_checkpoint_evaluations(
+        pd.read_csv(Path(r) / "checkpoint_eval.csv").astype({"period": str}), tr[lab]
+    ) for lab, r in runs.items()}
 
     import matplotlib.pyplot as plt
     groups = [g for g in GROUPS if any(g in set(t.group) for t in tr.values())]
@@ -74,8 +78,8 @@ def main():
                 if d.empty or d[col].isna().all():
                     continue
                 for _, s in d.groupby("seed"):
-                    ax.plot(s.timesteps / 1000, s[col], color=c, lw=0.7, alpha=0.35)
-                m = d.groupby("timesteps")[col].mean()
+                    ax.plot(s.actual_timesteps / 1000, s[col], color=c, lw=0.7, alpha=0.35)
+                m = d.groupby("actual_timesteps")[col].mean()
                 ax.plot(m.index / 1000, m.values, color=c, lw=2, label=lab)
         for i, (_, _, ylab) in enumerate(ROWS):
             ax = axes[i, j]
@@ -88,7 +92,7 @@ def main():
             if j == 0:
                 ax.set_ylabel(ylab, fontsize=8.5)
             if i == len(ROWS) - 1:
-                ax.set_xlabel("training steps (k)", fontsize=9)
+                ax.set_xlabel("actual training steps (k)", fontsize=9)
     handles, names = axes[1, 0].get_legend_handles_labels()
     fig.suptitle("Training with vs without commission: metrics of every checkpoint "
                  "(thick = seed mean, thin = seeds; test/valid always pay 0.25%)", fontsize=11)

@@ -327,16 +327,21 @@ class PortfolioOptimizationEnv(gym.Env):
                     self._portfolio_value = np.sum(portfolio)  # new portfolio value
                     weights = portfolio / self._portfolio_value  # new weights
             elif self._comission_fee_model == "trf":
+                # The fixed-point tolerance is finer than float32 precision.
+                trf_weights = weights.astype(np.float64)
+                trf_last_weights = np.asarray(last_weights, dtype=np.float64)
                 last_mu = 1
                 mu = 1 - 2 * self._comission_fee_pct + self._comission_fee_pct**2
                 while abs(mu - last_mu) > 1e-10:
                     last_mu = mu
                     mu = (
                         1
-                        - self._comission_fee_pct * weights[0]
+                        # Cash before rebalancing belongs in the numerator;
+                        # target cash belongs in the denominator (Jiang et al., Eq. 14).
+                        - self._comission_fee_pct * trf_last_weights[0]
                         - (2 * self._comission_fee_pct - self._comission_fee_pct**2)
-                        * np.sum(np.maximum(last_weights[1:] - mu * weights[1:], 0))
-                    ) / (1 - self._comission_fee_pct * weights[0])
+                        * np.sum(np.maximum(trf_last_weights[1:] - mu * trf_weights[1:], 0))
+                    ) / (1 - self._comission_fee_pct * trf_weights[0])
                 self._info["trf_mu"] = mu
                 self._portfolio_value = mu * self._portfolio_value
 

@@ -6,7 +6,7 @@
 For each <root>/<group>_seed<k>/ckpt/step_<t>.zip: one continuous deterministic run on the
 test window (yearly + full-period metrics) and on each --extra window (default: the 2008-09
 crisis, which lies before the 2010 training start). Commission is always charged.
-Output: <root>/checkpoint_eval.csv  (group, seed, timesteps, period, metrics...)
+Output: <root>/checkpoint_eval.csv  (group, seed, timesteps, actual_timesteps, period, metrics...)
 """
 import argparse
 import re
@@ -38,7 +38,8 @@ def eval_run(run: Path, prices: Path, test, extra, commission):
         for per, (a, b) in windows:
             daily = S.run_continuous(policy, market, a, b, commission)
             for r in S.period_metrics(daily, per).to_dict("records"):
-                rows.append({"group": g, "seed": int(seed), "timesteps": t, **r})
+                rows.append({"group": g, "seed": int(seed), "timesteps": t,
+                             "actual_timesteps": int(model.num_timesteps), **r})
     return rows
 
 

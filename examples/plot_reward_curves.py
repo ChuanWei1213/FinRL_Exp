@@ -10,10 +10,13 @@ Markers show the checkpoint each selection rule picks (first max, as in training
 """
 import argparse
 import re
+import sys
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from finrl.experiments.scenario_mix_reporting import load_training_history
 
 GROUPS = ["A", "B20", "B50", "B70", "B90"]
 SEED_COLORS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4"]  # fixed categorical order
@@ -27,13 +30,7 @@ def load(root: Path):
     runs = {}
     for d in sorted(p for p in root.iterdir() if p.is_dir() and (p / "valid.csv").exists()):
         g, seed = re.match(r"(.+)_seed(\d+)$", d.name).groups()
-        v = pd.read_csv(d / "valid.csv")
-        ep = pd.read_csv(d / "episodes.csv")
-        eval_freq = int(v.timesteps.iloc[0])
-        ep["bucket"] = (np.ceil(ep.timesteps / eval_freq) * eval_freq).astype(int)
-        for src, col in (("real", "train_real"), ("synthetic", "train_syn")):
-            v[col] = v.timesteps.map(ep[ep.source == src].groupby("bucket").reward.mean())
-        runs[(g, int(seed))] = v
+        runs[(g, int(seed))] = load_training_history(d)
     return runs
 
 
@@ -52,9 +49,11 @@ def main():
             if gg != g:
                 continue
             c = SEED_COLORS[seed % len(SEED_COLORS)]
-            x = v.timesteps / 1000
+            x = v.actual_timesteps / 1000
             sel = {m: v[m].idxmax() for m in PICKS}
-            picks.append({"group": g, "seed": seed, **{f"{m}_step": int(v.timesteps[i]) for m, i in sel.items()}})
+            picks.append({"group": g, "seed": seed,
+                          **{f"{m}_step": int(v.timesteps[i]) for m, i in sel.items()},
+                          **{f"{m}_actual_step": int(v.actual_timesteps[i]) for m, i in sel.items()}})
             for i, (col, _) in enumerate(ROWS):
                 ax = axes[i, j]
                 if v[col].isna().all():
@@ -79,7 +78,7 @@ def main():
             if j == 0:
                 ax.set_ylabel(ylab, fontsize=9)
             if i == len(ROWS) - 1:
-                ax.set_xlabel("training steps (k)", fontsize=9)
+                ax.set_xlabel("actual training steps (k)", fontsize=9)
     # Legend: seed colors + the two pick markers (in neutral ink).
     from matplotlib.lines import Line2D
     seeds = sorted({s for _, s in runs})
@@ -88,8 +87,8 @@ def main():
                        label="checkpoint picked by final value"),
                 Line2D([], [], ls="", marker="D", mfc="#333333", mec="#333333", ms=6,
                        label="checkpoint picked by Sharpe")]
-    fig.suptitle("Reward and checkpoint selection vs training steps (train reward = mean episode reward per "
-                 "25k steps, 100·log return)", fontsize=11)
+    fig.suptitle("Reward and checkpoint selection vs actual training steps "
+                 "(train reward = mean completed-episode reward per evaluation interval)", fontsize=11)
     fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, 0.975), ncol=len(handles),
                frameon=False, fontsize=9)
     fig.tight_layout(rect=(0, 0, 1, 0.95))

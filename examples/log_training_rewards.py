@@ -1,12 +1,14 @@
-"""Re-run one scenario-mix PPO training with full logging. Training is unchanged.
+"""Train one scenario-mix PPO run with episode and checkpoint logging.
 
-Same env / PPO / seed / eval schedule as train_scenario_mix_ppo.py, so the run reproduces
-the original one step for step (check: validation curve equals the original *_valid.csv).
-Extra outputs, nothing else:
+Uses the env / PPO / seed / eval schedule from train_scenario_mix_ppo.py, with an
+optional training commission override. Historical runs used the old TRF formula.
+Outputs:
     episodes.csv   one row per training episode: timesteps, reward (=100*log V_end/V_start),
                    length, source (real/synthetic), scenario, k
-    valid.csv      validation final value / reward / sharpe / calmar / stock weight per eval
-    ckpt/step_<t>.zip   every evaluated checkpoint
+    valid.csv      nominal timesteps, actual_timesteps, validation metrics per eval
+    ckpt/step_<t>.zip   every evaluated checkpoint (t is the nominal checkpoint ID)
+
+PPO completes whole rollouts: actual_timesteps can exceed the nominal schedule.
 
 Run from FinRL_Exp/ (one group/seed per process):
     python examples/log_training_rewards.py \
@@ -69,8 +71,6 @@ def main():
     if cli.out.exists() and any(cli.out.iterdir()):
         raise FileExistsError(f"{cli.out} is not empty")
     (cli.out / "ckpt").mkdir(parents=True, exist_ok=True)
-    (cli.out / "config.json").write_text(json.dumps(
-        {k: str(v) if isinstance(v, Path) else v for k, v in vars(cli).items()}, indent=2) + "\n")
 
     episodes = []
 
@@ -90,20 +90,24 @@ def main():
                            k_max=cli.k_max, seed=cli.seed)
     env = Monitor(SourceInfo(env))
     model = make_ppo(env, cli.seed, "cpu", cli.log_std_init, cli.ent_coef)
+    config = {k: str(v) if isinstance(v, Path) else v for k, v in vars(cli).items()}
+    config["rollout_steps"] = model.n_steps * model.n_envs
+    (cli.out / "config.json").write_text(json.dumps(config, indent=2) + "\n")
     policy = lambda obs: model.predict(obs, deterministic=True)[0]  # noqa: E731
     cb, history = EpisodeLog(), []
     for done in range(cli.eval_freq, cli.timesteps + 1, cli.eval_freq):
         model.learn(cli.eval_freq, reset_num_timesteps=False, callback=cb)
         vdaily = S.run_continuous(policy, market, *cli.valid, cli.commission)
         fv = float(vdaily.value.iloc[-1])
-        history.append({"timesteps": done, "valid_final_value": fv, "valid_reward": 100 * np.log(fv),
+        history.append({"timesteps": done, "actual_timesteps": int(model.num_timesteps),
+                        "valid_final_value": fv, "valid_reward": 100 * np.log(fv),
                         "valid_sharpe": validation_score(vdaily, "sharpe"),
                         "valid_calmar": validation_score(vdaily, "calmar"),
                         "valid_mean_stock_weight": float(1 - vdaily.cash_weight.mean())})
         model.save(cli.out / "ckpt" / f"step_{done:06d}")
         pd.DataFrame(history).to_csv(cli.out / "valid.csv", index=False)
         pd.DataFrame(episodes).to_csv(cli.out / "episodes.csv", index=False)
-        print(f"{cli.group} seed {cli.seed} t={done}: valid {fv:.4f}", flush=True)
+        print(f"{cli.group} seed {cli.seed} checkpoint={done} actual={model.num_timesteps}: valid {fv:.4f}", flush=True)
     print("done", flush=True)
 
 

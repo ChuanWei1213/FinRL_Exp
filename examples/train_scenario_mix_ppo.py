@@ -134,7 +134,8 @@ def main():
                 model.learn(cli.eval_freq, reset_num_timesteps=False, tb_log_name=f"{group}_seed{seed}")
                 vdaily = S.run_continuous(policy, market, *cli.valid, cli.commission)
                 val = validation_score(vdaily, cli.select_metric)
-                history.append({"timesteps": done, "valid_final_value": float(vdaily.value.iloc[-1]),
+                history.append({"timesteps": done, "actual_timesteps": int(model.num_timesteps),
+                                "valid_final_value": float(vdaily.value.iloc[-1]),
                                 "valid_score": val, "valid_mean_stock_weight": float(1 - vdaily.cash_weight.mean()),
                                 "valid_stock_weight_std": float((1 - vdaily.cash_weight).std())})
                 if val > best_val:
