@@ -47,7 +47,7 @@ XDG_CACHE_HOME=/private/tmp/finrl-trf-cache \
 venv/bin/python -m analysis.scenario_mix.run_trf_ablation \
   --prices ../TimeDiff/datasets/dow10/prices_2004.csv \
   --test-prices ../TimeDiff/datasets/dow10/prices_2004_2025.csv \
-  --synthetic ../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz \
+  --synthetic ../TimeDiff/outputs/dow10/conditional/fixed_scenarios/legacy/rl_paths/paths.npz \
   --out results/scenario_mix/trf_ablation_20261011 --workers 8
 
 venv/bin/python -m analysis.scenario_mix.summarize_trf_ablation \

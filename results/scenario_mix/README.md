@@ -47,7 +47,7 @@ v3_nocost（訓練成本 0%）────────┴─> compare_train_cost
 | 延長測試 | 兩個 `*_test2025` 設定為 2020-01-02～2025-12-31 |
 | 歷史價格設定路徑 | `../TimeDiff/datasets/dow10/prices_2004.csv` |
 | 延長回測價格設定路徑 | `../TimeDiff/datasets/dow10/prices_2004_2025.csv` |
-| 合成路徑設定位置 | `../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz` |
+| 合成路徑設定位置 | `../TimeDiff/outputs/dow10/conditional/fixed_scenarios/legacy/rl_paths/paths.npz` |
 
 以上資料路徑以專案根目錄為工作目錄解讀。目前一般訓練 CLI 預設起點為 2009-04-01，不能據此將歷史實驗寫成從 2009 年訓練。
 

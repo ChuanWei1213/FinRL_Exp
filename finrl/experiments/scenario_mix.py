@@ -50,11 +50,20 @@ class MarketData:
         return self.idx(date, side="right") - 1
 
 
+def resolve_synthetic_path(path):
+    """Keep archived scenario-mix configs readable after TimeDiff relocation."""
+    path = Path(path).expanduser().resolve()
+    old_suffix = ("outputs", "dow10_cond", "rl_paths", "paths.npz")
+    if path.parts[-4:] == old_suffix:
+        return path.parents[3] / "outputs/dow10/conditional/fixed_scenarios/legacy/rl_paths/paths.npz"
+    return path
+
+
 class SyntheticPaths:
     """paths.npz from dow10_cond_experiment.py generate --mode rl."""
 
     def __init__(self, path, market: MarketData):
-        z = np.load(path, allow_pickle=False)
+        z = np.load(resolve_synthetic_path(path), allow_pickle=False)
         if list(z["tickers"]) != market.tickers:
             raise ValueError("ticker order differs between paths.npz and prices")
         self.close, self.high, self.low = z["close"], z["high"], z["low"]   # [n, 21, N]

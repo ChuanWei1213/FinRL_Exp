@@ -13,7 +13,7 @@ PPO completes whole rollouts: actual_timesteps can exceed the nominal schedule.
 Run from FinRL_Exp/ (one group/seed per process):
     python -m finrl.experiments.train_scenario_mix_logged \
         --prices ../TimeDiff/datasets/dow10/prices_2004.csv \
-        --synthetic ../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz \
+        --synthetic ../TimeDiff/outputs/dow10/conditional/fixed_scenarios/legacy/rl_paths/paths.npz \
         --group B90 --p 0.9 --seed 2 --out results/scenario_mix/v2_rewardlog/B90_seed2
 """
 

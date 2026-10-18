@@ -34,7 +34,7 @@ Scenario-mix 的正式訓練與回測由 `finrl.experiments` 提供。以下指�
 ```bash
 venv/bin/python -m finrl.experiments.train_scenario_mix \
   --prices ../TimeDiff/datasets/dow10/prices.csv \
-  --synthetic ../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz \
+  --synthetic ../TimeDiff/outputs/dow10/conditional/fixed_scenarios/legacy/rl_paths/paths.npz \
   --out results/scenario_mix/new_run
 ```
 
@@ -43,7 +43,7 @@ venv/bin/python -m finrl.experiments.train_scenario_mix \
 ```bash
 venv/bin/python -m finrl.experiments.train_scenario_mix_logged \
   --prices ../TimeDiff/datasets/dow10/prices_2004.csv \
-  --synthetic ../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz \
+  --synthetic ../TimeDiff/outputs/dow10/conditional/fixed_scenarios/legacy/rl_paths/paths.npz \
   --group B90 --p 0.9 --seed 2 \
   --out results/scenario_mix/new_logged_run/B90_seed2
 ```

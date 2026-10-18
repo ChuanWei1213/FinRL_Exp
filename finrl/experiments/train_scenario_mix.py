@@ -11,7 +11,7 @@ Test: 2020-01-02 .. 2025-12-31 continuous real run (yearly + full-period metrics
 Run from FinRL_Exp/:
     python -m finrl.experiments.train_scenario_mix \
         --prices ../TimeDiff/datasets/dow10/prices.csv \
-        --synthetic ../TimeDiff/outputs/dow10_cond/rl_paths/paths.npz \
+        --synthetic ../TimeDiff/outputs/dow10/conditional/fixed_scenarios/legacy/rl_paths/paths.npz \
         --out results/scenario_mix/v1
 """
 
