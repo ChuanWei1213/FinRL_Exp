@@ -1,0 +1,61 @@
+{
+  "quantstats_disabled": true,
+  "episodes": [
+    {
+      "dataset": "PR30",
+      "seed": 0,
+      "source": "synthetic",
+      "episode_steps": 39,
+      "passed": true
+    },
+    {
+      "dataset": "PR30",
+      "seed": 1,
+      "source": "real",
+      "episode_steps": 31,
+      "passed": true
+    },
+    {
+      "dataset": "PR30",
+      "seed": 2,
+      "source": "synthetic",
+      "episode_steps": 39,
+      "passed": true
+    },
+    {
+      "dataset": "PR30",
+      "seed": 3,
+      "source": "synthetic",
+      "episode_steps": 38,
+      "passed": true
+    },
+    {
+      "dataset": "PR10",
+      "seed": 0,
+      "source": "synthetic",
+      "episode_steps": 39,
+      "passed": true
+    },
+    {
+      "dataset": "PR10",
+      "seed": 1,
+      "source": "real",
+      "episode_steps": 31,
+      "passed": true
+    },
+    {
+      "dataset": "PR10",
+      "seed": 2,
+      "source": "synthetic",
+      "episode_steps": 39,
+      "passed": true
+    },
+    {
+      "dataset": "PR10",
+      "seed": 3,
+      "source": "synthetic",
+      "episode_steps": 38,
+      "passed": true
+    }
+  ]
+}

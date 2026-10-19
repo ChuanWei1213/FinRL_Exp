@@ -1,0 +1,58 @@
+{
+  "frozen_at": "2026-10-18T16:51:36.099979+00:00",
+  "train": [
+    "2010-01-01",
+    "2017-12-31"
+  ],
+  "valid": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "test": [
+    "2020-01-01",
+    "2025-12-31"
+  ],
+  "test_subperiods": [
+    "2020-2022",
+    "2023-2025",
+    "each calendar year"
+  ],
+  "new_groups": [
+    "REAL_REPLAY_PR30_B50",
+    "REAL_REPLAY_PR10_B50",
+    "FULL_B50"
+  ],
+  "new_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "workers": 5,
+  "nominal_steps": 500000,
+  "actual_steps": 532480,
+  "selection": "Maximum validation Sharpe per group and seed; earliest nominal step wins ties. Common corrected TRF and commission 0.0025. Freeze selection before any new test rollout.",
+  "test_checkpoint_curves": "Descriptive diagnostics only; never used for selection, tuning, or stopping.",
+  "legacy_sources": [
+    "v2_rewardlog",
+    "v3_nocost"
+  ],
+  "legacy_reference": "Also audit the saved v2_sharpe models against corresponding v2_rewardlog selections; do not count duplicates as independent runs.",
+  "legacy_differences": "Original v2/v3 training used legacy TRF; v3 training commission=0. All reevaluations use corrected TRF and commission=0.0025. Report historical validation choice sensitivity.",
+  "train_metrics": "Deterministic continuous real train-window evaluation, separate from sampled stochastic training episode reward.",
+  "paired_controls": "Replacement probability remains 0.5 for every B50 group. Each replay group uses exactly the same anchor/condition draws and 4x replicate weights as its generated counterpart.",
+  "input_price_overlap_exact": false,
+  "input_price_overlap_max_relative_difference": {
+    "close": 1.2818265515690541e-06,
+    "high": 1.2818265513470095e-06,
+    "low": 1.2818265515690541e-06
+  },
+  "price_revision_note": "Generator uses original prices_2004.csv; all current PPO controls and standardized evaluation use prices_2004_2025.csv, as did the existing current runs. Overlap differs by <=1.282 ppm in levels, not exactly equal.",
+  "no_original_outputs_overwritten": true
+}

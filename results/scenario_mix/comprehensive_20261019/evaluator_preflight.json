@@ -1,0 +1,60 @@
+[
+  {
+    "split": "train",
+    "rows": 2014,
+    "seconds": 1.3044641250744462,
+    "reference_max_value_error": 0.0,
+    "metrics": {
+      "days": 2013.0,
+      "final_value": 2.941811095738469,
+      "return_pct": 194.18110957384692,
+      "cagr_net_pct": 14.462742040386601,
+      "annual_return_pct": 14.495350033654745,
+      "volatility_pct": 12.974225154704616,
+      "sharpe": 1.0433303222942987,
+      "sortino": 1.5109815551823258,
+      "calmar": 1.0743911895165292,
+      "mdd_pct": 13.49168736219587,
+      "var95_daily_pct": 1.303273257305712,
+      "es95_daily_pct": 1.881529010425596,
+      "positive_day_pct": 54.19771485345256,
+      "worst_day_pct": -4.474817139402229,
+      "stock_weight_pct": 88.41658575441818,
+      "annual_turnover": 1.61763019587816,
+      "fee_factor_drag_pct": 5.739996211450249,
+      "mean_largest_stock_weight_pct": 10.882489326341489,
+      "max_single_stock_weight_pct": 12.35428412997015,
+      "concentrated_over80_pct": 0.0,
+      "action_bound_fraction_pct": 0.0
+    }
+  },
+  {
+    "split": "val",
+    "rows": 504,
+    "seconds": 0.17757370800245553,
+    "reference_max_value_error": 0.0,
+    "metrics": {
+      "days": 503.0,
+      "final_value": 1.3859100847589056,
+      "return_pct": 38.59100847589056,
+      "cagr_net_pct": 17.76287973176185,
+      "annual_return_pct": 17.897196376532992,
+      "volatility_pct": 15.185650448127081,
+      "sharpe": 1.0842001280203768,
+      "sortino": 1.535067379432505,
+      "calmar": 1.1630873289798223,
+      "mdd_pct": 15.387663445900612,
+      "var95_daily_pct": 1.7116872204949471,
+      "es95_daily_pct": 2.360889386179479,
+      "positive_day_pct": 55.26838966202783,
+      "worst_day_pct": -3.791315406468544,
+      "stock_weight_pct": 88.4651501231255,
+      "annual_turnover": 1.6644798493411888,
+      "fee_factor_drag_pct": 1.6315642861362445,
+      "mean_largest_stock_weight_pct": 10.886353693939023,
+      "max_single_stock_weight_pct": 12.202720290041386,
+      "concentrated_over80_pct": 0.0,
+      "action_bound_fraction_pct": 0.0
+    }
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "same_generator_checkpoint_sha256": "35a7a8453df92ed3e7da4b891942114b1010ba01becfd4837bd86370635ca5d6",
+  "tail_cutoffs": {
+    "10": -0.03476270020021468,
+    "30": -0.0018410959144873973
+  },
+  "datasets": [
+    {
+      "dataset": "Full100",
+      "path": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10/conditional/empirical_joint/run_20261017/batches/full100_20261019/paths.npz",
+      "sha256": "e0712b52534be1ce61009c6f2a9f1f7df698b0f9404a9149a157fb705248f049",
+      "recomputed_condition_max_abs_error": 2.0751477944336294e-07,
+      "unique_close_paths": 2000
+    },
+    {
+      "dataset": "Full70+PR30",
+      "path": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10/conditional/empirical_joint/run_20261017/batches/full70_tail30_pr30/paths.npz",
+      "sha256": "e8ca7fbbbc65f1147464ffe0b0c0fcfd8a1e9cc06c78fb895d944177d47dd267",
+      "recomputed_condition_max_abs_error": 2.0751477944336294e-07,
+      "unique_close_paths": 2000
+    },
+    {
+      "dataset": "Full70+PR10",
+      "path": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10/conditional/empirical_joint/run_20261017/batches/full70_tail30_pr10/paths.npz",
+      "sha256": "8a986ae468e10875a60ca68b71aad9bcb86d102747e7221757f830eb13385ba5",
+      "recomputed_condition_max_abs_error": 2.0751477944336294e-07,
+      "unique_close_paths": 2000
+    }
+  ],
+  "note": "No paths removed based on quality or realized return; all 2000 retained per dataset."
+}

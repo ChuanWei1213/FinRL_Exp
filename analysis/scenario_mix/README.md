@@ -4,6 +4,14 @@
 
 ## 分析入口
 
+本輪聯合條件取樣實驗：
+
+- [完整比較 notebook](comprehensive_20261019/comparison.ipynb)：六個目前組別與 v2／v3，共 16 組、90 run；含 train／val／test 對步數的指標、持股、風險及配對差異。
+- [先前 validation 比較 notebook](joint_sharpe_realonly_20261018/comparison.ipynb)：PR30、PR10 與 REAL_ONLY 各 10 seeds，保留當時尚未測試的分析。
+- [結果索引](../../results/scenario_mix/README.md)：各批次、checkpoint、逐日紀錄及完整性查核位置。
+
+這兩個日期目錄保存當次訓練、評估、彙整與製作 notebook 的程式；其批次名稱與輸出位置固定，並非新的通用 CLI。閱讀已保存 notebook 不會觸發訓練；重現新實驗應另建輸出位置。原始 manifest 保留當時本機絕對路徑及雜湊，不改寫歷史紀錄。
+
 以下命令在專案根目錄執行，後面接原本相同的參數。也可直接執行 `python analysis/scenario_mix/<檔名>.py`。這些是專案內的分析工具，不納入 FinRL 的發行套件。
 
 | 工具 | 正式命令 | 輸入與輸出 |

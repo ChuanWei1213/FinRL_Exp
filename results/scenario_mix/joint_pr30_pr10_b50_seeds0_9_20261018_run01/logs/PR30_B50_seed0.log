@@ -1,0 +1,88 @@
+
+Fontconfig error: No writable cache directories
+	/opt/homebrew/var/cache/fontconfig
+	/Users/chuanwei/.cache/fontconfig
+	/Users/chuanwei/.fontconfig
+
+Fontconfig error: No writable cache directories
+	/opt/homebrew/var/cache/fontconfig
+	/Users/chuanwei/.cache/fontconfig
+	/Users/chuanwei/.fontconfig
+
+Fontconfig error: No writable cache directories
+	/opt/homebrew/var/cache/fontconfig
+	/Users/chuanwei/.cache/fontconfig
+	/Users/chuanwei/.fontconfig
+
+Fontconfig error: No writable cache directories
+	/opt/homebrew/var/cache/fontconfig
+	/Users/chuanwei/.cache/fontconfig
+	/Users/chuanwei/.fontconfig
+
+Fontconfig error: No writable cache directories
+	/opt/homebrew/var/cache/fontconfig
+	/Users/chuanwei/.cache/fontconfig
+	/Users/chuanwei/.fontconfig
+Matplotlib is building the font cache; this may take a moment.
+Traceback (most recent call last):
+  File "/Users/chuanwei/.pyenv/versions/3.10.20/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Users/chuanwei/.pyenv/versions/3.10.20/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/finrl/experiments/train_scenario_mix_logged.py", line 163, in <module>
+    main()
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/finrl/experiments/train_scenario_mix_logged.py", line 159, in main
+    run(build_parser().parse_args(argv))
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/finrl/experiments/train_scenario_mix_logged.py", line 134, in run
+    model.learn(cli.eval_freq, reset_num_timesteps=False, callback=cb)
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/stable_baselines3/ppo/ppo.py", line 311, in learn
+    return super().learn(
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/stable_baselines3/common/on_policy_algorithm.py", line 311, in learn
+    total_timesteps, callback = self._setup_learn(
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/stable_baselines3/common/base_class.py", line 423, in _setup_learn
+    self._last_obs = self.env.reset()  # type: ignore[assignment]
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/stable_baselines3/common/vec_env/dummy_vec_env.py", line 78, in reset
+    obs, self.reset_infos[env_idx] = self.envs[env_idx].reset(seed=self._seeds[env_idx], **maybe_options)
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/stable_baselines3/common/monitor.py", line 85, in reset
+    return self.env.reset(**kwargs)
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/gymnasium/core.py", line 333, in reset
+    return self.env.reset(seed=seed, options=options)
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/finrl/experiments/scenario_mix.py", line 257, in reset
+    self._inner = self._build()
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/finrl/experiments/scenario_mix.py", line 252, in _build
+    return _InnerEpisode(frame, len(self.m.tickers), self.commission, self.obs_days)
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/finrl/experiments/scenario_mix.py", line 152, in __init__
+    cls = _fast_env_class()
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/finrl/experiments/scenario_mix.py", line 112, in _fast_env_class
+    from finrl.meta.env_portfolio_optimization.env_portfolio_optimization_gymnasium import (
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/finrl/meta/env_portfolio_optimization/env_portfolio_optimization_gymnasium.py", line 25, in <module>
+    from .env_portfolio_optimization import PortfolioOptimizationEnv
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/finrl/meta/env_portfolio_optimization/env_portfolio_optimization.py", line 28, in <module>
+    import quantstats as qs
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/quantstats/__init__.py", line 25, in <module>
+    from . import stats, utils, plots, reports
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/quantstats/stats.py", line 38, in <module>
+    from scipy.stats import norm as _norm, linregress as _linregress
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/stats/__init__.py", line 624, in <module>
+    from ._stats_py import *
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/stats/_stats_py.py", line 38, in <module>
+    from scipy import sparse
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/__init__.py", line 134, in __getattr__
+    return _importlib.import_module(f'scipy.{name}')
+  File "/Users/chuanwei/.pyenv/versions/3.10.20/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/__init__.py", line 315, in <module>
+    from . import csgraph
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/csgraph/__init__.py", line 187, in <module>
+    from ._laplacian import laplacian
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/csgraph/_laplacian.py", line 7, in <module>
+    from scipy.sparse.linalg import LinearOperator
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/linalg/__init__.py", line 134, in <module>
+    from ._eigen import *
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/linalg/_eigen/__init__.py", line 11, in <module>
+    from ._svds import svds
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/linalg/_eigen/_svds.py", line 10, in <module>
+    from scipy.sparse.linalg._svdp import _svdp
+  File "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/linalg/_svdp.py", line 23, in <module>
+    from ._propack import _spropack  # type: ignore[attr-defined]
+ImportError: dlopen(/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/linalg/_propack/_spropack.cpython-310-darwin.so, 0x0002): tried: '/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/linalg/_propack/_spropack.cpython-310-darwin.so' (section '__DATA/__thread_bss' has a zero-fill section type, but offset field is not zero), '/System/Volumes/Preboot/Cryptexes/OS/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/linalg/_propack/_spropack.cpython-310-darwin.so' (no such file), '/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/venv/lib/python3.10/site-packages/scipy/sparse/linalg/_propack/_spropack.cpython-310-darwin.so' (section '__DATA/__thread_bss' has a zero-fill section type, but offset field is not zero)

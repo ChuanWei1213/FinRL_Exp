@@ -1,0 +1,17 @@
+{
+  "comparisons": [
+    {
+      "paired_dataset": "full70_tail30_pr30",
+      "shared_full_pool_paths": 1400,
+      "all_features_and_ohlc_bitwise_equal": true,
+      "changed_component_paths": 600
+    },
+    {
+      "paired_dataset": "full70_tail30_pr10",
+      "shared_full_pool_paths": 1400,
+      "all_features_and_ohlc_bitwise_equal": true,
+      "changed_component_paths": 600
+    }
+  ],
+  "note": "Same plan seed and diffusion stream preserve all 1400 full-component paths exactly; only the other 600 paths' sampling conditions change."
+}

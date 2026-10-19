@@ -1,0 +1,155 @@
+{
+  "completed_at": "2026-10-18T17:50:44.618819+00:00",
+  "inputs": {
+    "prices_sha256": "87883b88ba476bc8d97644c7e6c98662f62033389519af49fde857325158e56e",
+    "checkpoints": [
+      {
+        "nominal_timesteps": 25000,
+        "actual_timesteps": 26624,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_025000.zip",
+        "checkpoint_sha256": "b5cda29f442202a3df5c458aff9739f40d34983e85ad6bb73d910e7b7bd1c504"
+      },
+      {
+        "nominal_timesteps": 50000,
+        "actual_timesteps": 53248,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_050000.zip",
+        "checkpoint_sha256": "d186a523f9e5a5803ddfecee74e1326c7f523080de673a2c71b340ff21f0659e"
+      },
+      {
+        "nominal_timesteps": 75000,
+        "actual_timesteps": 79872,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_075000.zip",
+        "checkpoint_sha256": "18ede30b14c358a6502d0e463ff4f2e7f6defa79a6091286614fef24b16952d6"
+      },
+      {
+        "nominal_timesteps": 100000,
+        "actual_timesteps": 106496,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_100000.zip",
+        "checkpoint_sha256": "95238a5d29d8f7b9af54e30d62713f74bfbcc809e183a5dcfd7997a1fc120a4f"
+      },
+      {
+        "nominal_timesteps": 125000,
+        "actual_timesteps": 133120,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_125000.zip",
+        "checkpoint_sha256": "985ab45ca1d21d01d730e57c5b57cf456dff625339a6d5f5a98d600fb6015db3"
+      },
+      {
+        "nominal_timesteps": 150000,
+        "actual_timesteps": 159744,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_150000.zip",
+        "checkpoint_sha256": "2ae6d198dcf6042e7acc3586b44936bc41ad92c006c3dbb2cd7db1d1cfae4275"
+      },
+      {
+        "nominal_timesteps": 175000,
+        "actual_timesteps": 186368,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_175000.zip",
+        "checkpoint_sha256": "6a9ec62327278016b943931f986136e547ec4c834baad7d01ba37e1f8742ee70"
+      },
+      {
+        "nominal_timesteps": 200000,
+        "actual_timesteps": 212992,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_200000.zip",
+        "checkpoint_sha256": "13790a2b095274b4cc42344117a0843c2208693d3bb2432031dc88d64aabb8f3"
+      },
+      {
+        "nominal_timesteps": 225000,
+        "actual_timesteps": 239616,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_225000.zip",
+        "checkpoint_sha256": "44cb94d1082e17fc2e078f1a2444a8a139be79d61b5a9a88923198d6388f690a"
+      },
+      {
+        "nominal_timesteps": 250000,
+        "actual_timesteps": 266240,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_250000.zip",
+        "checkpoint_sha256": "7af9fad099fb9c39977631cf7be368dc3285e4c0167b7d433a95eec32b1fc983"
+      },
+      {
+        "nominal_timesteps": 275000,
+        "actual_timesteps": 292864,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_275000.zip",
+        "checkpoint_sha256": "6d2e4d8cd2e1630d4c9058793f497b236fabc6fce30e6235fb7006856a73a8dc"
+      },
+      {
+        "nominal_timesteps": 300000,
+        "actual_timesteps": 319488,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_300000.zip",
+        "checkpoint_sha256": "d50d7370713a489774fd91272d3d12af89d023705ebf4c5d0da12db34cda534d"
+      },
+      {
+        "nominal_timesteps": 325000,
+        "actual_timesteps": 346112,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_325000.zip",
+        "checkpoint_sha256": "dc90760511abbe68fca56b37514468809f96d419a8e8937b28886ec30ba4ef89"
+      },
+      {
+        "nominal_timesteps": 350000,
+        "actual_timesteps": 372736,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_350000.zip",
+        "checkpoint_sha256": "ab33de5e17e77e8725598315fad425b80991b17589458971db9b7d71a85f3ae1"
+      },
+      {
+        "nominal_timesteps": 375000,
+        "actual_timesteps": 399360,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_375000.zip",
+        "checkpoint_sha256": "ff292290950bb8983012fbc6fd07972f63991e3a101ed0ba57915a0a7661ec48"
+      },
+      {
+        "nominal_timesteps": 400000,
+        "actual_timesteps": 425984,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_400000.zip",
+        "checkpoint_sha256": "1a09a7040571a02415658d0bbd95720a8a17d02a8099e335dd4cc181a6f006aa"
+      },
+      {
+        "nominal_timesteps": 425000,
+        "actual_timesteps": 452608,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_425000.zip",
+        "checkpoint_sha256": "0cd4aa66066565bed1851f37e98434166dedefef4feaf7614e8f4d874685e051"
+      },
+      {
+        "nominal_timesteps": 450000,
+        "actual_timesteps": 479232,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_450000.zip",
+        "checkpoint_sha256": "a481dfaff8116b5834335bb62426a8784d7072b56e11c95498d177fdc3d6c856"
+      },
+      {
+        "nominal_timesteps": 475000,
+        "actual_timesteps": 505856,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_475000.zip",
+        "checkpoint_sha256": "b270d588d64212372c2dcf3a0f79ee3c0e4e38ce8e47a0b33805fbd19408828c"
+      },
+      {
+        "nominal_timesteps": 500000,
+        "actual_timesteps": 532480,
+        "checkpoint": "results/scenario_mix/v2_rewardlog/B90_seed2/ckpt/step_500000.zip",
+        "checkpoint_sha256": "43f00663b8c4fe1b0f8d0169e50868b32f16b242d94b5b2d47e21fe7d336a990"
+      }
+    ],
+    "config_sha256": "025278f72e700486ad1446937f662bcfb9eda5c31f8757a9d99df02127d43084",
+    "evaluator_sha256": "6f48c1d4d99d1c023728859ee0f0e6bbeb9d37ebe02e78a87d27994b7c78b31b"
+  },
+  "artifacts": {
+    "step_025000_test.csv.gz": "2eb141df450f21bbb6918eeb63ee158e8dd47ed2f538a9902215a31068fc2fcf",
+    "step_050000_test.csv.gz": "2e92b8b837c9e18dd20961c09afe4d96349fa9bb782af3b3af2defd6c76911f8",
+    "step_075000_test.csv.gz": "20ddf7e85319776172bf30106bcbd6378133091ca866077c95af31c733c54d79",
+    "step_100000_test.csv.gz": "969c215602ef7119b40dbc7602dae2a9656ee19de5ac95d87d3577969aa5514f",
+    "step_125000_test.csv.gz": "1584a90dfb8350d861a0954e880e3b26df9a3848bc0054ee64237ca3ec76942f",
+    "step_150000_test.csv.gz": "b0a2a7a5cca2817c92771abfb826fd930b87cc8896c60131b547706ea10fabf3",
+    "step_175000_test.csv.gz": "b40bc3f576c7959e5af0b47965e6fa68bc1937dcbfb49166b641b9b4d93232d1",
+    "step_200000_test.csv.gz": "668e1c42ef4518643f33e76b7e8c380ad6820db1110ed40698b2fa39e6e0bf87",
+    "step_225000_test.csv.gz": "0f10cb480d71ef32ba54cb6cf90e5923a7e2337c20741e741bdf34787e2c53be",
+    "step_250000_test.csv.gz": "b5fc6ee3995736f6d4a54f0b9286aa2dfce938c0c58c9fc5287091c37bbd081d",
+    "step_275000_test.csv.gz": "ec2edb6def9ca9466d11eb74f8151861d9ce50e65c870d1dfcddd60365a29e4e",
+    "step_300000_test.csv.gz": "9950c5f77a005e6c0bdd8ca0069f0a2db560fafd8460b87b07c7a167c6380c4a",
+    "step_325000_test.csv.gz": "54519a0d86cb1eec840239062ff94619b84d7045c5a6d36aed186dfbed5d8a4a",
+    "step_350000_test.csv.gz": "88e656bef03ef68aa873b86e9e3266bd383efdd6de9907573c8d0eabf38c8def",
+    "step_375000_test.csv.gz": "a386d572c8c67df256f8fb0e6f81e12fb76f1cd482af0955afa9c40fc681aaaf",
+    "step_400000_test.csv.gz": "488bb1785959762ed21f5929f994ae2aca3f99de7057059149161319d6128587",
+    "step_425000_test.csv.gz": "40bf771ac3847bc963d9f9f15ba0ee4e1bf092e435f026e4af0db31975d2259f",
+    "step_450000_test.csv.gz": "e1bfe00c35eb769b2b6b21dbf877d4b34ffb9d86e548123656d236d6f88bb534",
+    "step_475000_test.csv.gz": "73e241ad1577e49437b9ab7daa5cd1dfc6ef1463c200641aba38d25bd902abe2",
+    "step_500000_test.csv.gz": "e226599cfaff38c3abce2f3697cff6fd5cf848ae24b04f020355e03a7498a026",
+    "test_metrics.csv": "d780921da1983added0449158c9dee397634ec2e47355b015fa75960399ccf76"
+  },
+  "rows": 20,
+  "elapsed_seconds": 11.301099707954563
+}

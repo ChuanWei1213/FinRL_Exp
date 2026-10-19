@@ -1,0 +1,256 @@
+[
+  {
+    "group": "REAL_REPLAY_PR30_B50",
+    "path_count": 2000,
+    "source": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10/conditional/empirical_joint/run_20261017/batches/full70_tail30_pr30/paths.npz",
+    "source_sha256": "e8ca7fbbbc65f1147464ffe0b0c0fcfd8a1e9cc06c78fb895d944177d47dd267",
+    "paths_sha256": "d762d26b50eda40fc4ad620ba21166efb8badc40e245a08b0bc6ab7158a189ed",
+    "paired_real_ohlc_exact_to_ppo_prices": true,
+    "condition_max_abs_difference_vs_generator_prices": [
+      3.417006455355698e-07,
+      1.6311607256569438e-06
+    ],
+    "eligible_indices_match_synthetic": true,
+    "eligibility_by_k": [
+      {
+        "k": 0,
+        "eligible_paths": 1948,
+        "tail_pool_fraction": 0.30390143737166325
+      },
+      {
+        "k": 1,
+        "eligible_paths": 1948,
+        "tail_pool_fraction": 0.30390143737166325
+      },
+      {
+        "k": 2,
+        "eligible_paths": 1948,
+        "tail_pool_fraction": 0.30390143737166325
+      },
+      {
+        "k": 3,
+        "eligible_paths": 1948,
+        "tail_pool_fraction": 0.30390143737166325
+      },
+      {
+        "k": 4,
+        "eligible_paths": 1948,
+        "tail_pool_fraction": 0.30390143737166325
+      },
+      {
+        "k": 5,
+        "eligible_paths": 1940,
+        "tail_pool_fraction": 0.30515463917525776
+      },
+      {
+        "k": 6,
+        "eligible_paths": 1940,
+        "tail_pool_fraction": 0.30515463917525776
+      },
+      {
+        "k": 7,
+        "eligible_paths": 1940,
+        "tail_pool_fraction": 0.30515463917525776
+      },
+      {
+        "k": 8,
+        "eligible_paths": 1940,
+        "tail_pool_fraction": 0.30515463917525776
+      },
+      {
+        "k": 9,
+        "eligible_paths": 1940,
+        "tail_pool_fraction": 0.30515463917525776
+      },
+      {
+        "k": 10,
+        "eligible_paths": 1940,
+        "tail_pool_fraction": 0.30515463917525776
+      },
+      {
+        "k": 11,
+        "eligible_paths": 1940,
+        "tail_pool_fraction": 0.30515463917525776
+      },
+      {
+        "k": 12,
+        "eligible_paths": 1940,
+        "tail_pool_fraction": 0.30515463917525776
+      },
+      {
+        "k": 13,
+        "eligible_paths": 1936,
+        "tail_pool_fraction": 0.30578512396694213
+      },
+      {
+        "k": 14,
+        "eligible_paths": 1932,
+        "tail_pool_fraction": 0.3064182194616977
+      },
+      {
+        "k": 15,
+        "eligible_paths": 1932,
+        "tail_pool_fraction": 0.3064182194616977
+      },
+      {
+        "k": 16,
+        "eligible_paths": 1932,
+        "tail_pool_fraction": 0.3064182194616977
+      },
+      {
+        "k": 17,
+        "eligible_paths": 1932,
+        "tail_pool_fraction": 0.3064182194616977
+      },
+      {
+        "k": 18,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.3076923076923077
+      },
+      {
+        "k": 19,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.3076923076923077
+      },
+      {
+        "k": 20,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.3076923076923077
+      },
+      {
+        "k": 21,
+        "eligible_paths": 1916,
+        "tail_pool_fraction": 0.3068893528183716
+      }
+    ],
+    "source_pool_tail_fraction": 0.3,
+    "interpretation": "50% ordinary real episodes; 50% same weighted anchor pool as corresponding synthetic group, replaying actual future OHLC. Duplicates preserve sampling weights; they are not independent histories."
+  },
+  {
+    "group": "REAL_REPLAY_PR10_B50",
+    "path_count": 2000,
+    "source": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10/conditional/empirical_joint/run_20261017/batches/full70_tail30_pr10/paths.npz",
+    "source_sha256": "8a986ae468e10875a60ca68b71aad9bcb86d102747e7221757f830eb13385ba5",
+    "paths_sha256": "2d29d73670b98dcb2c6acf287463e173698b39efe91b95ec80358492c8b7c2f0",
+    "paired_real_ohlc_exact_to_ppo_prices": true,
+    "condition_max_abs_difference_vs_generator_prices": [
+      3.417006455355698e-07,
+      1.6503052652772077e-06
+    ],
+    "eligible_indices_match_synthetic": true,
+    "eligibility_by_k": [
+      {
+        "k": 0,
+        "eligible_paths": 1932,
+        "tail_pool_fraction": 0.2981366459627329
+      },
+      {
+        "k": 1,
+        "eligible_paths": 1932,
+        "tail_pool_fraction": 0.2981366459627329
+      },
+      {
+        "k": 2,
+        "eligible_paths": 1932,
+        "tail_pool_fraction": 0.2981366459627329
+      },
+      {
+        "k": 3,
+        "eligible_paths": 1932,
+        "tail_pool_fraction": 0.2981366459627329
+      },
+      {
+        "k": 4,
+        "eligible_paths": 1932,
+        "tail_pool_fraction": 0.2981366459627329
+      },
+      {
+        "k": 5,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.2993762993762994
+      },
+      {
+        "k": 6,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.2993762993762994
+      },
+      {
+        "k": 7,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.2993762993762994
+      },
+      {
+        "k": 8,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.2993762993762994
+      },
+      {
+        "k": 9,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.2993762993762994
+      },
+      {
+        "k": 10,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.2993762993762994
+      },
+      {
+        "k": 11,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.2993762993762994
+      },
+      {
+        "k": 12,
+        "eligible_paths": 1924,
+        "tail_pool_fraction": 0.2993762993762994
+      },
+      {
+        "k": 13,
+        "eligible_paths": 1920,
+        "tail_pool_fraction": 0.3
+      },
+      {
+        "k": 14,
+        "eligible_paths": 1916,
+        "tail_pool_fraction": 0.30062630480167013
+      },
+      {
+        "k": 15,
+        "eligible_paths": 1916,
+        "tail_pool_fraction": 0.30062630480167013
+      },
+      {
+        "k": 16,
+        "eligible_paths": 1916,
+        "tail_pool_fraction": 0.30062630480167013
+      },
+      {
+        "k": 17,
+        "eligible_paths": 1916,
+        "tail_pool_fraction": 0.30062630480167013
+      },
+      {
+        "k": 18,
+        "eligible_paths": 1908,
+        "tail_pool_fraction": 0.3018867924528302
+      },
+      {
+        "k": 19,
+        "eligible_paths": 1908,
+        "tail_pool_fraction": 0.3018867924528302
+      },
+      {
+        "k": 20,
+        "eligible_paths": 1908,
+        "tail_pool_fraction": 0.3018867924528302
+      },
+      {
+        "k": 21,
+        "eligible_paths": 1904,
+        "tail_pool_fraction": 0.3025210084033613
+      }
+    ],
+    "source_pool_tail_fraction": 0.3,
+    "interpretation": "50% ordinary real episodes; 50% same weighted anchor pool as corresponding synthetic group, replaying actual future OHLC. Duplicates preserve sampling weights; they are not independent histories."
+  }
+]

@@ -198,6 +198,28 @@ results/scenario_mix/trf_ablation_20261011/logs/
 results/scenario_mix/trf_ablation_20261011/**/.evaluation.lock
 results/scenario_mix/trf_ablation_20261011/**/.*.training.lock
 
+# Empirical joint-condition PPO experiments and complete comparison evidence.
+!results/scenario_mix/joint_pr30_pr10_b50_seeds0_9_20261018_run01/
+!results/scenario_mix/joint_pr30_pr10_b50_seeds0_9_20261018_run01/**
+!results/scenario_mix/joint_pr30_pr10_b50_seeds0_9_20261018_run02/
+!results/scenario_mix/joint_pr30_pr10_b50_seeds0_9_20261018_run02/**
+!results/scenario_mix/joint_real_only_seeds0_9_20261018_run01/
+!results/scenario_mix/joint_real_only_seeds0_9_20261018_run01/**
+!results/scenario_mix/joint_pr30_pr10_real_only_sharpe_20261018/
+!results/scenario_mix/joint_pr30_pr10_real_only_sharpe_20261018/**
+!results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/
+!results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/**
+!results/scenario_mix/comprehensive_20261019/
+!results/scenario_mix/comprehensive_20261019/**
+results/scenario_mix/joint_*/**/__pycache__/
+results/scenario_mix/joint_*/**/*.py[cod]
+results/scenario_mix/joint_*/**/.DS_Store
+results/scenario_mix/joint_*/**/*.lock
+results/scenario_mix/comprehensive_20261019/**/__pycache__/
+results/scenario_mix/comprehensive_20261019/**/*.py[cod]
+results/scenario_mix/comprehensive_20261019/**/.DS_Store
+results/scenario_mix/comprehensive_20261019/**/*.lock
+
 # Share the intrinsic-reward semantic training cache across machines while
 # keeping smoke/full reports and duplicated experiment artifacts local.
 # !results/ppo_portfolio_intrinsic_reward_ablation/

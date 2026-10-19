@@ -1,0 +1,68 @@
+{
+  "started_at": "2026-10-18T16:51:36.102247+00:00",
+  "config": {
+    "prices": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/datasets/dow10/prices_2004_2025.csv",
+    "dataset": [
+      [
+        "REAL_REPLAY_PR30_B50",
+        "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/comprehensive_20261019/inputs/real_replay_pr30/paths.npz"
+      ],
+      [
+        "REAL_REPLAY_PR10_B50",
+        "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/comprehensive_20261019/inputs/real_replay_pr10/paths.npz"
+      ],
+      [
+        "FULL_B50",
+        "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10/conditional/empirical_joint/run_20261017/batches/full100_20261019/paths.npz"
+      ]
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "workers": 5,
+    "out": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01",
+    "p": 0.5,
+    "train": [
+      "2010-01-01",
+      "2017-12-31"
+    ],
+    "valid": [
+      "2018-01-01",
+      "2019-12-31"
+    ],
+    "timesteps": 500000,
+    "eval_freq": 25000,
+    "commission": 0.0025,
+    "train_commission": 0.0025,
+    "k_max": 21,
+    "log_std_init": -2.0,
+    "ent_coef": 0.0,
+    "dry_run": false
+  },
+  "source_sha256": {
+    "finrl/experiments/scenario_mix.py": "65eb6e06b5ce06f5bf4fed9666b8119e6ab859d5c21abdfd4cf0d56de0c51822",
+    "finrl/experiments/train_scenario_mix_logged.py": "59a21122bb4176c5c104afaf20913604b3549f9d05a94485afb23afaee9bff28",
+    "finrl/experiments/scenario_mix_common.py": "5ff401a2d8053ca3d534338f7b665291b9ec2287b646d821c4854aee4dd9db57",
+    "finrl/experiments/notebook_utils.py": "a91244aad31845a143fa068876784ce7d7c162ef9eb51a2d8fcbc8ede2a9afcd",
+    "finrl/meta/env_portfolio_optimization/env_portfolio_optimization.py": "a711c3d097f352e91c73b215be37a46579bd985b7b5c2d8f38f9664f57a8f2b7",
+    "analysis/scenario_mix/comprehensive_20261019/prepare_and_launch.py": "a5808a559fb178ae9efeb12a62b1a36f70bf9e9ceab14d4d9b05a16c9cf641a4",
+    "analysis/scenario_mix/comprehensive_20261019/train_missing.py": "8f3b4183d066921e779d17891804bbd09817a245ab10886c7a1d49dc199b18d9"
+  },
+  "input_sha256": {
+    "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/datasets/dow10/prices_2004_2025.csv": "87883b88ba476bc8d97644c7e6c98662f62033389519af49fde857325158e56e",
+    "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/comprehensive_20261019/inputs/real_replay_pr30/paths.npz": "d762d26b50eda40fc4ad620ba21166efb8badc40e245a08b0bc6ab7158a189ed",
+    "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/comprehensive_20261019/inputs/real_replay_pr10/paths.npz": "2d29d73670b98dcb2c6acf287463e173698b39efe91b95ec80358492c8b7c2f0",
+    "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10/conditional/empirical_joint/run_20261017/batches/full100_20261019/paths.npz": "e0712b52534be1ce61009c6f2a9f1f7df698b0f9404a9149a157fb705248f049"
+  },
+  "python": "3.10.20 (main, Jul 22 2026, 11:17:08) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "runtime_note": "Same optional QuantStats report shim; no changes to PPO, reward, fees, observation, or optimizer."
+}

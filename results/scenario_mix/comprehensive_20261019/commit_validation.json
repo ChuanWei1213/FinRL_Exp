@@ -1,0 +1,244 @@
+{
+  "status": "verified",
+  "verified_at": "2026-10-19T05:57:11.379988+00:00",
+  "operation": "Read-only integrity checks before versioning; no training, evaluation, or notebook rerun",
+  "batch_checks": [
+    {
+      "directory": "results/scenario_mix/joint_pr30_pr10_b50_seeds0_9_20261018_run02",
+      "runs": 20,
+      "checkpoints": 400,
+      "validation_rows": 400
+    },
+    {
+      "directory": "results/scenario_mix/joint_real_only_seeds0_9_20261018_run01",
+      "runs": 10,
+      "checkpoints": 200,
+      "validation_rows": 200
+    },
+    {
+      "directory": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01",
+      "runs": 30,
+      "checkpoints": 600,
+      "validation_rows": 600
+    }
+  ],
+  "comparison": {
+    "groups": 16,
+    "runs": 90,
+    "checkpoint_hashes_verified": 1800,
+    "daily_artifact_hashes_verified": 5400,
+    "metric_rows": 5400,
+    "selected_rows": 270,
+    "png_svg_pairs": 78
+  },
+  "npz_inputs": [
+    {
+      "path": "TimeDiff/outputs/dow10/conditional/empirical_joint/run_20261017/batches/full100_20261019/paths.npz",
+      "sha256": "e0712b52534be1ce61009c6f2a9f1f7df698b0f9404a9149a157fb705248f049",
+      "shapes": {
+        "tickers": [
+          10
+        ],
+        "anchor_dates": [
+          2000
+        ],
+        "scenario": [
+          2000
+        ],
+        "source_pool": [
+          2000
+        ],
+        "window_id": [
+          2000
+        ],
+        "draw_id": [
+          2000
+        ],
+        "replicate_id": [
+          2000
+        ],
+        "target": [
+          2000,
+          2
+        ],
+        "realized": [
+          2000,
+          2
+        ],
+        "close": [
+          2000,
+          21,
+          10
+        ],
+        "high": [
+          2000,
+          21,
+          10
+        ],
+        "low": [
+          2000,
+          21,
+          10
+        ],
+        "raw_features": [
+          2000,
+          21,
+          30
+        ],
+        "anchor_close": [
+          2000,
+          10
+        ],
+        "history_features": [
+          500,
+          63,
+          30
+        ],
+        "history_draw_ids": [
+          500
+        ],
+        "paired_real_future": [
+          500,
+          21,
+          30
+        ]
+      }
+    },
+    {
+      "path": "FinRL_Exp/results/scenario_mix/comprehensive_20261019/inputs/real_replay_pr30/paths.npz",
+      "sha256": "d762d26b50eda40fc4ad620ba21166efb8badc40e245a08b0bc6ab7158a189ed",
+      "shapes": {
+        "tickers": [
+          10
+        ],
+        "anchor_dates": [
+          2000
+        ],
+        "scenario": [
+          2000
+        ],
+        "source_pool": [
+          2000
+        ],
+        "window_id": [
+          2000
+        ],
+        "draw_id": [
+          2000
+        ],
+        "replicate_id": [
+          2000
+        ],
+        "target": [
+          2000,
+          2
+        ],
+        "close": [
+          2000,
+          21,
+          10
+        ],
+        "high": [
+          2000,
+          21,
+          10
+        ],
+        "low": [
+          2000,
+          21,
+          10
+        ],
+        "raw_features": [
+          2000,
+          21,
+          30
+        ],
+        "realized": [
+          2000,
+          2
+        ],
+        "anchor_close": [
+          2000,
+          10
+        ],
+        "path_type": []
+      }
+    },
+    {
+      "path": "FinRL_Exp/results/scenario_mix/comprehensive_20261019/inputs/real_replay_pr10/paths.npz",
+      "sha256": "2d29d73670b98dcb2c6acf287463e173698b39efe91b95ec80358492c8b7c2f0",
+      "shapes": {
+        "tickers": [
+          10
+        ],
+        "anchor_dates": [
+          2000
+        ],
+        "scenario": [
+          2000
+        ],
+        "source_pool": [
+          2000
+        ],
+        "window_id": [
+          2000
+        ],
+        "draw_id": [
+          2000
+        ],
+        "replicate_id": [
+          2000
+        ],
+        "target": [
+          2000,
+          2
+        ],
+        "close": [
+          2000,
+          21,
+          10
+        ],
+        "high": [
+          2000,
+          21,
+          10
+        ],
+        "low": [
+          2000,
+          21,
+          10
+        ],
+        "raw_features": [
+          2000,
+          21,
+          30
+        ],
+        "realized": [
+          2000,
+          2
+        ],
+        "anchor_close": [
+          2000,
+          10
+        ],
+        "path_type": []
+      }
+    }
+  ],
+  "notebooks": [
+    {
+      "path": "analysis/scenario_mix/comprehensive_20261019/comparison.ipynb",
+      "code_cells": 10,
+      "sha256": "b2c9dc23862babd1fe47b564ce0f087066b118cebcf333104538f827e59adc00"
+    },
+    {
+      "path": "analysis/scenario_mix/joint_sharpe_realonly_20261018/comparison.ipynb",
+      "code_cells": 7,
+      "sha256": "894bcc08a4c6e7d44081f08865ec1bed0428a59218d9c0886e797a7f87199816"
+    }
+  ],
+  "python_sources_parsed": 14,
+  "unique_file_hashes_verified": 7971,
+  "existing_completion_audit_sha256": "fb39171a93d62bcfd62b011456bdb79d8fe8ec81e8e5b101d221339c373bd0d6",
+  "original_artifacts_modified": false
+}

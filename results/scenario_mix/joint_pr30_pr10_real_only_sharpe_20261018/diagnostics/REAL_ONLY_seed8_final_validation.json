@@ -1,0 +1,6 @@
+{
+  "checkpoint": "results/scenario_mix/joint_real_only_seeds0_9_20261018_run01/REAL_ONLY_seed8/ckpt/step_500000.zip",
+  "checkpoint_sha256": "b71f81d0500a46d3d3916ac24194be0dd30a38f0cd4b73aa2a87213e3ad3694b",
+  "daily_sha256": "5eb5c40105173036c504887ae7c67e91187acf12d93e5351971d2fad8f55c314",
+  "validation_only": true
+}

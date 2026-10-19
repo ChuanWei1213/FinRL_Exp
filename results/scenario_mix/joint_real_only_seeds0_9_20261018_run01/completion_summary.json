@@ -1,0 +1,110 @@
+{
+  "status": "completed_and_verified",
+  "checked_at": "2026-10-18T15:51:27.821480+00:00",
+  "started_at": "2026-10-18T15:33:18.714268+00:00",
+  "completed_at": "2026-10-18T15:50:55.898180+00:00",
+  "elapsed_seconds": 1057.183912,
+  "runs_succeeded": 10,
+  "runs_failed": 0,
+  "workers": 5,
+  "checkpoints_total": 200,
+  "validation_rows_total": 200,
+  "all_training_episodes_real": true,
+  "test_evaluation_performed": false,
+  "input_and_training_source_hashes_unchanged": true,
+  "training_source_matches_paired_batch_commit": "fb5a6b201de5215a40ebd6bbab839be040dd96ae",
+  "effective_training_commission": 0.0025,
+  "config_note": "Real-only train_commission=null inherits commission=0.0025; the mixed batch explicitly sets train_commission=0.0025. Effective training and validation fees are identical.",
+  "runs": [
+    {
+      "seed": 0,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16950,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "seed": 1,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16942,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "seed": 2,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16928,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "seed": 3,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16934,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "seed": 4,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16908,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "seed": 5,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16903,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "seed": 6,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16879,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "seed": 7,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16893,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "seed": 8,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16886,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "seed": 9,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episode_rows": 16929,
+      "all_episodes_real": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    }
+  ]
+}

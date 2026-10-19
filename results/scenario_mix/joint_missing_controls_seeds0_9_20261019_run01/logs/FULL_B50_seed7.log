@@ -1,0 +1,21 @@
+FULL_B50 seed 7 checkpoint=25000 actual=26624: valid 1.4173
+FULL_B50 seed 7 checkpoint=50000 actual=53248: valid 1.4197
+FULL_B50 seed 7 checkpoint=75000 actual=79872: valid 1.4227
+FULL_B50 seed 7 checkpoint=100000 actual=106496: valid 1.4284
+FULL_B50 seed 7 checkpoint=125000 actual=133120: valid 1.4243
+FULL_B50 seed 7 checkpoint=150000 actual=159744: valid 1.4206
+FULL_B50 seed 7 checkpoint=175000 actual=186368: valid 1.4138
+FULL_B50 seed 7 checkpoint=200000 actual=212992: valid 1.4178
+FULL_B50 seed 7 checkpoint=225000 actual=239616: valid 1.4202
+FULL_B50 seed 7 checkpoint=250000 actual=266240: valid 1.4263
+FULL_B50 seed 7 checkpoint=275000 actual=292864: valid 1.4259
+FULL_B50 seed 7 checkpoint=300000 actual=319488: valid 1.4377
+FULL_B50 seed 7 checkpoint=325000 actual=346112: valid 1.4541
+FULL_B50 seed 7 checkpoint=350000 actual=372736: valid 1.4589
+FULL_B50 seed 7 checkpoint=375000 actual=399360: valid 1.4747
+FULL_B50 seed 7 checkpoint=400000 actual=425984: valid 1.4862
+FULL_B50 seed 7 checkpoint=425000 actual=452608: valid 1.5067
+FULL_B50 seed 7 checkpoint=450000 actual=479232: valid 1.6252
+FULL_B50 seed 7 checkpoint=475000 actual=505856: valid 1.6811
+FULL_B50 seed 7 checkpoint=500000 actual=532480: valid 1.7357
+done

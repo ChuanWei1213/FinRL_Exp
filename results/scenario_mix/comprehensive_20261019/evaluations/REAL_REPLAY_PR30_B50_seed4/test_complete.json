@@ -1,0 +1,155 @@
+{
+  "completed_at": "2026-10-18T17:48:30.811120+00:00",
+  "inputs": {
+    "prices_sha256": "87883b88ba476bc8d97644c7e6c98662f62033389519af49fde857325158e56e",
+    "checkpoints": [
+      {
+        "nominal_timesteps": 25000,
+        "actual_timesteps": 26624,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_025000.zip",
+        "checkpoint_sha256": "ef7089b5fc43c5ba09702bc7540510e1de9055d7d6713baaf1dc8971d77fc77e"
+      },
+      {
+        "nominal_timesteps": 50000,
+        "actual_timesteps": 53248,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_050000.zip",
+        "checkpoint_sha256": "e3608d1d2c53d7a9d779113b7d703da74a3759e3780a89e88f09b4fa4ec17019"
+      },
+      {
+        "nominal_timesteps": 75000,
+        "actual_timesteps": 79872,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_075000.zip",
+        "checkpoint_sha256": "b5a892c31a0264b092082728f9d698f7d956a9e4c3af4f0bc656b53ab74d0ee8"
+      },
+      {
+        "nominal_timesteps": 100000,
+        "actual_timesteps": 106496,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_100000.zip",
+        "checkpoint_sha256": "d6807ad8cee748ec6e725f55cd8ca977c16c99c7f88078b9b9c39fe0ebb05ab1"
+      },
+      {
+        "nominal_timesteps": 125000,
+        "actual_timesteps": 133120,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_125000.zip",
+        "checkpoint_sha256": "19dbfa141b31889077728005ae9e5736b41888b4eab72bea6d5981cd60b15dd7"
+      },
+      {
+        "nominal_timesteps": 150000,
+        "actual_timesteps": 159744,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_150000.zip",
+        "checkpoint_sha256": "7d3af15c2639d7abdc9f5c775fe3d4ae50e8d02db3f0ea316523a1ce6e1dd79f"
+      },
+      {
+        "nominal_timesteps": 175000,
+        "actual_timesteps": 186368,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_175000.zip",
+        "checkpoint_sha256": "1839e4458c2267eb6d0b8dba444f22e5e705742c2640cc48131aa64b817bf23c"
+      },
+      {
+        "nominal_timesteps": 200000,
+        "actual_timesteps": 212992,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_200000.zip",
+        "checkpoint_sha256": "3765486b533221e4fa259ef4ba79136d0dcd49a08bea96266b91e18c36bd51a9"
+      },
+      {
+        "nominal_timesteps": 225000,
+        "actual_timesteps": 239616,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_225000.zip",
+        "checkpoint_sha256": "9f6d8695d981a2f70855649b8ad4167141266018fc304ecd2bfd04b6d7a14310"
+      },
+      {
+        "nominal_timesteps": 250000,
+        "actual_timesteps": 266240,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_250000.zip",
+        "checkpoint_sha256": "684a1fa0318346eef645121f7add17145b159bde99d5365e956eb530b72af1e5"
+      },
+      {
+        "nominal_timesteps": 275000,
+        "actual_timesteps": 292864,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_275000.zip",
+        "checkpoint_sha256": "6d815afc0741439a43e4869b9b3083f3d3ea529222a65b5d75563ba9437b5047"
+      },
+      {
+        "nominal_timesteps": 300000,
+        "actual_timesteps": 319488,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_300000.zip",
+        "checkpoint_sha256": "ffdb6a43c1bd0d40068cff1c58771397542ea7de7e83b3f68cf1b006664e4996"
+      },
+      {
+        "nominal_timesteps": 325000,
+        "actual_timesteps": 346112,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_325000.zip",
+        "checkpoint_sha256": "139dbd16b3c2793457aad7ba80ab349d097093b73388525686879420a44088f6"
+      },
+      {
+        "nominal_timesteps": 350000,
+        "actual_timesteps": 372736,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_350000.zip",
+        "checkpoint_sha256": "4905b8eaedf6aeb59b76f54163de40b8359bb76655483463d1f5ad202b07962b"
+      },
+      {
+        "nominal_timesteps": 375000,
+        "actual_timesteps": 399360,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_375000.zip",
+        "checkpoint_sha256": "f71b6e66a929d663f3bcb4350139731416a827b4f2a8a05a873c7a7c1aae6264"
+      },
+      {
+        "nominal_timesteps": 400000,
+        "actual_timesteps": 425984,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_400000.zip",
+        "checkpoint_sha256": "68b82c68e7bfba8c881ca89e64e2a49f955aea21e2386cd2b7f3d2d9a09283be"
+      },
+      {
+        "nominal_timesteps": 425000,
+        "actual_timesteps": 452608,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_425000.zip",
+        "checkpoint_sha256": "11abcbe03878e0b09fdd52b43bce4be917309f7925023dd1accb7d0627663153"
+      },
+      {
+        "nominal_timesteps": 450000,
+        "actual_timesteps": 479232,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_450000.zip",
+        "checkpoint_sha256": "60260095fe628847cbee2430be266aeba3e5b142a4a2fd20dcd4261afb5f8d38"
+      },
+      {
+        "nominal_timesteps": 475000,
+        "actual_timesteps": 505856,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_475000.zip",
+        "checkpoint_sha256": "0a711386afc08ab86a651f6f3b2baf942d1760ed55229578bca1d53fd410e88f"
+      },
+      {
+        "nominal_timesteps": 500000,
+        "actual_timesteps": 532480,
+        "checkpoint": "results/scenario_mix/joint_missing_controls_seeds0_9_20261019_run01/REAL_REPLAY_PR30_B50_seed4/ckpt/step_500000.zip",
+        "checkpoint_sha256": "15903c7f58d8c1bc83b4a6b06dbdd154398874feaa2fa74dd3a97408996ffccd"
+      }
+    ],
+    "config_sha256": "967dd25e6d35f999983dfc9a727f8373194d450abc1feb08262c088b0d9031a1",
+    "evaluator_sha256": "6f48c1d4d99d1c023728859ee0f0e6bbeb9d37ebe02e78a87d27994b7c78b31b"
+  },
+  "artifacts": {
+    "step_025000_test.csv.gz": "82ddf66b65e521e544bebb2c8a335c4c625035a3fe576826e2f88dc1514528b1",
+    "step_050000_test.csv.gz": "99b4c783ea9d36b508c432584eff42b4be0a92998ea06d31576a665ffe2ae0e3",
+    "step_075000_test.csv.gz": "f072e4674ecae33d09f29e81bcb952c9bc474ccac7dd4700dade1214102a9a5f",
+    "step_100000_test.csv.gz": "3df056fdb86b8b71e9872172c884daec8bec384a3f303bf0b12b0ac5c82425cc",
+    "step_125000_test.csv.gz": "f1b95db448f234ebeea6ac6220f416ef991d08f626e44368e020b833c67846eb",
+    "step_150000_test.csv.gz": "779baa3fe25e56f1a09c1bc16c1a886d0131fb873154993a8c71ae7c2597c4b0",
+    "step_175000_test.csv.gz": "6b6b127e5dba1cdacb9b2068a963cc9d7f20a766efe6f91030a0f9d9b79e4174",
+    "step_200000_test.csv.gz": "5b046af5225267b3139b10070f51d2e523982af718a4e598f5d546a536f5c38e",
+    "step_225000_test.csv.gz": "5d17d16ef7f556c0aa54ad347b83c403921f56086e2cf6bc64073a43bdd09c7c",
+    "step_250000_test.csv.gz": "77bda953373c5e7207d6733aff40535d4664ef537e5fd75a1bdc26cd84a3de80",
+    "step_275000_test.csv.gz": "4005d14292bcb03c6eb80071cc6a4f2d8ab5405724536b83e764553618f79df0",
+    "step_300000_test.csv.gz": "b021dec6092d6d2e10e5e64ce62b9410d8825628fc10b5dd2bb2f6bdba130606",
+    "step_325000_test.csv.gz": "72c0f9a87b3ce2a8edcb5465b99968193ab231fac75eee01f0ea3ff85a01d415",
+    "step_350000_test.csv.gz": "72347374b06575766219485dd3fe2417fa9aafc524e4dbe5a056ca90a0f8d858",
+    "step_375000_test.csv.gz": "6997fbb0244e902d408e72969354058697baff8522202bf1d8882a5414e570b4",
+    "step_400000_test.csv.gz": "38ac07a4b86780cbe796615e8b354841704016c1385ba854e4362465d4ec6f92",
+    "step_425000_test.csv.gz": "4dd728e93026e3cf5cc50ebf0fd1c5009b9e180d3076587671ccc4abd9ed7066",
+    "step_450000_test.csv.gz": "e16f80c71bd4ba18237376c78d668c1bd94cc141cdf27feff8050a7f619efa13",
+    "step_475000_test.csv.gz": "200a40c036bd9318cb37a15268f33fea662aff7d3fa01d15810fa2a3547cdee4",
+    "step_500000_test.csv.gz": "0e219dcb74d6c9487dc7d6940ee32ddc7faed39bf2048de6b588296aa0951b57",
+    "test_metrics.csv": "57d8bf039a39767bfaf9062d6696994d7a12ec665f74b86903dc1b11d92bbafb"
+  },
+  "rows": 20,
+  "elapsed_seconds": 10.951345917070284
+}

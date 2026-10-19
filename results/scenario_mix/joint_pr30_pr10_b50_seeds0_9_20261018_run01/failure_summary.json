@@ -1,0 +1,10 @@
+{
+  "status": "failed_before_first_checkpoint",
+  "runs": 20,
+  "failed_runs": 20,
+  "checkpoints": 0,
+  "cause": "Optional QuantStats import fails while loading the installed SciPy _spropack binary.",
+  "runtime_workaround": "/private/tmp/finrl-joint-ppo-20261018-atuf5_sm/sitecustomize.py",
+  "precedent": "analysis/scenario_mix/trf_ablation.py disables the same unused legacy report dependency.",
+  "next_batch": "joint_pr30_pr10_b50_seeds0_9_20261018_run02"
+}

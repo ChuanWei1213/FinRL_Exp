@@ -1,0 +1,41 @@
+{
+  "group": "PR30_B50",
+  "seed": 5,
+  "selection": {
+    "timesteps": 500000,
+    "actual_timesteps": 532480,
+    "valid_final_value": 1.452341666832788,
+    "valid_reward": 37.31771964581611,
+    "valid_sharpe": 1.2840331218466334,
+    "valid_calmar": 1.47853297529034,
+    "valid_mean_stock_weight": 0.8155645712537883,
+    "group": "PR30_B50",
+    "seed": 5
+  },
+  "checkpoint": "results/scenario_mix/joint_pr30_pr10_b50_seeds0_9_20261018_run02/PR30_B50_seed5/ckpt/step_500000.zip",
+  "checkpoint_sha256": "aa8fe230b22011f04819b22441433aa594f38b9124052715df7d8e8443cba439",
+  "daily_file": "results/scenario_mix/joint_pr30_pr10_real_only_sharpe_20261018/daily/PR30_B50_seed5_validation.csv.gz",
+  "daily_sha256": "eca4ca9ba1d4e043f885ce9d91449f3af7f452c96783a2aa8feed98d1c53df10",
+  "validation_only": true,
+  "metrics": {
+    "return_pct": 45.2341666832788,
+    "annual_return_pct": 20.695356309294503,
+    "sharpe": 1.2840331218466334,
+    "calmar": 1.4785329752903396,
+    "mdd_pct": 13.99722336610758,
+    "es95_daily_pct": 2.1969035751133945,
+    "var95_daily_pct": 1.5878608582201963,
+    "stock_weight_pct": 81.55645712537883,
+    "annual_turnover": 6.80645622985643,
+    "fee_factor_drag_pct": 5.532294133666149,
+    "mean_largest_stock_weight_pct": 17.29393991653346,
+    "action_bound_fraction_pct": 0.0
+  },
+  "replay_metric_deviations": {
+    "return_pct": 0.0,
+    "sharpe": 0.0,
+    "calmar": -4.440892098500626e-16,
+    "stock_weight_pct": 0.0
+  },
+  "matches_original_rollout_checked_for_seed0": false
+}

@@ -1,0 +1,6 @@
+{
+  "checkpoint": "results/scenario_mix/joint_pr30_pr10_b50_seeds0_9_20261018_run02/PR30_B50_seed8/ckpt/step_500000.zip",
+  "checkpoint_sha256": "7a41e2bbbbce529aaa4cee12a13c3d610f251e7f4de15d826f31d8497dce4e05",
+  "daily_sha256": "bb2272250bd2e8cfd84463444c8e3868396c1a18ed3f5a1e1a0bbb4e33be9f28",
+  "validation_only": true
+}

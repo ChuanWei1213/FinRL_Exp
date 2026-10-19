@@ -1,0 +1,30 @@
+{
+  "source": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10/conditional/fixed_scenarios/legacy/rl_paths/paths.npz",
+  "sha256": "da21274c1662c8c9c023248610516197f35fd611f08cda5311ab197408958edd",
+  "paths": 6039,
+  "unique_anchor_dates": 2013,
+  "anchor_min": "2010-01-04",
+  "anchor_max": "2017-12-29",
+  "target_return_volatility_pairs": [
+    [
+      -0.36,
+      1.4
+    ],
+    [
+      -0.23,
+      1.0
+    ],
+    [
+      -0.1,
+      0.5
+    ]
+  ],
+  "counts": [
+    2013,
+    2013,
+    2013
+  ],
+  "realized_return_mean": -0.19871715198028644,
+  "realized_volatility_mean": 0.5951040855729853,
+  "interpretation": "These actual NPZ targets override script defaults when describing the historical experiment."
+}

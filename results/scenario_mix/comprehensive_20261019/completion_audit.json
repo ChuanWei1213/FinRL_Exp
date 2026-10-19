@@ -1,0 +1,1493 @@
+{
+  "status": "verified",
+  "verified_at": "2026-10-18T17:57:57.998956+00:00",
+  "groups": 16,
+  "runs": 90,
+  "new_training_runs": 30,
+  "checkpoints": 1800,
+  "split_evaluations": 5400,
+  "selected_split_rows": 270,
+  "training_completed_at": "2026-10-18T17:45:45.215374+00:00",
+  "selection_frozen_at": "2026-10-18T17:47:54.045127+00:00",
+  "earliest_test_start_inferred": "2026-10-18T17:47:56.250012+00:00",
+  "maximum_selected_weight_sum_error": 2.9802322165650708e-08,
+  "maximum_independent_metric_error": 2.4868995751603507e-14,
+  "all_original_checkpoints_match_evaluation_hashes": true,
+  "figures": [
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/01_current_checkpoint_curves.png",
+      "size": [
+        2174,
+        1700
+      ],
+      "sha256": "f3a152309286f8acfc4835e2ed7a21d4d355b702cd5c9ae7f9a160571ebafe16",
+      "svg_sha256": "aa809bd4b7edfb3fdff065d1917e70ad7519b8eb990535a877bb09efbb89aad0"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/02_common_seed_version_curves.png",
+      "size": [
+        2174,
+        1700
+      ],
+      "sha256": "cdc75868e903c46b9dc4b4c87585a7649d459f9bb44b6c277c3ae501da276ae1",
+      "svg_sha256": "0287d2f45ba02953d51c6791aed3f6f02740ff3de2f440af874ed39f58938d7b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/03_selected_metrics_test.png",
+      "size": [
+        2502,
+        1510
+      ],
+      "sha256": "76d1bb78e9c949742fcd3e3891003a0742ef11642eb8af77fd618f7bcb2fabbd",
+      "svg_sha256": "4099d8b9334bbdade984a30e0cdd14603fdd00d28e8fe14739baff9a8786b1ac"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/03_selected_metrics_train.png",
+      "size": [
+        2504,
+        1510
+      ],
+      "sha256": "70e310265acf82a7cf077453eb4173ff4730e93eacae0687ef57d65b07420d86",
+      "svg_sha256": "b1bd31ac22fcbb9d664f6f1c7df6b3a487bab74422a72c5dced34632630bd8d3"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/03_selected_metrics_val.png",
+      "size": [
+        2502,
+        1510
+      ],
+      "sha256": "326f0fae999502173b015e0b7bdfaec46bd60266eed1004aa503669b2d923059",
+      "svg_sha256": "79fcb432929304d119e8e3dc8be75b6a1a9d66118e2df6180343050b065e86eb"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/04_selected_paths.png",
+      "size": [
+        2297,
+        1322
+      ],
+      "sha256": "a653eaaf42ff03bd768e22c2f6a9c0c5ae00e1d791f44850deb63f5d857c73b1",
+      "svg_sha256": "e105adebb448def62b6ae8a1e1624b771ba8e9735133212b72d7654470cebb44"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/05_test_paired_differences.png",
+      "size": [
+        2348,
+        1362
+      ],
+      "sha256": "3b4f5ee9bede55c184d9077faeadcf67a623fdb36e700cb725f65a7f257a73ec",
+      "svg_sha256": "2460cd16e4aa846280cb4b65e24a7860dd0a31a35790baee51aaf7b623ecf70e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/06_generalization.png",
+      "size": [
+        2014,
+        838
+      ],
+      "sha256": "ec67c077ad247cd8a0067cebc5a28ba4bb269063f249e90d56e750df0e2107d4",
+      "svg_sha256": "beba518c65796bc993fbb058b80b6ed6ff269e428507e933b2709ea343d8ae95"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/07_training_episode_rewards.png",
+      "size": [
+        2174,
+        1309
+      ],
+      "sha256": "7b72f0e1f40e3c27f234bb63471d28d96f72e1bf4ddac6a4691bb2928b9442fb",
+      "svg_sha256": "6fee342eed0bcb74ecc9d8c7593a22c3c1b24a7273652462e0572a2945e12be6"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/08_test_annual_heatmap.png",
+      "size": [
+        2188,
+        1596
+      ],
+      "sha256": "8de5ab2971012b976fff40fbba0739ac7b0e27fed35a481ff7d366b167605fe9",
+      "svg_sha256": "c5e25098061b41f9b49995b24383322a432d54a5a3531606bd59a4baa46a3061"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/09_exposure_concentration.png",
+      "size": [
+        2508,
+        1541
+      ],
+      "sha256": "466e01b83166c8bc1a6ac1e57ed811e7c18fe4e113041c697b979952183cdca2",
+      "svg_sha256": "028ea7a3a2809c5330e060927399bcc94473c5b2f01b1e39fdc970629cce93dd"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/10_generation_tail_comparison.png",
+      "size": [
+        2297,
+        830
+      ],
+      "sha256": "b1bf60b31d6bc773beaf316add8ed23bcc4c57afaac48ea82f22be10ff4f714f",
+      "svg_sha256": "59991028de877ce88ff6250aaeaebaa0068922c925e4f04fe52f81df0fcc154c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/11_selected_horizon21_risk.png",
+      "size": [
+        2193,
+        1518
+      ],
+      "sha256": "fbc88b36732ef98f164767d4dcc1af295b00dfe21574be5015e696f27d2bbe95",
+      "svg_sha256": "0b8438f7e9fa771276594f9928d67f2e21efdc3deaad12d402899e8ffaddc315"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/12_current_horizon21_curves.png",
+      "size": [
+        2174,
+        1700
+      ],
+      "sha256": "f13c0250b9864e875ac68e55705bf846f947091e4c6f0465d7d204ce5f8ea23d",
+      "svg_sha256": "e02ecad3ff84e47c86f03905a6db6b0d9cc43990a8c0d232c2a6f7e4f2f60309"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_FULL_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "4116b95ba936fa9875ea10eaf90d9613d2ac06e94d6ee55edb171635da107cc4",
+      "svg_sha256": "1e247f938ceff4d00fff7b7cea14475ac053715d2cbf8a74f32f98e6c8a020fe"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_PR10_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "cd10768496df2afbb1466e999ccb103db68d2ff779030998ad7fcd3cbed65abf",
+      "svg_sha256": "5c2d16d8772edab852cbd6aca6404d347ec3402f12d92b1768a92e2eb6323269"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_PR30_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "e5e8dd97eea101e0a39ae858984dafd5e02390ec100626d76ce8b9063ccdb8fb",
+      "svg_sha256": "d7b0d76fdf88ce601f65e11b4d106109f2997f499b90184d8d231dc2f8c206e5"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_REAL_ONLY.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "54a8b9308c8646b09a61c6156f183a295e6a48dfeb262a650aca55f241d95996",
+      "svg_sha256": "b7872c8270873ae69bba4e6f56950ba48b40498608357b82b5ff81d3cae63863"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_REAL_REPLAY_PR10_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "756343605ddc38b1977cb77d857879dbacdf0be016f493d4636ac687a10376be",
+      "svg_sha256": "ee3b5105b4b1bdea6fbf60f7801f9a8212c881e53aeffd338c04330f093be4d0"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_REAL_REPLAY_PR30_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "3e92fc046b617b2648c0a7e768e9d8a7f36e78c77924e60cd8cb1aaec7577a87",
+      "svg_sha256": "7d9baf2bd6e8ed543367c259b8266e7c7e08df031573f9faa46c07abc32a0635"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V2_A.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "6bff20f84b15cf726e639c1bc951c8164c70563b646ff92ec907d53026d05b4e",
+      "svg_sha256": "12075edd67b24b7ea6831bbca5d9b2d0fd7cbb9f172c93754e9b00a2e677118b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V2_B20.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "5f08e87f9e1c9a154353bfbbc4e6e058cd86683722cf5bbff00fbb8c48673966",
+      "svg_sha256": "9740ee7fae2b576a13e1f9d02c713f604558c24d017bba1f76101071564da90c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V2_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "26bb917c01e2686997c3fbfe124e92fa5461ad7325ddadf09d642f04ed98b46b",
+      "svg_sha256": "d66208207bf4f8d74612a7abe2dcbd0d6cb1e4e68c6f333316bfe0f7167e6242"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V2_B70.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "b6cefbc439dd0f1aa459819e66c105b87e63a66fa8717d167249e11710eda134",
+      "svg_sha256": "e9e7a8dd23f0065014aa56b19db8024223552d2bc61890ca20d76b795c4d8983"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V2_B90.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "db8f6fe313e5f4038b1145c15a3ab9ccd85be69423f1cb61a576b1aef9688e95",
+      "svg_sha256": "c514e8f93e3e920328f80abc2686f39917f8d5ebea23e492cd15df82522d0ff6"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V3_A.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "5c96b0d217bda2f37733815aec56fa481d53d979957acfe73263d709b353a6ec",
+      "svg_sha256": "1c9a50c5e3841f8829a956cad0dc0e1bb031f29abfa3c213099d74d7d069d049"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V3_B20.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "2249e6e57fc8b5b49d1599a21e9ac992e10097a9a29c1a20171a2818befaddcc",
+      "svg_sha256": "fc35ba754289095f2861b80d901562b45270b6cf59af027e22ddf19841400c2c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V3_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "0bd5bc9581257dced9e39af9b212ce8758fbc45c6ec2b2b311db4b25c8cdc37e",
+      "svg_sha256": "85cf125ec596ebbe718df763cae2c34ab9eaa7c71fcf46ffe9f700cacb04ffdd"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V3_B70.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "b937aa0d31a68511259f2e8159333b5beadc0963466d4b3d5557e833f187dee5",
+      "svg_sha256": "002d7fc10c3c7af0ae2a1a5d2ae564e7364a56222d3ac738cf49242702bc77aa"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_V3_B90.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "334f286eb0cba2704938ffdc38a10934f4633560d689791b30a7664006657536",
+      "svg_sha256": "b9f322f28018904caf55ef977d72c700eac7dcf3f231d746318975f3b5be8a03"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_FULL_B50.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "a3baee80fab5aec98097cf33df9f6b28990180ef95d3fa79c41e507b21100943",
+      "svg_sha256": "32b62efd77b8fe4ca98cd56f155f8b28026d394722200aa33949e49aa779fa49"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_PR10_B50.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "0dc8c8f9f70516b7d3dfcc1d777963046ab2cf6549731f472e9406552492e95e",
+      "svg_sha256": "d10f7e1ac70f9f5b27f621e952ce977ceb213b98aeadc69da32b1b6633bf121e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_PR30_B50.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "7f14e085e22f663cddbc9010c463aced029de24708fccaf0a6a8663b5c6b3b8f",
+      "svg_sha256": "06c8fff738fa158b03145e37cfe94484d76da9ef48bfb39082e3ed372f2e793f"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_REAL_ONLY.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "4bcc9a76db8985449809a0d4d762062cc732c76259762f0d01e6348cf4702d7f",
+      "svg_sha256": "2dfd7dd414bbec0c5a600b72d94d40b35a39eea1007606dc1e354797e21a2cba"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_REAL_REPLAY_PR10_B50.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "9c43381938b3cbd7e78abd026c69f8060c37f1e199a6943ce3f0a5ce6b3ce61d",
+      "svg_sha256": "1f1ef02011513270e103735ea02e2bd78052dad92ba1e650252545624f45ee94"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_REAL_REPLAY_PR30_B50.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "86bb40c4b103fd93860d068a6eb81af58c03d4fe5d1ce7862f40ab27f5c03c2a",
+      "svg_sha256": "98ca2566e721718374d1353c4afcba343cff69dc54f270aa63a079aab23919ef"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V2_A.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "ae35dbbd198ee244060236785dda532bb2a8a2904b992bc98d9b95067ed9f01b",
+      "svg_sha256": "f01b88dbd00520bac20db076828b9dce70c32a91c37b4ef1937feed12a559084"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V2_B20.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "1bd56e2150cecb653d4afd15e3deae0150f5ebdd5ed64741250c9c7322959de6",
+      "svg_sha256": "a28b1cbcf593e8d4cca12dae46058210b2475976c504d1c8ad45d2d3ccc02efd"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V2_B50.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "e0a5d94312bd399fc45774e5616ad61df6f8f75602d3682424aa919b3548b274",
+      "svg_sha256": "b95d1bd2b9125d3bade304954c5ae7fd2da7df206602a4ac28fe10cd53eaa498"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V2_B70.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "602e5aaf27a6e1bde437476d37eed04600f495d26bd975ec81521d0e875c8685",
+      "svg_sha256": "2fa594edf7db437a4efb6c09dc6d196628569c9bfa567dfec8aee715525de00d"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V2_B90.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "4e72c1ced01bd3a567b91417b3fe783c562575fa433db818197d25ce8d38e034",
+      "svg_sha256": "095f4b19ddb1e03eeb9e48617ae88b874823ce5430edfec49e9bc50b1490e56c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V3_A.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "0655e1b7752150793336d2bce98c9b935c89663d1b388f5717f8b6d3bee8a3c6",
+      "svg_sha256": "90c7cf4b355c5732373b476c173359866e22406dee72614c596b79d17725a020"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V3_B20.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "8ab6d72b495fbafe3664a92b9b6a3f09a88d1aa41bee2d08bbad31d27d3435e3",
+      "svg_sha256": "05f9d338c70b91551a22b16472806c27f138201480d3d507ec8806950cc9aa12"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V3_B50.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "2cec5b62291a2fc9363bab541472b3efbf7c417e197ea6bdfc2d0fed3d7a4a15",
+      "svg_sha256": "b92dc6c04fe7a3c7e84e6cd103868f2812fd908d798c4711e360b88fdb37f5f4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V3_B70.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "7bc9386728f1bc99c690c4bba2738453a1157073a94835d3ab53292bb62ffc57",
+      "svg_sha256": "c7f8c9e12ddd7b7f947569e8c09872258236d61c36c505cab4e8f92c246f94b4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_allocation_V3_B90.png",
+      "size": [
+        3714,
+        1620
+      ],
+      "sha256": "a06971022402ec2df8a2e164561c3d716db9ad7d8cbb672b8a6932b3dd32e1b9",
+      "svg_sha256": "239e4e0be5cb3bc3feb90fecb7d5a8d2d951e77249e18b0f56aaea927ab3c4dd"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_FULL_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "cf4d9f0130c6a970fb6b7235116218df508b637fa6c0c0b3812b199096cc7e04",
+      "svg_sha256": "1c396bff2142d7f65875ee8457f24268f7d0ccf81b2bd45ccb338a6e457bf9e1"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_PR10_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "3046df21b0bbbb802bf8f4623a12da1213cd03fab36f286d979e3387bc853fe4",
+      "svg_sha256": "be30f78fe6b972adb398eb1e561379491dd1d117bc0412660a81da20038d5439"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_PR30_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "cd31889fecf270c83bda155f83f84da5d451f064e298472ef6efda1028a29b12",
+      "svg_sha256": "288f8214d567c8ffdc2c29657293472b10d06d3530f7c4129ded9d01efe7f67a"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_REAL_ONLY.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "0f5f51fd95971ff7fc43b86f70dd470c51f052671770a07c5e09759038b26796",
+      "svg_sha256": "552b0217b0ace410d2f3a0c01ad233f0c529e45667ff9f5b82e9fa4d203f25f7"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_REAL_REPLAY_PR10_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "87532750b7838ecce0e006d8349d788abb801988acf0719bf265d8802d460587",
+      "svg_sha256": "356341f1b8c9ef376f775c03079e522e8f62b3f0e850d861820785de1eee994b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_REAL_REPLAY_PR30_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "4b63a4cad4b71905be381121b64160ce4084053e3eb8d8d56aedb4e72258e517",
+      "svg_sha256": "cfa20c30dc1a0b84d5d6d46f0d204d33522551080c843a7148a400be93a07b61"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V2_A.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "54cc62abc0e6f9015337d52a1eb6656478a2cec5651b745b23add06ac3b7a76c",
+      "svg_sha256": "0d0198c4cf47310b3e190d0244091c4d77a86d4aae83b966b752f7a239e889aa"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V2_B20.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "ce6dab5cfc338412af4611e484d510ffa96bf803e866409d43ecee8f3075bf5d",
+      "svg_sha256": "343e0a534463bc9393b232e5bd0c376110b277f5f5939576fc7ba51e961c3231"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V2_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "03d1a8a115fd68f507d8da22e8754932e8052f743d0b2aa46d525d1150c41443",
+      "svg_sha256": "a32b729d74aa2cade05767261d878167f3a0ec44d716357f2109ff22cda322ee"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V2_B70.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "4b5a541cc0a0f78a501d149e0faaa3506a00e2549e470b2597c56f5ec76d032f",
+      "svg_sha256": "b1c4e24287064d4fa0ce10e72b6a9dab22b410161279ef3e3cd19a1c402d7ea9"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V2_B90.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "89d78d387bee7de6a7a8cea42a0a25698174b5f60b9ddac7da5729d7bdc25d99",
+      "svg_sha256": "6e0d9cf7b9bad2e9b2c38608cb834edcfb94aaed8e8dcb54144b9b4b74eaab96"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V3_A.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "a55988c1cd8ca11d308fdb352769766183d130e6db4f9a423d9949c4e55af7c1",
+      "svg_sha256": "557be9af6c9386da22c7ccd52c033884df9a76c2ab07a8c8cc3d50b5cb6ece55"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V3_B20.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "bf06ce7e4cf5d97556e4db21b8884127da5fc23e3e4dbf8cabbf2d63f6b9edc0",
+      "svg_sha256": "6fe960fbce5ba1c82efb585a4b990439b44288bc93a70e7464727f2b628221b9"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V3_B50.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "4fd4702429bbe2de126fa0ec516133b8d2408e160ef2b6deaea9eedba098e926",
+      "svg_sha256": "bf87d0ef512c15124467c1724175644d956c8885950e13c12ed58c7a17c388c4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V3_B70.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "99cc203d9bdbdbcd42984b93254d7e6cb3fba5424135b6639eea450832f3374a",
+      "svg_sha256": "a56a4e851ced9378945e0bf3332a4fd641c2ea230b956c0a81bb0d44ad568372"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/curves_risk_V3_B90.png",
+      "size": [
+        3190,
+        1620
+      ],
+      "sha256": "fb0633c24b9df48112174a4d272d9e47019aacddaf831d7cbe6ad74e2222c656",
+      "svg_sha256": "7364742406c0bb0aed01560df355fb6b5efe32c3cc5ed5edef0362dacba14f69"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_FULL_B50.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "abd9724b6ae2b5c7d54cd7edb03e7beb89e04a74a9774fa24845596a6d64752b",
+      "svg_sha256": "da2d3cb81a761f2ec91290a5bc4467e0aacb4f3e097307117c07a40d1352d36d"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_PR10_B50.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "aa505404b82da464a8b6451ff9536187d5c74e61f30985cdf4d7fea3b75c0f8e",
+      "svg_sha256": "a61e61160e9cbb62ac1bec32ee2198916faa357a13669aea5a6feba4dd4ab94b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_PR30_B50.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "5f95ebb4c4cfa7bd198c32dcef7d31387739f2b4a30452507fd22549a5b970da",
+      "svg_sha256": "d5ebe7db1b768c7c31d2d7020a761fce394a27c2da069dec8d9f3572d625b210"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_REAL_ONLY.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "aca6bfcf4e51a028a2c652b82fcefd9927aadaba60e3e339b34399eade6fa791",
+      "svg_sha256": "0ee2534bcce7460bd8a6bdabaf217cd3899233fbf9332ab27c266a8d7f155989"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_REAL_REPLAY_PR10_B50.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "dd2cbef72fa5dbfbd7203f0d84a8d8df3f3b514a58e24d58fa7d244a128ce7f9",
+      "svg_sha256": "7a943e369df77caa0eb50e23f6369d4e1082d721fdc98fb13b0c754f29368132"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_REAL_REPLAY_PR30_B50.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "ecd4a10f03be91e977f87b6d686228f7104b346f46b592bf78f860dcac0abbb8",
+      "svg_sha256": "20e8df6ca1461310019bf9b375430d436917212b289dab4fc4c17e37003bb138"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V2_A.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "3b2e93aab093575c50ced6d251a6f76f47a34f94958470fa0e3c4c49b54fbd5a",
+      "svg_sha256": "be5ed273ff73d8fb71a2d5b228d800e33759216c752525846a0d7b47cda28bce"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V2_B20.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "dd25ff45ad0ad4ce72d0168c676465f232f48d8180b281110334312c5d9fd4fb",
+      "svg_sha256": "61b8f48fe2a19618aeb25ca9236a718129fe8baf34720cb33cdf33afd5915fda"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V2_B50.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "2eab5573e2dc5af6565255c0c0b46c3cce7331a4b4049dc2944ac4a56362bf5a",
+      "svg_sha256": "2e4f0975478faf879c01ce14ea4ff5944945795e0cd6874b2d2ed20a8aceb29d"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V2_B70.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "a727f8eb5aee9db973a96b2086e645bd627d5e7ba07e46a3ce2aba3e2d9136e0",
+      "svg_sha256": "3d6778a311ef55ea9f6701633fe42fa90bcf5a0f1a3139479407fbe4a0d63fb1"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V2_B90.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "3dbd93ba296c9caf7531ad20352a9f680e9b012ebefa3e6efc41171aa71cd9cb",
+      "svg_sha256": "2212ed3ddbe3834f18fcd009ce46c99ee3098a1de7ed009dbd2f337c469115f4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V3_A.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "52dd2dfccf3b564cd9479bfa3ca4f17178448530cf0f275718863c00ec71c830",
+      "svg_sha256": "cfd34c282bb3c4a238208b6d9bfa668f4b341d6de360b01bb63e72c6b336159e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V3_B20.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "ebefcfbaa2ef4e5a58d452449465ab080f9ecec195b3762bb47694a5a26ffbf3",
+      "svg_sha256": "26b0698856a025bf1819a57b30d90ba498bdf00cef83ef8c446133e5a6d0f0f0"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V3_B50.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "3bd39b4e8499ffeb003b26e707422ba860da5c479689e8e85ec81ec4c20b6aa0",
+      "svg_sha256": "0b276df45e13ebe2810b499eacc985bada0a96679a168c96febe3eae41ba2d85"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V3_B70.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "f14ab6cb8d846970c24fa2989ec6f29dce1738c62483349d2bdb875e4a4b8242",
+      "svg_sha256": "b01cdc35c8d1dfd9cbc2dbd7af3f94afe9a9aec9703ad0af2dd4eee5934a73af"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/figures/by_group/holdings_V3_B90.png",
+      "size": [
+        2439,
+        1303
+      ],
+      "sha256": "f223b26a6f2e8a7c7ad0d157e8bd28b4406eac9251a8f697d23804f06169b41b",
+      "svg_sha256": "da22001e61a54390bbeb1f91d7f5b7656d7e9ddaa76471b343bffea58ef9840b"
+    }
+  ],
+  "evaluation_manifests": [
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed0/pretest_complete.json",
+      "sha256": "ede1009054b529d8c2c5119e180ded6bde920d7a06ea6d7456446daf0c0ae0c5"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed0/test_complete.json",
+      "sha256": "1c72002960c45eedbab9abd31f3b440cfe0d22a098c9439d1f5139291ab4827c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed1/pretest_complete.json",
+      "sha256": "963fd07df7370c9d29afbb3d706101a124153287128be83d3b1b1e9144baaf36"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed1/test_complete.json",
+      "sha256": "cd7aa58215a85f4f9819b390684d23e402c4c28edd358aacbc254ad3dc55be50"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed2/pretest_complete.json",
+      "sha256": "ea97f298e3c403b3f7b53580182abb104d8b1185f1eeecd49c9d7b1fe15631e1"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed2/test_complete.json",
+      "sha256": "e64b31649921dc97d02f9bd373d0a8da60cbde436b99f68c336a97993ad2d751"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed3/pretest_complete.json",
+      "sha256": "1355c0fa85d23fb43cae5b3833a34e3d8f6cff7f22c785dcf7739fb32ab19d61"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed3/test_complete.json",
+      "sha256": "ad5df9168d7e32fefde7c57e02a4bcc2a0a1ff722eac7bf4161f3a8921299cb7"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed4/pretest_complete.json",
+      "sha256": "b929e76f2290c74c75558abb8bb51a61b4115ce2cf2336705c1aa7fd334e15d4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed4/test_complete.json",
+      "sha256": "e47d15d0441d99a19d700e44c0bda4c70e7a78dfbb5e2d9ac603b4ed89e494cd"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed5/pretest_complete.json",
+      "sha256": "0dd55f28d1ac8a47982b2c84a9f5885f03525a2563f57c392fcd14632e1009b4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed5/test_complete.json",
+      "sha256": "ce6707f8d074f67576d258a5757344f177deda0b2678658d334f5fa618d31cfc"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed6/pretest_complete.json",
+      "sha256": "a840ee11cf876d81d730ea1e89e6ab42970ce690d07808803798878bfc6809f4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed6/test_complete.json",
+      "sha256": "fa6a4279d8fa2d53a1e9a6a783fada901b9b5abacd70aa92cc39d963cc28879c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed7/pretest_complete.json",
+      "sha256": "d25e8288124d83cb7e28fc0840872c015091dc7d3ed100349d8d4dcaa315b547"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed7/test_complete.json",
+      "sha256": "7cc86806324449010c1aa24941c32b5b4b69cc45c0ff914a60f9dab32d02a25e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed8/pretest_complete.json",
+      "sha256": "ec49e91c99d127d0efecbcca0021f9d20553e3eb32ef15761fd676e32f5c413e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed8/test_complete.json",
+      "sha256": "d27f47dae23c018bae8cf161f077a4156da1366b045cb3f11c1444941bb2276a"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed9/pretest_complete.json",
+      "sha256": "06da9254277010cb09ba52c7e13e064a3d66e63c7ded80c5374b2acb90131a44"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_ONLY_seed9/test_complete.json",
+      "sha256": "edc6427c13e54080dbf80ae1f380b6a8df185383154799b651a16acecd5ab646"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed0/pretest_complete.json",
+      "sha256": "e588ebdd6c5d1740c2195f3d1fe5161faea9e29a88484c04efb8450757e6b367"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed0/test_complete.json",
+      "sha256": "023d278bace54d9977af30444f085f967b56a9bcf644dbf34800a7dad5fca84b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed1/pretest_complete.json",
+      "sha256": "5c973af6bce87f3f9f88241cd2ca415f7e02d55de99e9ca8fd26e08a8bdfe1db"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed1/test_complete.json",
+      "sha256": "297c249ae7a0710023c3ac37db05c38a8d54f6bd1e7edc59158cc2c59f90f3b5"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed2/pretest_complete.json",
+      "sha256": "6e89fd6c6c0a0eeef82b4cb531b79b6704ea2ac6be7bab76bb036db00410d660"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed2/test_complete.json",
+      "sha256": "798ec4925bc60cfc396dcc91dbe643fdeeff8c08d4de75b7f6cf606f71f5add0"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed3/pretest_complete.json",
+      "sha256": "90824af085bf67b1d5309b83bd6c3a071d462752f99f9c1cec2a8722aaf20f30"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed3/test_complete.json",
+      "sha256": "6ce64441182394571b403c583d1c3f3e137939fef4ef09050aec30539b866590"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed4/pretest_complete.json",
+      "sha256": "54a640da2affedb2c27f9162942b07ab2bb13318c72843eea5a005e31cd4cfde"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed4/test_complete.json",
+      "sha256": "7a58cc995205b44b783e308d6ebfa97352e6fdeb9466853e1c435907aa7f176c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed5/pretest_complete.json",
+      "sha256": "35be46a99dd2a23304e9f3559822a392f75b06cddd02b9f83a124bf7ef702ef2"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed5/test_complete.json",
+      "sha256": "65e5249862e2060774a0c718e69a509cbaed8d4365721f57972eb9a261eacc6a"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed6/pretest_complete.json",
+      "sha256": "d3cec300b6d96f13f717f2b71d531085558ec4540ea6f126f3d5d472a330d8ff"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed6/test_complete.json",
+      "sha256": "2371086d0c9cd61e7f53403d5657469fc3a224132a77bc86e1f79223bd3ce771"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed7/pretest_complete.json",
+      "sha256": "44aff75bc6ae392cd57b01eba3c4439f5e6442d3dcc5c6faffb61b01d8b3d2f1"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed7/test_complete.json",
+      "sha256": "5472e55ae063384c0a367a5d9c9241dd2216c59b3b1ad20d473e58a58d6051c2"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed8/pretest_complete.json",
+      "sha256": "55ea1c40fc65924e376d4b4b8c2d42a36b72c04adfbf125c80e8226f7a6e1556"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed8/test_complete.json",
+      "sha256": "5dee38bcefb5faccff9dfe1b1304786b8c8d69ea71985652115052d3b8bce837"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed9/pretest_complete.json",
+      "sha256": "782e7a7f6113a2f763f0314f7c2415a92697e4ed1db7bd0a6a8f22d747766773"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR30_B50_seed9/test_complete.json",
+      "sha256": "d807e3d76ed6ac81d2c9e6662212b688c034ac950a7babcd016ce2437d6eb174"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed0/pretest_complete.json",
+      "sha256": "c72fc3ece12cca074b79943d7bc687daedd687cafad1d3850cb90093887a327a"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed0/test_complete.json",
+      "sha256": "9602fe43e816560aa5cd7d52cdf085941ece73e50bb4bbbbe3a80c8798350d5b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed1/pretest_complete.json",
+      "sha256": "66e1c0fdd2151309036eb8e4340d70a44d877e76f4060b82b3dac09497347490"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed1/test_complete.json",
+      "sha256": "d30060c4b790c05909f92dd4c89fa448b9af2b22921faba6698691b443488736"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed2/pretest_complete.json",
+      "sha256": "a1f63596ffde619aa6f38eb33c5b9b750cb51c16137dec3f580009b2f002a4b8"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed2/test_complete.json",
+      "sha256": "c3bd84be09335ef988db5a410aab2d1e98e97872546afd9465234713c8164bf6"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed3/pretest_complete.json",
+      "sha256": "7a907e7ab06c36e2ec78d692b7620d3ed875508aa97f6570741afd83a50506ce"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed3/test_complete.json",
+      "sha256": "229551a8fff355188ed08f16f72d307ec3fe46d1b841cae35a3ec250c3906405"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed4/pretest_complete.json",
+      "sha256": "6428d0efc175eb5c02f6e00956161f98901cf6d9580b7779b9372a7f5edf39e5"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed4/test_complete.json",
+      "sha256": "d1ebf8579116c9fe5d2c86ab007439af3af2869642f51c0f4886ad63127b71c6"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed5/pretest_complete.json",
+      "sha256": "c562fba48df1e630369a2dd0f3eba10784392fcf56a9721ebb30468e55b6146f"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed5/test_complete.json",
+      "sha256": "4b2beb8bdac37e4f86985f23fe29396a50e4f7d4586effce4b8758fb31e71a25"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed6/pretest_complete.json",
+      "sha256": "bc68c990ba14485671446ceb569bd09429d0d28ec439aaff51e846181b1fc789"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed6/test_complete.json",
+      "sha256": "6cd5cba7802bd7db1bdd03515aa823c89f662d206c1e27895531eaa2ab1ea711"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed7/pretest_complete.json",
+      "sha256": "51725197a358468871d52435899eea639f8f9b6e74dbfac7211f676d0526b6e7"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed7/test_complete.json",
+      "sha256": "32cb240bc96e3a7ee466accc6a0f5f81036d4ab07bc5a2281335978b28d120c5"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed8/pretest_complete.json",
+      "sha256": "b94dab2ebfb14d7749042e7c0e8aa91021a1c136b87c3b01a0fc10f79468320c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed8/test_complete.json",
+      "sha256": "11fde27fa57a465aa9b87506d41712819d541f001132b58cbb85edd393a4097a"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed9/pretest_complete.json",
+      "sha256": "6d686de3e52ffc02b8f90293f35e9d3332fef35133e971bf2218c8da2cb0999b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/REAL_REPLAY_PR10_B50_seed9/test_complete.json",
+      "sha256": "29c65e1852d28d671478a4d414420507a388a7c37e23578626e44862f32fc141"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed0/pretest_complete.json",
+      "sha256": "a5a0a5ff6a34e660974fd483cad7f186b8d7b944461f3066490e6cd890192ee2"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed0/test_complete.json",
+      "sha256": "8319ac72bb352c80cc4f99b1280d9e485fe97370b5e4a99aed6383526669fb9c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed1/pretest_complete.json",
+      "sha256": "385b1dfe1ad309814faa24b98aaf4ad6a310505e94f21386ee26e58e65525169"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed1/test_complete.json",
+      "sha256": "0f773e7e2c22c029b28b492349cefdcbadfc5f1737b3b9ceabeceb4110197bac"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed2/pretest_complete.json",
+      "sha256": "88781e9b809fb0b507bb82401480cc2cf4a9ed9fa52ad29626fc371a1510c71b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed2/test_complete.json",
+      "sha256": "eb5cd13cdd6cd111373c5a74d6ba822f18c680d1b93d5b01db7bd7dd1a0a606b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed3/pretest_complete.json",
+      "sha256": "9d700815e55ea6494b691fcbefaab5d6be98d54e4abd28512dc75584b0afc45e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed3/test_complete.json",
+      "sha256": "ccca20b7a3fae2b2d6fa2446c1e16f3d4491ccb0a450cf3ab610ffbced4c59eb"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed4/pretest_complete.json",
+      "sha256": "e852130d6ed7e1a62a6963a061f7c5a8d8769fc111f39fcbcc01895b83e10c65"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed4/test_complete.json",
+      "sha256": "3978bf20a4b7f87d6878e2001319c3a6862945a9c25ce8418dbbc50b0853fc99"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed5/pretest_complete.json",
+      "sha256": "27307e7dffe3766c569befd452a2040edb7eb5c42fdae7363443b826a67b507f"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed5/test_complete.json",
+      "sha256": "f6846cb27043e3e386657efe7e12561350d18ac25872b14f7586a21079ed71b4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed6/pretest_complete.json",
+      "sha256": "850a5c659ac958750382de96c57ed892e431d43a05af28618f39d638d415d484"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed6/test_complete.json",
+      "sha256": "877eedd78390be7ca10b21529d277d1ae075258ac124d325b46cf029a438acfc"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed7/pretest_complete.json",
+      "sha256": "58da1ba3709a6c841fd685a1c25174b827b24da800562d2e587a13daffde070d"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed7/test_complete.json",
+      "sha256": "565b125054e53e283765bb794b87d421aa7f0c74608db790a1d0b9e4a015ae9f"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed8/pretest_complete.json",
+      "sha256": "7dd5063b0763aa147bb16f69f801412a7e36d4c7c1f9ebc9f8cce49cf2990a07"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed8/test_complete.json",
+      "sha256": "acc5eb8cdb0be89ff37e2bc2da3cacc9e333df41458eb0a612f26302dcb0225e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed9/pretest_complete.json",
+      "sha256": "a7003eca2130abdd4fae5393de4f089ee317e88c7ec83b5591f218632b992ed3"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/FULL_B50_seed9/test_complete.json",
+      "sha256": "edfcb854ba0ccea217f71dde299de7d843bacdef45dcac9299f5617b84895b95"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed0/pretest_complete.json",
+      "sha256": "355c0b878f842c07f1059b14c33bab8bc2517e6cdffb24648f1a8a41d279497f"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed0/test_complete.json",
+      "sha256": "97524b364aeaf4a3af70a16f6c6c394f66b697c59806d8f28d64d7ceee385c88"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed1/pretest_complete.json",
+      "sha256": "6a76e81f948020e3bbad4d546a4766ef05bbb309dc4545143b63c5e8fa6c8dfd"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed1/test_complete.json",
+      "sha256": "59b21bb3db6708ebe15853fb0951f435c776c5acc665d62785a9d23023e21aa4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed2/pretest_complete.json",
+      "sha256": "15021f944804b61fdf0e1996da37055630580f27ccd1cb8402279f02d6448b6d"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed2/test_complete.json",
+      "sha256": "772c8513c52cdc82a823c82d4cbc48eca9109dadc8d26911472a9790769bea09"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed3/pretest_complete.json",
+      "sha256": "870e844c05a7638f531bd353dfd227a148446bf3d06aeea0ef315ce39597c53f"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed3/test_complete.json",
+      "sha256": "d2b194ee5bfcc02ae61e6d18b046afe2e5b14b96852ee887f5cf44db2f8dd532"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed4/pretest_complete.json",
+      "sha256": "c6e7c99a868ccb5b2f927ab499f1c0c2dbc398051edca5104d69d06ceb980b16"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed4/test_complete.json",
+      "sha256": "98af88a1f466a5db9c900d7ac7d76bdf69415b00667fb81a510c6ad303088964"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed5/pretest_complete.json",
+      "sha256": "20dabea93e8ed860ef908344712d6a31cbabb3842961e1b94ac6c647c736fa7f"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed5/test_complete.json",
+      "sha256": "d53758f3c8b76b0bdb991d3f271995434060bc2bf7efec3524835290b80a6577"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed6/pretest_complete.json",
+      "sha256": "90e841169e75ca6ef98ccf21be8bc66525ee85b5f127c734f7476a4f9f9fff08"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed6/test_complete.json",
+      "sha256": "50a99b6bfb74e15e366a458f2aa69da671d9adc6911e4b4de71605e6dcbd653b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed7/pretest_complete.json",
+      "sha256": "ce8fb17e9df91f54031a65fb2bde7774c24fcd121007d6baf4d63ae325cd39af"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed7/test_complete.json",
+      "sha256": "a032cddf4deb759d206727e73efdac93662315e18ea780173668db9b3013b631"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed8/pretest_complete.json",
+      "sha256": "fe5f0fc064582e319e1f645c87ebee3d8cdc0a32ab57b93bdd5ac28ecf8c69db"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed8/test_complete.json",
+      "sha256": "bcbf8157294df6eb50b31db8ba9000ae9076e82cfc7c41b098010e7cd2dbb68e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed9/pretest_complete.json",
+      "sha256": "60e2c7bf6781e59e9bd207f61fee5107d4101fb605a216c67be71f470a2b01f0"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR30_B50_seed9/test_complete.json",
+      "sha256": "851e5b4b0cf7cb46643e74b78c8fcf50aa111c2d3f4dbc506e4a7962ad8f0f70"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed0/pretest_complete.json",
+      "sha256": "11d26104e4a5b3b365b7ff5aa7eb6199e416c56f61d5d9517f253d304660f3f6"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed0/test_complete.json",
+      "sha256": "a2620471a38df6b16e25fa1c30a3b756514a0a907b04106e4ddaa045a7e93358"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed1/pretest_complete.json",
+      "sha256": "ff8c0ba42252ead00c10187de1073751279b0f75cef154701ecda8a4e528c147"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed1/test_complete.json",
+      "sha256": "f31ae5efac0af17a053934db24a3f409b26e747ba0565e2686572189073860c7"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed2/pretest_complete.json",
+      "sha256": "7daa10e7def52556fa76617e8cafd8c5531f1d143830529175097d21b263aa70"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed2/test_complete.json",
+      "sha256": "93833272f8c7baf0373c14ef86b54ef636ce52c8a16c31cef65f44ebf39b9972"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed3/pretest_complete.json",
+      "sha256": "16608887961fd41aa3ca9a275d60082993e8b68badb160f49953fe84ebe3d118"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed3/test_complete.json",
+      "sha256": "d1f51b754a6247fb6207ef4c723a64361b81b5358b29dbb4ab31188d40782013"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed4/pretest_complete.json",
+      "sha256": "df93c68a5c3bd2fb7080d4a101d1b89d067705785aa8cf391c6b46068e328ace"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed4/test_complete.json",
+      "sha256": "d49b29bb8d639f508d9618563230f0a7ce0a88405a44e04be1364a1ecc775b43"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed5/pretest_complete.json",
+      "sha256": "b9cef7926a206e8ccca3a900a0f9ca73e3a7f7a7f540e60b397095db5af3fb1a"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed5/test_complete.json",
+      "sha256": "3e69c6b448b73f6df2c30d1e61c08c21341c011c389f4bd59a8358fad7d1ec0e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed6/pretest_complete.json",
+      "sha256": "583450961c2f0a9d3f8f91720bb01cb55536c27b73928c71ea0aba0ae258e66c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed6/test_complete.json",
+      "sha256": "df2f4762217ca3fda7b4da485b4e02b257842d5c3b7ff7dc4737620ef4db433e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed7/pretest_complete.json",
+      "sha256": "625e1571e286b81be1c16d562e7e5d1482dba9fb0a01ed34036cd67624305525"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed7/test_complete.json",
+      "sha256": "878d397e50576c92da92dd4cb2b4521a0f54f92e24301f640a37c08956ec7ecc"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed8/pretest_complete.json",
+      "sha256": "b06110ebf0375ccefecae0c3a564aa8a7dca570ae62857c9885d46679b3b0982"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed8/test_complete.json",
+      "sha256": "976ed3f284b8eac05eefd8df4f373ee60590161607c352981e0604c61ebc5c62"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed9/pretest_complete.json",
+      "sha256": "49cf39a71c66323ffce2da59c4a8111b8bb8a7dab0078fb320d5a87a05ae4372"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/PR10_B50_seed9/test_complete.json",
+      "sha256": "3e1aca3e84154e3c95df0aa2a94d2484e38e3e202abbe792121d815747f2f40b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_A_seed0/pretest_complete.json",
+      "sha256": "8750f5b1c7c2180230a1b0ca7681910a25c3c92c692bdbe2de22c647619b1306"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_A_seed0/test_complete.json",
+      "sha256": "9dced9cf51c1c45a369baa5d140ba4344383d6f0d930d98258446ff3320a9dd3"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_A_seed1/pretest_complete.json",
+      "sha256": "4d63a287fe21f3c8317ba5ffcae2f8e2e03424034049cc9154e2418546b5b872"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_A_seed1/test_complete.json",
+      "sha256": "bb0aff106250bdaa0feea0605489dccf181d22171029cb293d50b8f3b7058550"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_A_seed2/pretest_complete.json",
+      "sha256": "bea877de540eae55bcb1df7141555d60cd72fa8502f44ca1a032fdd4b6c59e5c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_A_seed2/test_complete.json",
+      "sha256": "4dbb9f57a76f194c422c6d1e711f87d799dd82193686615f0d659c505a7ed728"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B20_seed0/pretest_complete.json",
+      "sha256": "96ff823530fd1c025a694eff9edeb8153e6504723f43a9f23a2bedc3d9f220b6"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B20_seed0/test_complete.json",
+      "sha256": "9fec8c522a4e684d8405ab50e72ece079facad4a20ce69aece53fe1b39ba44c2"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B20_seed1/pretest_complete.json",
+      "sha256": "607a636b898aa635be88248231c2795b9a39f7d82da8b004a673709a0d151020"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B20_seed1/test_complete.json",
+      "sha256": "8bb7c910be9dc05823f0b0532fd783f205cd715d06bac0f55b13c65aaf69de4c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B20_seed2/pretest_complete.json",
+      "sha256": "90906e84edc7642ac72f0caf4afddcab85c023213b60e9c8a729334de7b10b1d"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B20_seed2/test_complete.json",
+      "sha256": "1244eeb1a528a42d5b91994947cabc9a9aff90edd05905824cb801be32c867a0"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B50_seed0/pretest_complete.json",
+      "sha256": "465c173a5399f271e72b2c1c8fff2eeef49d4c639e34397edf4954c3aaa154e7"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B50_seed0/test_complete.json",
+      "sha256": "953d4dfb84a9589858e326ecdb98e8261e87b3100d14b4cf106a3ae2ce3c836e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B50_seed1/pretest_complete.json",
+      "sha256": "644c71fc1e49820d3dba9c29d3b1fb4dc74d12ac610523d4ab351fa761c2d81e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B50_seed1/test_complete.json",
+      "sha256": "e9ea56c6bc3ec61dc7f675165950df3248503c729f591292dcdfd2cd8bc1b17a"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B50_seed2/pretest_complete.json",
+      "sha256": "8cd4845153355179e6daf45260cccaea348a98ab3f271c192c18f6913571654e"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B50_seed2/test_complete.json",
+      "sha256": "58f3d5475268113b09aab35fe8bc1175636d8d9c43bf0c6731af60dcc5e6e9ef"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B70_seed0/pretest_complete.json",
+      "sha256": "1b74f1ceb5d38d8ba0df5cf95d67472ea78ca47712b39caea4f5b50fc8f339d5"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B70_seed0/test_complete.json",
+      "sha256": "6b2a518ad0dfac00acd9f8202378003d495c97ca097a36de0acf22c4eb74c1a5"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B70_seed1/pretest_complete.json",
+      "sha256": "d2170e515066a9e71ca37cbd60d3976e752ea1754330f4fe17c4afc0b1f9856a"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B70_seed1/test_complete.json",
+      "sha256": "0e7d9c63e1e22df60d1740f06da0683dafcc6c0165eb324cad671cb7989a1c2f"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B70_seed2/pretest_complete.json",
+      "sha256": "4e803c656a8fd2e447e35797da250081f3d7bebcf392a8ffa7f628deca1590d2"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B70_seed2/test_complete.json",
+      "sha256": "e43571783583b4d76450dce8202a8ae40954b3dcfe3495b8f39b94c7f882f2af"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B90_seed0/pretest_complete.json",
+      "sha256": "d4f50342e376bc0f27820258d538d68a397c7b215b604cf0680991ea9eb36763"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B90_seed0/test_complete.json",
+      "sha256": "d22ab6ef83789629a0b7c362592a967522aef6af2e04970b18de5e73143ba332"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B90_seed1/pretest_complete.json",
+      "sha256": "f44122482213254666f157ee3605807138a139c28f77f663062b37380a8029a8"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B90_seed1/test_complete.json",
+      "sha256": "ee25a226d03df60df037ac0995f58faff24e87906240c7d849bc7e4e31647fe9"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B90_seed2/pretest_complete.json",
+      "sha256": "75d7cf5d2054f85c32dcd9185de74ad763306223f2a33f3a46e5c7c725f519e7"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V2_B90_seed2/test_complete.json",
+      "sha256": "ade840721ab2427d379cc8ac64a33d7aec55f724bf058683af4acef56edd95c2"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_A_seed0/pretest_complete.json",
+      "sha256": "a5eb801737f10c2ab015d6f88746223f39ba26891aec5d6f3c6b1b6b7da910b4"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_A_seed0/test_complete.json",
+      "sha256": "060b1b25961c1a52c9b459cf29ef3b7ca473345fcb9817cce0913725ab797d19"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_A_seed1/pretest_complete.json",
+      "sha256": "fe9acac3188ef2bb2e28bb2af99a73d595b3a221946ca0a0e38e4dacef3c1ff1"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_A_seed1/test_complete.json",
+      "sha256": "33e90f0b6838819f4a95cd9c3f710ed686416a6a94f10f16f8e973d0b44bc4b9"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_A_seed2/pretest_complete.json",
+      "sha256": "acffd9de3a2b15799811ae404f819ea5431d296fb9fb9bd53237046fa60e2a90"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_A_seed2/test_complete.json",
+      "sha256": "cc13b62d4e9f61104660c2b8424e665cc988c02de4a3799ee85f38918d411ed2"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B20_seed0/pretest_complete.json",
+      "sha256": "0734d3bf6a2bb0522fea280aa1343b3125131aeb03ddf8d218548907381bfffc"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B20_seed0/test_complete.json",
+      "sha256": "c3c803ed55ecfe3ca1c5cdbeb19065e4d3e5eb645e5108de5f4b2b401b3b0e07"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B20_seed1/pretest_complete.json",
+      "sha256": "a58b78bf2347cefcfac630b679043ab0d212f3b7b1b10a7885531ff89e540107"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B20_seed1/test_complete.json",
+      "sha256": "e3f6fc16516e80ae8220317e0d4c8d5d3b245ad8cc50e7e9faa3b64c5d50dc78"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B20_seed2/pretest_complete.json",
+      "sha256": "66eb2731a0cbb827c0c704281efbe637d9c9d725fb327d3ea50d2c6d0486ad16"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B20_seed2/test_complete.json",
+      "sha256": "c8c41c4492b8b0fcfb1491bd88fc5af22d13dc34725841cb1ef3364e8dd020c1"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B50_seed0/pretest_complete.json",
+      "sha256": "b22db3632bf0561a52e33dd371e7a5d15b6a24b9c12b163a386dfe89db9bfcd5"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B50_seed0/test_complete.json",
+      "sha256": "984b3a59d37979ddd47a1764c216b7b43d901ccb2174fb9adc83f4d6138c9161"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B50_seed1/pretest_complete.json",
+      "sha256": "2e89d80cdddc3ebf5f36b429fab4e2b52f88f41122cfb4fcb963195a68dfae72"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B50_seed1/test_complete.json",
+      "sha256": "f245e8cc267a8d75dba35947b7eebd5c1d32219ecf6d04613789f68932fd1be3"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B50_seed2/pretest_complete.json",
+      "sha256": "f9a7e5f0b1d5694cae048ea7660366538d1f52749b999cf8d91cc9751195e579"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B50_seed2/test_complete.json",
+      "sha256": "31d63a86dc846463e7d5bb7c1a2ece492df75cc4dec07f8770241a5700af9f5b"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B70_seed0/pretest_complete.json",
+      "sha256": "0beee884f4a3271002720e0819126ab529a7cf184f3e5a47916380fc12c092e8"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B70_seed0/test_complete.json",
+      "sha256": "daf49c00818911bf9fce2f68a33a89b7018714bb104d7a1b8607d5298a15f7fc"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B70_seed1/pretest_complete.json",
+      "sha256": "54b1e0352046efeb1895fcce29bd286d2258d43036f59eb4d1e6fb9ae0c0646d"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B70_seed1/test_complete.json",
+      "sha256": "d409abe9ad2dc61a9abcbd70739780bdf4cf7049d6e1d0de7a25271fd30f499c"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B70_seed2/pretest_complete.json",
+      "sha256": "8efc21b7b1f9e36d77809759ba57bd1b84e5942f0cfeaf6b9162977bf4291cf1"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B70_seed2/test_complete.json",
+      "sha256": "64bc4acc1a66aa39202491f2f845507f5ed98d947ee47ee433e5fde3c9936dcc"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B90_seed0/pretest_complete.json",
+      "sha256": "1994d9a7c2a7beaf22e2730073b82582d80950b6ee26704f751789d708e726c2"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B90_seed0/test_complete.json",
+      "sha256": "5d6e07128bd5a83f1f6a419c04451b39abfdb8b4f495ea12377ec538c397e835"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B90_seed1/pretest_complete.json",
+      "sha256": "08e7127bfb7c8baac91205e3eedc8b6f50069df05adda483df8a99da73490c90"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B90_seed1/test_complete.json",
+      "sha256": "4f0f295d0b6dcb2d5fa7cac50bdd6c24ce8427b776e6098425c2cf69deddd407"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B90_seed2/pretest_complete.json",
+      "sha256": "e0bab91aff36a1fb54c789d8eb3137b328e2faea03293bd44362195c2c09ec81"
+    },
+    {
+      "path": "results/scenario_mix/comprehensive_20261019/evaluations/V3_B90_seed2/test_complete.json",
+      "sha256": "7c7eef51a6c197a8d2db0cd7de9e54a3bbd4fa94f4656ebc2b1db4432e49eadb"
+    }
+  ],
+  "source_sha256": {
+    "analysis/scenario_mix/comprehensive_20261019/build_notebook.py": "b6b77112883ed58dbbd3c2e67cf73149de5b96bbc2aa6b724bb57b8aeee512d2",
+    "analysis/scenario_mix/comprehensive_20261019/evaluate.py": "6f48c1d4d99d1c023728859ee0f0e6bbeb9d37ebe02e78a87d27994b7c78b31b",
+    "analysis/scenario_mix/comprehensive_20261019/finish_evaluations.py": "cdf236ff68741cb9d58ea97d841476659a5b993098398cde1dcc90b93c492a87",
+    "analysis/scenario_mix/comprehensive_20261019/finish_tables.py": "c6d857a0768f10861d5bc1772ce6fbf288047a1830ff284db657949bf8699e00",
+    "analysis/scenario_mix/comprehensive_20261019/input_diagnostics.py": "0c204f1cfd0302a94718858fde472d80cfa26bc9054bd4384df44514b0319a6a",
+    "analysis/scenario_mix/comprehensive_20261019/plot.py": "a31aa5b6e275904dd9839962d3e65378810645542d4ee31e6be8f478a2307e78",
+    "analysis/scenario_mix/comprehensive_20261019/prepare_and_launch.py": "a5808a559fb178ae9efeb12a62b1a36f70bf9e9ceab14d4d9b05a16c9cf641a4",
+    "analysis/scenario_mix/comprehensive_20261019/summarize.py": "3591684086ff9c483aed3c36bc1bf7a40f7e3e14904610fdb81576f35a8f32f2",
+    "analysis/scenario_mix/comprehensive_20261019/train_missing.py": "8f3b4183d066921e779d17891804bbd09817a245ab10886c7a1d49dc199b18d9",
+    "analysis/scenario_mix/comprehensive_20261019/verify.py": "7ebb604123c75824dee8dc19ad144e148d4cbc8aea0c4038e96812f03dc263dc"
+  },
+  "table_sha256": {
+    "all_checkpoint_metrics.csv": "8713a64d23491bb5602153e0569ecf23a0798223cf89bd8acd130b8e8c700d02",
+    "benchmark_metrics.csv": "00ff9952faaf54099742be67bf6cc754689d06362a379b709799572a9c1b1176",
+    "checkpoint_selection_sensitivity.csv": "53f6c47246ec48f659582914924a5942e430a6559b016f5904e04514812581a5",
+    "episode_sampling.csv": "6f678d5f9d33db276ba7c1353698f45949275d41c2dac95a3cc2ee3d4f874656",
+    "fixed_final_summary.csv": "8e0ad97f0241c2681affb4033b0b23a0022f5f16eb16062cae711cebcd5f3e15",
+    "generation_quality_comparison.csv": "fe1549009aa52250789b141aaf533070dd50d24d39fa66012a24a99377a9473d",
+    "group_configurations.csv": "893af9a4251c86d83d59ec52f70d6b18785fb486cf16ce688ccb4629dd753c67",
+    "legacy_validation_selection_audit.csv": "b0b43081394e093a01ebbc1c6eac131f4a0a0fc01c9d2e64084c6c037de0c649",
+    "original_selection_common_evaluation.csv": "a42856f68cb763ac18c8620204a4ef071f2df3da6c76a6bb194ae6cf07971918",
+    "paired_seed_differences.csv": "315e187321c6de6e1a221bb239023d9debd762c0218ed1b60e66064bcfd55d22",
+    "prior_current_selection_reproduction.csv": "90906f0158f154c3fa82bc085847c1b74c13101b348ce50255ff82e1fafa3eb4",
+    "selected_asset_weights.csv": "442831ba4161af2b887694126c48b0e641ed2552aa4455e33cc311c26a13c91f",
+    "selected_checkpoints.csv": "ca04a41ecc854a67281fd7b8f2f829eb9cc8e48377e4b8e5b32f0a5c580b1933",
+    "selected_metrics.csv": "a42856f68cb763ac18c8620204a4ef071f2df3da6c76a6bb194ae6cf07971918",
+    "selected_subperiod_metrics.csv": "56afbc17420eda85937874d13864430db68dc2104006d4c09b154eaaf2c199ae",
+    "selected_summary.csv": "c7c6c3db2112205bf418e1b784a5f298f0aa33e862c9f08961e6812006fa89e0",
+    "selected_summary_common_seeds0_2.csv": "fe3038594ee6d893b361f8bbe8c45f222f1b6ce827184edfc67c5af06f6b3312",
+    "subperiod_summary.csv": "cf2d84db2057d8dab854def37c8d848fe8e8ba0b9083aa9ec0a6e832207536cf",
+    "training_episode_curves.csv": "7715c814014fcc2450d6b7bd2bb2ff01aaf9344946bc9dbda524c352fc9bb87f",
+    "v2_saved_model_equivalence.csv": "7f00ff70774e531f8ca5693b7ea6a8c64068f9a00078540aa90c33eb907cf1a3"
+  },
+  "notebook": {
+    "path": "analysis/scenario_mix/comprehensive_20261019/comparison.ipynb",
+    "sha256": "b2c9dc23862babd1fe47b564ce0f087066b118cebcf333104538f827e59adc00",
+    "executed_at": "2026-10-18T17:55:55.236806+00:00",
+    "code_cells": 10,
+    "execution": "sequential in-process IPython; no kernel/socket",
+    "errors": 0,
+    "embedded_images": 18,
+    "file": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/analysis/scenario_mix/comprehensive_20261019/comparison.ipynb"
+  },
+  "findings_sha256": "c2cc6b0a85c26e335ec74c712adc992631d7b5cc3a6c477fb264415f1858b2ca",
+  "visual_review": {
+    "path": "results/scenario_mix/comprehensive_20261019/visual_review.json",
+    "sha256": "8defa53f821e469c7e44f5fa187837a8d93853c00e9c080aed67bb1551b9829e",
+    "figure_count": 78,
+    "note": "Recorded separately after visual inspection; structural checks alone are insufficient."
+  }
+}

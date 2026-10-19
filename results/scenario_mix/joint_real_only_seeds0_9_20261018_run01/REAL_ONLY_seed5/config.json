@@ -1,0 +1,24 @@
+{
+  "prices": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/datasets/dow10/prices_2004_2025.csv",
+  "synthetic": "/Users/chuanwei/Files/Projects/nycu_fintech/TimeDiff/outputs/dow10/conditional/empirical_joint/run_20261017/batches/full70_tail30_pr30/paths.npz",
+  "group": "REAL_ONLY",
+  "p": 0.0,
+  "seed": 5,
+  "out": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/scenario_mix/joint_real_only_seeds0_9_20261018_run01/REAL_ONLY_seed5",
+  "train": [
+    "2010-01-01",
+    "2017-12-31"
+  ],
+  "valid": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "timesteps": 500000,
+  "eval_freq": 25000,
+  "commission": 0.0025,
+  "train_commission": null,
+  "k_max": 21,
+  "log_std_init": -2.0,
+  "ent_coef": 0.0,
+  "rollout_steps": 2048
+}

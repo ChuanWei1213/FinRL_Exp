@@ -1,0 +1,21 @@
+PR30_B50 seed 2 checkpoint=25000 actual=26624: valid 1.4080
+PR30_B50 seed 2 checkpoint=50000 actual=53248: valid 1.4069
+PR30_B50 seed 2 checkpoint=75000 actual=79872: valid 1.4046
+PR30_B50 seed 2 checkpoint=100000 actual=106496: valid 1.3912
+PR30_B50 seed 2 checkpoint=125000 actual=133120: valid 1.4005
+PR30_B50 seed 2 checkpoint=150000 actual=159744: valid 1.4116
+PR30_B50 seed 2 checkpoint=175000 actual=186368: valid 1.4134
+PR30_B50 seed 2 checkpoint=200000 actual=212992: valid 1.4148
+PR30_B50 seed 2 checkpoint=225000 actual=239616: valid 1.3997
+PR30_B50 seed 2 checkpoint=250000 actual=266240: valid 1.4049
+PR30_B50 seed 2 checkpoint=275000 actual=292864: valid 1.4119
+PR30_B50 seed 2 checkpoint=300000 actual=319488: valid 1.3976
+PR30_B50 seed 2 checkpoint=325000 actual=346112: valid 1.4160
+PR30_B50 seed 2 checkpoint=350000 actual=372736: valid 1.3998
+PR30_B50 seed 2 checkpoint=375000 actual=399360: valid 1.4184
+PR30_B50 seed 2 checkpoint=400000 actual=425984: valid 1.4400
+PR30_B50 seed 2 checkpoint=425000 actual=452608: valid 1.4059
+PR30_B50 seed 2 checkpoint=450000 actual=479232: valid 1.4278
+PR30_B50 seed 2 checkpoint=475000 actual=505856: valid 1.3953
+PR30_B50 seed 2 checkpoint=500000 actual=532480: valid 1.4041
+done

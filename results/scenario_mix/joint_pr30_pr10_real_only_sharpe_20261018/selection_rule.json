@@ -1,0 +1,62 @@
+{
+  "criterion": "maximum validation Sharpe",
+  "metric_column": "valid_sharpe",
+  "scope": "independently for each group and seed",
+  "tie_break": "earliest nominal checkpoint among exact ties",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "groups": [
+    "REAL_ONLY",
+    "PR30_B50",
+    "PR10_B50"
+  ],
+  "training_period": [
+    "2010-01-01",
+    "2017-12-31"
+  ],
+  "validation_period": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "checkpoint_candidates": [
+    25000,
+    50000,
+    75000,
+    100000,
+    125000,
+    150000,
+    175000,
+    200000,
+    225000,
+    250000,
+    275000,
+    300000,
+    325000,
+    350000,
+    375000,
+    400000,
+    425000,
+    450000,
+    475000,
+    500000
+  ],
+  "test_evaluation": false,
+  "primary_analysis": "Sharpe-selected validation checkpoints",
+  "secondary_analysis": "fixed final nominal 500000 checkpoint",
+  "uncertainty_unit": "training seed; repeated checkpoints are not independent observations",
+  "control_settings": "same configuration as PR30/PR10 run02 except p_synthetic=0 and group name",
+  "real_only_batch": "results/scenario_mix/joint_real_only_seeds0_9_20261018_run01",
+  "mixed_batch": "results/scenario_mix/joint_pr30_pr10_b50_seeds0_9_20261018_run02",
+  "note": "Selection on validation is authorized by the user; selected validation scores are optimistic and are not held-out test results.",
+  "frozen_at": "2026-10-18T15:32:28.814889+00:00"
+}

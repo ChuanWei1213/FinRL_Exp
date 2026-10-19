@@ -1,0 +1,21 @@
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=25000 actual=26624: valid 1.4007
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=50000 actual=53248: valid 1.3958
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=75000 actual=79872: valid 1.3944
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=100000 actual=106496: valid 1.3711
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=125000 actual=133120: valid 1.3776
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=150000 actual=159744: valid 1.3845
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=175000 actual=186368: valid 1.3713
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=200000 actual=212992: valid 1.3581
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=225000 actual=239616: valid 1.3611
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=250000 actual=266240: valid 1.3705
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=275000 actual=292864: valid 1.3647
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=300000 actual=319488: valid 1.3624
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=325000 actual=346112: valid 1.3730
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=350000 actual=372736: valid 1.3886
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=375000 actual=399360: valid 1.3777
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=400000 actual=425984: valid 1.3341
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=425000 actual=452608: valid 1.3280
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=450000 actual=479232: valid 1.3400
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=475000 actual=505856: valid 1.3409
+REAL_REPLAY_PR10_B50 seed 4 checkpoint=500000 actual=532480: valid 1.3869
+done

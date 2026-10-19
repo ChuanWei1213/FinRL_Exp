@@ -1,0 +1,434 @@
+{
+  "status": "completed_and_verified",
+  "checked_at": "2026-10-18T17:51:38.323924+00:00",
+  "started_at": "2026-10-18T16:51:36.102247+00:00",
+  "completed_at": "2026-10-18T17:45:45.215374+00:00",
+  "elapsed_seconds": 3249.113127,
+  "runs": 30,
+  "workers": 5,
+  "checkpoints": 600,
+  "validation_rows": 600,
+  "all_sources_verified": true,
+  "runs_detail": [
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 0,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16895,
+      "source_counts": {
+        "real_replay": 8449,
+        "real": 8446
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 1,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16910,
+      "source_counts": {
+        "real": 8493,
+        "real_replay": 8417
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 2,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16906,
+      "source_counts": {
+        "real_replay": 8490,
+        "real": 8416
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 3,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16903,
+      "source_counts": {
+        "real_replay": 8454,
+        "real": 8449
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 4,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16930,
+      "source_counts": {
+        "real": 8471,
+        "real_replay": 8459
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 5,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16925,
+      "source_counts": {
+        "real_replay": 8549,
+        "real": 8376
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 6,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16929,
+      "source_counts": {
+        "real_replay": 8595,
+        "real": 8334
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 7,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16886,
+      "source_counts": {
+        "real": 8562,
+        "real_replay": 8324
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 8,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16916,
+      "source_counts": {
+        "real": 8462,
+        "real_replay": 8454
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR30_B50",
+      "seed": 9,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16882,
+      "source_counts": {
+        "real_replay": 8528,
+        "real": 8354
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 0,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16895,
+      "source_counts": {
+        "real_replay": 8449,
+        "real": 8446
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 1,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16910,
+      "source_counts": {
+        "real": 8493,
+        "real_replay": 8417
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 2,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16906,
+      "source_counts": {
+        "real_replay": 8490,
+        "real": 8416
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 3,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16903,
+      "source_counts": {
+        "real_replay": 8454,
+        "real": 8449
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 4,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16930,
+      "source_counts": {
+        "real": 8471,
+        "real_replay": 8459
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 5,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16925,
+      "source_counts": {
+        "real_replay": 8549,
+        "real": 8376
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 6,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16929,
+      "source_counts": {
+        "real_replay": 8595,
+        "real": 8334
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 7,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16886,
+      "source_counts": {
+        "real": 8562,
+        "real_replay": 8324
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 8,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16916,
+      "source_counts": {
+        "real": 8462,
+        "real_replay": 8454
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "REAL_REPLAY_PR10_B50",
+      "seed": 9,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16882,
+      "source_counts": {
+        "real_replay": 8528,
+        "real": 8354
+      },
+      "matched_episode_schedule_verified": true,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 0,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16895,
+      "source_counts": {
+        "synthetic": 8449,
+        "real": 8446
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 1,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16910,
+      "source_counts": {
+        "real": 8493,
+        "synthetic": 8417
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 2,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16906,
+      "source_counts": {
+        "synthetic": 8490,
+        "real": 8416
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 3,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16903,
+      "source_counts": {
+        "synthetic": 8454,
+        "real": 8449
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 4,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16930,
+      "source_counts": {
+        "real": 8471,
+        "synthetic": 8459
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 5,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16925,
+      "source_counts": {
+        "synthetic": 8549,
+        "real": 8376
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 6,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16929,
+      "source_counts": {
+        "synthetic": 8595,
+        "real": 8334
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 7,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16886,
+      "source_counts": {
+        "real": 8562,
+        "synthetic": 8324
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 8,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16916,
+      "source_counts": {
+        "real": 8462,
+        "synthetic": 8454
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    },
+    {
+      "group": "FULL_B50",
+      "seed": 9,
+      "checkpoints": 20,
+      "validation_rows": 20,
+      "episodes": 16882,
+      "source_counts": {
+        "synthetic": 8528,
+        "real": 8354
+      },
+      "matched_episode_schedule_verified": false,
+      "last_nominal": 500000,
+      "last_actual": 532480
+    }
+  ]
+}

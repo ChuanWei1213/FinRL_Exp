@@ -1,6 +1,27 @@
 # Scenario-mix 各版本實驗總覽
 
-更新日期：2026-10-12。歷史版本依據 `TimeDiff-mix` 的程式、各 run 的 `config.json`、CSV 與本地模型檔盤點；`257bf771` 補齊模型後，已另行完成 TRF 對照實驗。
+更新日期：2026-10-19。歷史版本依據 `TimeDiff-mix` 的程式、各 run 的 `config.json`、CSV 與本地模型檔盤點；`257bf771` 補齊模型後，已另行完成 TRF 對照實驗。
+
+## 聯合條件取樣實驗（2026-10-18～19）
+
+完整比較入口為 [研究 notebook](../../analysis/scenario_mix/comprehensive_20261019/comparison.ipynb)，結果與查核在 [comprehensive_20261019](comprehensive_20261019/)。本輪六組各 seeds 0–9，共 60 個成功訓練 run、1,200 個 checkpoint；再納入既有 v2／v3 各五組、seeds 0–2，合計 **16 組、90 run、1,800 個 checkpoint、5,400 筆 train／val／test 評估**。
+
+| 目錄 | 保存內容 |
+|---|---|
+| [joint_pr30_pr10_b50_seeds0_9_20261018_run02](joint_pr30_pr10_b50_seeds0_9_20261018_run02/) | PR30_B50、PR10_B50，各 10 seeds、20 個 checkpoint／seed |
+| [joint_real_only_seeds0_9_20261018_run01](joint_real_only_seeds0_9_20261018_run01/) | REAL_ONLY，10 seeds、20 個 checkpoint／seed |
+| [joint_missing_controls_seeds0_9_20261019_run01](joint_missing_controls_seeds0_9_20261019_run01/) | REAL_REPLAY_PR30_B50、REAL_REPLAY_PR10_B50、FULL_B50，各 10 seeds、20 個 checkpoint／seed |
+| [joint_pr30_pr10_real_only_sharpe_20261018](joint_pr30_pr10_real_only_sharpe_20261018/) | 先前只比較 PR30／PR10／REAL_ONLY 的 validation 分析，當時尚未執行 test |
+| [comprehensive_20261019](comprehensive_20261019/) | 全部組別的指標表、逐 checkpoint 每日紀錄、78 組 PNG／SVG 圖、輸入、凍結選模與完整性查核 |
+| [joint_pr30_pr10_b50_seeds0_9_20261018_run01](joint_pr30_pr10_b50_seeds0_9_20261018_run01/) | 首次啟動因未使用的 QuantStats／SciPy 依賴失敗；保存設定、log 與 failure_summary，不列入成功實驗 |
+
+目前六組使用相同 PPO 預算：名義 500,000 步、實際 532,480 步，每 25,000 名義步保存及驗證；B50 的替換機率為 0.5。REAL_REPLAY 使用與對應合成組完全相同的抽樣錨點與重複權重，但接上當時真實後續價格。FULL 使用 100% 完整歷史分布條件；PR30／PR10 使用 70% 完整池加 30% 尾部池。
+
+模型依 2018–2019 **validation Sharpe** 選取，同分選最早 checkpoint；選取清單於 test 前凍結。Train 指標為 2010–2017 真實行情連續推論，test 為 2020–2025；test 對訓練步數曲線僅供診斷。舊 v2／v3 使用舊 TRF 訓練，且 v3 訓練費率為零；此次全部重測統一修正後 TRF 與 0.25% 費率，歷史差異見 [protocol.json](comprehensive_20261019/protocol.json)。
+
+主要表格為 [selected_summary.csv](comprehensive_20261019/selected_summary.csv)、[同 seeds 0–2 比較](comprehensive_20261019/selected_summary_common_seeds0_2.csv)、[逐 checkpoint 指標](comprehensive_20261019/all_checkpoint_metrics.csv) 與 [配對差異](comprehensive_20261019/paired_seed_differences.csv)。[completion_audit.json](comprehensive_20261019/completion_audit.json) 保存來源雜湊、選模時序、圖表與 notebook 驗證；原始結果不覆寫。Git 保存全部 checkpoint、每日壓縮 CSV、報表及執行紀錄，僅忽略執行鎖與快取。
+
+## 歷史版本
 
 歷史版本共有 **6 個訓練／回測結果目錄、2 個比較報表目錄**。以下記錄實際執行設定，不以目前 CLI 預設值代替歷史設定。這些舊目錄仍保留 **TRF 修正前**的績效；修正後的新一輪結果另存於 [trf_ablation_20261011](trf_ablation_20261011/report/analysis.md)，包含 600 個舊 checkpoint 重測與 30 組完整成對重訓。
 
