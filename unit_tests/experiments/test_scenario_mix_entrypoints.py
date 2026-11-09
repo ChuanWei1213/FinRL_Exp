@@ -68,6 +68,12 @@ def test_cli_defaults_preserve_distinct_protocols():
         "p": 0.9,
         "seed": 2,
         "train_commission": None,
+        "loss_weight": 0.0,
+        "loss_power": 1.0,
+        "loss_exp_rate": 0.0,
+        "loss_cap": None,
+        "tail_weight": 0.0,
+        "tail_threshold": -0.05,
     }
     assert vars(
         evaluate.build_parser().parse_args(

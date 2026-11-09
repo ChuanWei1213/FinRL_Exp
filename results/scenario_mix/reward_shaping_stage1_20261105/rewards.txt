@@ -1,0 +1,6 @@
+base|
+lin|--loss-weight 1
+sq|--loss-weight 0.5 --loss-power 2
+cube|--loss-weight 0.25 --loss-power 3 --loss-cap 30
+exp|--loss-weight 0.582 --loss-exp-rate 0.5
+tail|--tail-weight 2 --tail-threshold -0.05

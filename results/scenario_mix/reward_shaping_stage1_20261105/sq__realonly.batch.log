@@ -1,0 +1,11 @@
+Scheduling 5 runs with 5 workers: /mnt/sda1/juliana/FinRL_Exp_reward/results/scenario_mix/reward_shaping_stage1_20261105/sq__realonly
+REAL_ONLY_seed0: running
+REAL_ONLY_seed1: running
+REAL_ONLY_seed2: running
+REAL_ONLY_seed3: running
+REAL_ONLY_seed4: running
+REAL_ONLY_seed1: succeeded
+REAL_ONLY_seed3: succeeded
+REAL_ONLY_seed0: succeeded
+REAL_ONLY_seed4: succeeded
+REAL_ONLY_seed2: succeeded

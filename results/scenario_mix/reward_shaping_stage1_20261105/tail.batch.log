@@ -1,0 +1,21 @@
+Scheduling 10 runs with 5 workers: /mnt/sda1/juliana/FinRL_Exp_reward/results/scenario_mix/reward_shaping_stage1_20261105/tail
+PR30_B50_seed0: running
+V3_B50_seed0: running
+PR30_B50_seed1: running
+V3_B50_seed1: running
+PR30_B50_seed2: running
+PR30_B50_seed1: succeeded
+V3_B50_seed2: running
+V3_B50_seed0: succeeded
+PR30_B50_seed3: running
+PR30_B50_seed0: succeeded
+V3_B50_seed3: running
+PR30_B50_seed2: succeeded
+PR30_B50_seed4: running
+V3_B50_seed1: succeeded
+V3_B50_seed4: running
+PR30_B50_seed4: succeeded
+V3_B50_seed3: succeeded
+V3_B50_seed2: succeeded
+V3_B50_seed4: succeeded
+PR30_B50_seed3: succeeded

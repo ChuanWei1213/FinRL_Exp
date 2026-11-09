@@ -1,0 +1,8 @@
+{
+  "n_train_windows": 1992,
+  "PR5": -0.04914118825972109,
+  "PR10": -0.03441892812917125,
+  "test_windows_PR5": 149,
+  "test_windows_PR10": 223,
+  "test_windows_total": 1487
+}

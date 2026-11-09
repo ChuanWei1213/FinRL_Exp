@@ -88,6 +88,12 @@ def build_parser():
     ap.add_argument("--k-max", type=nonnegative_int, default=21)
     ap.add_argument("--log-std-init", type=finite_float, default=-2.0)
     ap.add_argument("--ent-coef", type=finite_float, default=0.0)
+    ap.add_argument("--loss-weight", type=finite_float, default=0.0)
+    ap.add_argument("--loss-power", type=finite_float, default=1.0)
+    ap.add_argument("--loss-exp-rate", type=finite_float, default=0.0)
+    ap.add_argument("--loss-cap", type=finite_float, default=None)
+    ap.add_argument("--tail-weight", type=finite_float, default=0.0)
+    ap.add_argument("--tail-threshold", type=finite_float, default=-0.05)
     ap.add_argument("--dry-run", action="store_true")
     return ap
 
@@ -115,6 +121,16 @@ def build_jobs(cli):
             raise ValueError(f"--{name.replace('_', '-')} must be in [0, 1)")
     if cli.ent_coef < 0:
         raise ValueError("--ent-coef must be nonnegative")
+    if cli.loss_weight < 0 or cli.tail_weight < 0:
+        raise ValueError("--loss-weight and --tail-weight must be nonnegative")
+    if not -1 < cli.tail_threshold <= 0:
+        raise ValueError("--tail-threshold must be in (-1, 0]")
+    if cli.loss_power < 1 or cli.loss_exp_rate < 0:
+        raise ValueError("--loss-power must be >= 1 and --loss-exp-rate nonnegative")
+    if cli.loss_exp_rate > 0 and cli.loss_power != 1:
+        raise ValueError("Use either --loss-power or --loss-exp-rate, not both")
+    if cli.loss_cap is not None and cli.loss_cap <= 0:
+        raise ValueError("--loss-cap must be positive")
     if cli.timesteps % cli.eval_freq:
         raise ValueError("--timesteps must be a multiple of --eval-freq")
     tr_start, tr_end, va_start, va_end = map(
@@ -149,6 +165,12 @@ def build_jobs(cli):
         "k_max",
         "log_std_init",
         "ent_coef",
+        "loss_weight",
+        "loss_power",
+        "loss_exp_rate",
+        "loss_cap",
+        "tail_weight",
+        "tail_threshold",
     ):
         value = getattr(cli, key)
         if value is not None:

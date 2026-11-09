@@ -1,0 +1,62 @@
+{
+  "PR30_B50_seed0": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:07:37.632978+00:00",
+    "pid": 2839155,
+    "returncode": 0
+  },
+  "V3_B50_seed0": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:06:49.892917+00:00",
+    "pid": 2839157,
+    "returncode": 0
+  },
+  "PR30_B50_seed1": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:07:32.813908+00:00",
+    "pid": 2839160,
+    "returncode": 0
+  },
+  "V3_B50_seed1": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:07:29.401130+00:00",
+    "pid": 2839163,
+    "returncode": 0
+  },
+  "PR30_B50_seed2": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:07:26.088794+00:00",
+    "pid": 2839166,
+    "returncode": 0
+  },
+  "V3_B50_seed2": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:28:14.287789+00:00",
+    "pid": 2841385,
+    "returncode": 0
+  },
+  "PR30_B50_seed3": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:27:51.850725+00:00",
+    "pid": 2841555,
+    "returncode": 0
+  },
+  "V3_B50_seed3": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:29:07.672764+00:00",
+    "pid": 2841560,
+    "returncode": 0
+  },
+  "PR30_B50_seed4": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:28:32.416539+00:00",
+    "pid": 2841564,
+    "returncode": 0
+  },
+  "V3_B50_seed4": {
+    "state": "succeeded",
+    "updated_at": "2026-11-05T07:28:25.004547+00:00",
+    "pid": 2841573,
+    "returncode": 0
+  }
+}

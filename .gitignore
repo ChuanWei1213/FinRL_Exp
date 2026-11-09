@@ -227,3 +227,9 @@ results/scenario_mix/comprehensive_20261019/**/*.lock
 # !results/ppo_portfolio_intrinsic_reward_ablation/train_cache/
 # !results/ppo_portfolio_intrinsic_reward_ablation/train_cache/**
 ### FILE TOO LARGE ###
+
+# Reward-shaping stage 1 (6 rewards x 4 datasets x 5 seeds): metrics, logs and daily
+# test backtests are tracked; checkpoints (ckpt/step_*.zip, ~1.2 GB) stay local.
+!results/scenario_mix/reward_shaping_stage1_20261105/
+!results/scenario_mix/reward_shaping_stage1_20261105/**
+results/scenario_mix/reward_shaping_stage1_20261105/**/ckpt/

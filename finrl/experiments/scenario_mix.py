@@ -183,18 +183,56 @@ def normalize_obs(obs):
 
 
 class ScenarioMixEnv(gym.Env):
-    """Each reset draws k, then a real episode (prob 1-p) or a TimeDiff path (prob p)."""
+    """Each reset draws k, then a real episode (prob 1-p) or a TimeDiff path (prob p).
+
+    Reward = the portfolio env's 100 * log(V_t / V_{t-1}) (net of commission), plus two
+    optional training-only shaping terms (both off by default, which leaves the reward,
+    observations and RNG stream exactly as before):
+
+        loss_weight  (lambda_1): every step subtracts lambda_1 * g(x), x = max(-reward, 0)
+                     the step's loss in reward units (~ percent). g is increasing and convex:
+                       g(x) = x ** loss_power                    (default power 1: linear)
+                       g(x) = expm1(rate * x) / rate             (loss_exp_rate = rate > 0)
+                     With power 1 losses count (1 + lambda_1) times; power > 1 or the
+                     exponential form barely touch small (fee-sized) losses and weigh large
+                     daily drops much more. loss_cap, if set, caps the per-step penalty.
+        tail_weight  (lambda_3): the terminal step adds
+                     -100 * lambda_3 * max(0, tail_threshold - R_ep),
+                     where R_ep = exp(sum of step log returns) - 1 over the episode.
+
+    Evaluation (run_continuous) reads portfolio values, never this reward.
+    """
 
     metadata = {"render_modes": []}
 
     def __init__(self, market: MarketData, synthetic: SyntheticPaths | None, *, p_synthetic: float,
                  data_start: str, data_end: str, commission: float, obs_days: int = 50,
-                 horizon: int = 21, k_max: int = 21, seed: int = 0):
+                 horizon: int = 21, k_max: int = 21, seed: int = 0, loss_weight: float = 0.0,
+                 loss_power: float = 1.0, loss_exp_rate: float = 0.0,
+                 loss_cap: float | None = None, tail_weight: float = 0.0,
+                 tail_threshold: float = -0.05):
         super().__init__()
         if p_synthetic and synthetic is None:
             raise ValueError("p_synthetic > 0 needs synthetic paths")
         if not 0 <= p_synthetic < 1:
             raise ValueError("p_synthetic must be in [0, 1)")
+        if loss_weight < 0 or tail_weight < 0:
+            raise ValueError("loss_weight and tail_weight must be nonnegative")
+        if loss_power < 1:
+            raise ValueError("loss_power must be >= 1 (convex loss penalty)")
+        if loss_exp_rate < 0:
+            raise ValueError("loss_exp_rate must be nonnegative")
+        if loss_exp_rate > 0 and loss_power != 1:
+            raise ValueError("use either loss_power or loss_exp_rate, not both")
+        if loss_cap is not None and loss_cap <= 0:
+            raise ValueError("loss_cap must be positive")
+        if not -1 < tail_threshold <= 0:
+            raise ValueError("tail_threshold must be in (-1, 0]")
+        self.loss_weight, self.tail_weight = float(loss_weight), float(tail_weight)
+        self.loss_power, self.loss_exp_rate = float(loss_power), float(loss_exp_rate)
+        self.loss_cap = None if loss_cap is None else float(loss_cap)
+        self.tail_threshold = float(tail_threshold)
+        self._episode_log_return = 0.0
         self.m, self.syn, self.p = market, synthetic, float(p_synthetic)
         self.obs_days, self.horizon, self.k_max = obs_days, horizon, k_max
         self.commission = commission
@@ -255,12 +293,37 @@ class ScenarioMixEnv(gym.Env):
         if seed is not None:
             self.rng = np.random.default_rng(seed)
         self._inner = self._build()
+        self._episode_log_return = 0.0
         obs, info = self._inner.reset()
         return normalize_obs(obs), info
 
     def step(self, action):
         obs, reward, terminated, truncated, info = self._inner.step(action)
-        return normalize_obs(obs), float(reward), bool(terminated), bool(truncated), info
+        reward, done = float(reward), bool(terminated or truncated)
+        scale = float(self._inner.env._reward_scaling)
+        self._episode_log_return += reward / scale
+        if self.loss_weight or self.tail_weight or done:
+            info = dict(info)
+            loss_term = -self._loss_penalty(max(-reward, 0.0)) if self.loss_weight else 0.0
+            tail_term = 0.0
+            if done:
+                episode_return = float(np.expm1(self._episode_log_return))
+                tail_term = -scale * self.tail_weight * max(0.0, self.tail_threshold - episode_return)
+                info["episode_return"] = episode_return
+            info["reward_base"] = reward
+            info["reward_loss_term"] = loss_term
+            info["reward_tail_term"] = tail_term
+            reward = reward + loss_term + tail_term
+        return normalize_obs(obs), reward, bool(terminated), bool(truncated), info
+
+    def _loss_penalty(self, loss):
+        """lambda_1 * g(loss) for a nonnegative step loss in reward units, optionally capped."""
+        if self.loss_exp_rate > 0:
+            g = float(np.expm1(self.loss_exp_rate * loss)) / self.loss_exp_rate
+        else:
+            g = loss ** self.loss_power
+        penalty = self.loss_weight * g
+        return penalty if self.loss_cap is None else min(penalty, self.loss_cap)
 
 
 # ─────────────────────────────── evaluation ───────────────────────────────

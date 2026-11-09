@@ -1,0 +1,21 @@
+V3_B50 seed 3 checkpoint=25000 actual=26624: valid 1.4078
+V3_B50 seed 3 checkpoint=50000 actual=53248: valid 1.4205
+V3_B50 seed 3 checkpoint=75000 actual=79872: valid 1.4144
+V3_B50 seed 3 checkpoint=100000 actual=106496: valid 1.4095
+V3_B50 seed 3 checkpoint=125000 actual=133120: valid 1.4111
+V3_B50 seed 3 checkpoint=150000 actual=159744: valid 1.3913
+V3_B50 seed 3 checkpoint=175000 actual=186368: valid 1.4006
+V3_B50 seed 3 checkpoint=200000 actual=212992: valid 1.3739
+V3_B50 seed 3 checkpoint=225000 actual=239616: valid 1.3532
+V3_B50 seed 3 checkpoint=250000 actual=266240: valid 1.2837
+V3_B50 seed 3 checkpoint=275000 actual=292864: valid 1.2516
+V3_B50 seed 3 checkpoint=300000 actual=319488: valid 1.2217
+V3_B50 seed 3 checkpoint=325000 actual=346112: valid 1.1758
+V3_B50 seed 3 checkpoint=350000 actual=372736: valid 1.1299
+V3_B50 seed 3 checkpoint=375000 actual=399360: valid 1.0639
+V3_B50 seed 3 checkpoint=400000 actual=425984: valid 1.0404
+V3_B50 seed 3 checkpoint=425000 actual=452608: valid 1.0354
+V3_B50 seed 3 checkpoint=450000 actual=479232: valid 1.0222
+V3_B50 seed 3 checkpoint=475000 actual=505856: valid 1.0226
+V3_B50 seed 3 checkpoint=500000 actual=532480: valid 1.0170
+done

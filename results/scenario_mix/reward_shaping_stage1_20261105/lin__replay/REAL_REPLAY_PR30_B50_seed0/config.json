@@ -1,0 +1,30 @@
+{
+  "prices": "/mnt/sda1/juliana/TimeDiff/datasets/dow10/prices_2004_2025.csv",
+  "synthetic": "/mnt/sda1/juliana/FinRL_Exp_reward/analysis/scenario_mix/reward_shaping_20261105/inputs/real_replay_pr30.npz",
+  "group": "REAL_REPLAY_PR30_B50",
+  "p": 0.5,
+  "seed": 0,
+  "out": "/mnt/sda1/juliana/FinRL_Exp_reward/results/scenario_mix/reward_shaping_stage1_20261105/lin__replay/REAL_REPLAY_PR30_B50_seed0",
+  "train": [
+    "2010-01-01",
+    "2017-12-31"
+  ],
+  "valid": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "timesteps": 500000,
+  "eval_freq": 25000,
+  "commission": 0.0025,
+  "train_commission": 0.0,
+  "k_max": 21,
+  "log_std_init": -2.0,
+  "ent_coef": 0.0,
+  "loss_weight": 1.0,
+  "loss_power": 1.0,
+  "loss_exp_rate": 0.0,
+  "loss_cap": null,
+  "tail_weight": 0.0,
+  "tail_threshold": -0.05,
+  "rollout_steps": 2048
+}

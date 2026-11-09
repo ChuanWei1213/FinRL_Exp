@@ -78,6 +78,42 @@ def build_parser():
     ap.add_argument("--k-max", type=int, default=21)
     ap.add_argument("--log-std-init", type=float, default=-2.0)
     ap.add_argument("--ent-coef", type=float, default=0.0)
+    ap.add_argument(
+        "--loss-weight",
+        type=float,
+        default=0.0,
+        help="training reward subtracts loss_weight * g(step loss); 0 = unchanged reward",
+    )
+    ap.add_argument(
+        "--loss-power",
+        type=float,
+        default=1.0,
+        help="g(x) = x ** loss_power for the step loss x (reward units ~ percent); 1 = linear",
+    )
+    ap.add_argument(
+        "--loss-exp-rate",
+        type=float,
+        default=0.0,
+        help="if > 0, g(x) = expm1(rate * x) / rate instead of the power form",
+    )
+    ap.add_argument(
+        "--loss-cap",
+        type=float,
+        default=None,
+        help="cap on the per-step loss penalty (reward units); default: no cap",
+    )
+    ap.add_argument(
+        "--tail-weight",
+        type=float,
+        default=0.0,
+        help="terminal reward adds -100 * tail_weight * max(0, tail_threshold - episode return)",
+    )
+    ap.add_argument(
+        "--tail-threshold",
+        type=float,
+        default=-0.05,
+        help="episode return below which the tail penalty applies",
+    )
     return ap
 
 
@@ -105,6 +141,7 @@ def run(cli):
                             "source": info.get("source"),
                             "scenario": info.get("scenario"),
                             "k": info.get("k"),
+                            "episode_return": info.get("episode_return"),
                         }
                     )
             return True
@@ -122,6 +159,12 @@ def run(cli):
         ),
         k_max=cli.k_max,
         seed=cli.seed,
+        loss_weight=cli.loss_weight,
+        loss_power=cli.loss_power,
+        loss_exp_rate=cli.loss_exp_rate,
+        loss_cap=cli.loss_cap,
+        tail_weight=cli.tail_weight,
+        tail_threshold=cli.tail_threshold,
     )
     env = Monitor(SourceInfo(env))
     model = make_ppo(env, cli.seed, "cpu", cli.log_std_init, cli.ent_coef)

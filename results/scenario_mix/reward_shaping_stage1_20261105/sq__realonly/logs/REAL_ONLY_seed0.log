@@ -1,0 +1,21 @@
+REAL_ONLY seed 0 checkpoint=25000 actual=26624: valid 1.3840
+REAL_ONLY seed 0 checkpoint=50000 actual=53248: valid 1.3818
+REAL_ONLY seed 0 checkpoint=75000 actual=79872: valid 1.3701
+REAL_ONLY seed 0 checkpoint=100000 actual=106496: valid 1.3626
+REAL_ONLY seed 0 checkpoint=125000 actual=133120: valid 1.3521
+REAL_ONLY seed 0 checkpoint=150000 actual=159744: valid 1.3467
+REAL_ONLY seed 0 checkpoint=175000 actual=186368: valid 1.3506
+REAL_ONLY seed 0 checkpoint=200000 actual=212992: valid 1.3380
+REAL_ONLY seed 0 checkpoint=225000 actual=239616: valid 1.3313
+REAL_ONLY seed 0 checkpoint=250000 actual=266240: valid 1.3254
+REAL_ONLY seed 0 checkpoint=275000 actual=292864: valid 1.3337
+REAL_ONLY seed 0 checkpoint=300000 actual=319488: valid 1.3021
+REAL_ONLY seed 0 checkpoint=325000 actual=346112: valid 1.2607
+REAL_ONLY seed 0 checkpoint=350000 actual=372736: valid 1.2461
+REAL_ONLY seed 0 checkpoint=375000 actual=399360: valid 1.2539
+REAL_ONLY seed 0 checkpoint=400000 actual=425984: valid 1.2630
+REAL_ONLY seed 0 checkpoint=425000 actual=452608: valid 1.2544
+REAL_ONLY seed 0 checkpoint=450000 actual=479232: valid 1.2455
+REAL_ONLY seed 0 checkpoint=475000 actual=505856: valid 1.2770
+REAL_ONLY seed 0 checkpoint=500000 actual=532480: valid 1.2714
+done
