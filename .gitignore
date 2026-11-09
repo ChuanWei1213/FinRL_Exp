@@ -233,3 +233,6 @@ results/scenario_mix/comprehensive_20261019/**/*.lock
 !results/scenario_mix/reward_shaping_stage1_20261105/
 !results/scenario_mix/reward_shaping_stage1_20261105/**
 results/scenario_mix/reward_shaping_stage1_20261105/**/ckpt/
+# Report figures and tables for the reward-shaping study (referenced by the Notion report).
+!analysis/scenario_mix/reward_shaping_20261105/report/*.csv
+!analysis/scenario_mix/reward_shaping_20261105/report/*.png
