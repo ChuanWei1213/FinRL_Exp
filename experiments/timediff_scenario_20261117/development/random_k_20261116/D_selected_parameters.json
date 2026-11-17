@@ -1,0 +1,21 @@
+{
+  "environment_pool_size": 16,
+  "active_parallel_environments": 16,
+  "minimum_repeats": 1,
+  "maximum_repeats": 8,
+  "improvement_threshold": 0.06355450334997576,
+  "regression_threshold": 0.09448003076785541,
+  "plateau_patience": 2,
+  "threshold_units": "21-day suffix reward after trading a random real prelude; no boundary reset",
+  "threshold_estimation": "median / 90th percentile of paired real-2018 validation update standard errors",
+  "best_fixed_repeat": 8,
+  "best_raw_pool": 16,
+  "larger_pool_triggered": true,
+  "calibration_interactions_per_candidate": 64512,
+  "selection_score": "mean paired real-2018 validation gain over updates 5-8 versus C at the same step",
+  "pooled_case_score": -0.003734436925443719,
+  "formal_parameters_locked": false,
+  "k_max": 21,
+  "pool_switch_policy": "finish in-flight episodes; new pool applies at the next natural reset (at most 41 extra steps per env)",
+  "limitation": "seed=0; 2018 validation only; no 2019/event performance used for calibration"
+}

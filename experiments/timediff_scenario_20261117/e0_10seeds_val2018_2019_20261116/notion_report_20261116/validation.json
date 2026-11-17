@@ -1,0 +1,64 @@
+{
+  "summary_rows_crosschecked": 24,
+  "metrics_crosschecked": 5,
+  "paired_rows_crosschecked": 30,
+  "generation_candidate_gates_recomputed": 18000,
+  "generation_tasks": 9,
+  "training_jobs": 120,
+  "images_visually_inspected": 5,
+  "native_toggle_pairs": 6,
+  "status": "passed",
+  "notion_page_id": "41ace255-8eff-8145-8aa1-f36ad447a5f2",
+  "saved_page_readback": {
+    "images": 5,
+    "toggles": 6,
+    "attached_data_packages": 1,
+    "full_content_available": true
+  },
+  "format_fix": "7 emphasis spans saved with native bold",
+  "page_panel_opened": true,
+  "lambda_supplement_update": {
+    "status": "success",
+    "new_images": 2,
+    "new_default_closed_toggles": 2,
+    "placement": "after lambda0.5 figure caption; before the original quality table",
+    "local_image_count": 7,
+    "local_toggle_count": 8,
+    "saved_page_readback_images": 7,
+    "saved_page_readback_toggles": 8,
+    "placement_verified": true,
+    "updated_evidence_package_attached": true
+  },
+  "exposure_supplement_20261117": {
+    "notion_update": "success",
+    "placement": "immediately after figure5 caption",
+    "image": "08_real_test_exposure.png",
+    "source_rows": 5040,
+    "metric": "end_stock_exposure",
+    "all_240_period_means_crosschecked": true,
+    "standalone_image_visually_inspected": true,
+    "per_seed_csv_attached": true
+  },
+  "figure2_independent_y_20261117": {
+    "status": "complete",
+    "subplot_count": 12,
+    "source_data_unchanged": true,
+    "all_lines_and_sd_bands_visible": true,
+    "local_image_visually_inspected": true,
+    "notion_update": "success",
+    "unrelated_user_edits_preserved": true
+  },
+  "training_source_supplements_20261117": {
+    "status": "success",
+    "images": 2,
+    "default_closed_toggles": 2,
+    "actual_stochastic_rollout": true,
+    "reward_scope": "full k+21 source-labelled episode",
+    "checkpoints_verified": 3840,
+    "episode_buffer_entries_verified": 384000,
+    "weighted_reconstruction_matches_figure2": true,
+    "both_images_visually_inspected": true,
+    "per_update_source_csv_attached": true,
+    "placement": "immediately after figure2 caption, before the original trend table"
+  }
+}

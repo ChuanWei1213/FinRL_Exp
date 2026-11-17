@@ -1,0 +1,109 @@
+{
+  "status": "passed",
+  "subplot_count": 12,
+  "sharey": false,
+  "all_seed_values_and_sd_bands_within_limits": true,
+  "source_data_unchanged": true,
+  "sources_sha256": {
+    "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_curves.csv": "2d5d6c9bf1cad7a5de270992db8586eca7c2b7f35e9b6a213299fcfa0d0aff98",
+    "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/training_trends.csv": "d32bb68872af3aa12a42932e8e1151ce51bff4aa7388f065e4f927da5a476130"
+  },
+  "axis_ranges": [
+    {
+      "event": "crash_2020",
+      "group": "R",
+      "data_min": -10.899448226156544,
+      "data_max": -7.020261469616333,
+      "y_lower": -11.209783166679761,
+      "y_upper": -6.709926529093116
+    },
+    {
+      "event": "crash_2020",
+      "group": "H",
+      "data_min": -11.669768880551825,
+      "data_max": -6.514507067752873,
+      "y_lower": -12.08218982557574,
+      "y_upper": -6.102086122728957
+    },
+    {
+      "event": "crash_2020",
+      "group": "C",
+      "data_min": -20.50856907025159,
+      "data_max": -13.328936103507155,
+      "y_lower": -21.082939707591144,
+      "y_upper": -12.7545654661676
+    },
+    {
+      "event": "crash_2020",
+      "group": "D",
+      "data_min": -20.77680146723217,
+      "data_max": -12.977894091276667,
+      "y_lower": -21.40071405730861,
+      "y_upper": -12.353981501200227
+    },
+    {
+      "event": "rebound_2020",
+      "group": "R",
+      "data_min": -11.870711373618317,
+      "data_max": -6.944808483772406,
+      "y_lower": -12.26478360480599,
+      "y_upper": -6.550736252584733
+    },
+    {
+      "event": "rebound_2020",
+      "group": "H",
+      "data_min": -11.725551780065675,
+      "data_max": -6.273899452521578,
+      "y_lower": -12.161683966269203,
+      "y_upper": -5.83776726631805
+    },
+    {
+      "event": "rebound_2020",
+      "group": "C",
+      "data_min": -3.6495483390679,
+      "data_max": 1.867662964379776,
+      "y_lower": -4.090925243343714,
+      "y_upper": 2.30903986865559
+    },
+    {
+      "event": "rebound_2020",
+      "group": "D",
+      "data_min": -4.223674964381113,
+      "data_max": 1.860187679773828,
+      "y_lower": -4.7103839759135075,
+      "y_upper": 2.346896691306223
+    },
+    {
+      "event": "bear_2022",
+      "group": "R",
+      "data_min": -11.360753502925188,
+      "data_max": -6.821776668329064,
+      "y_lower": -11.723871649692878,
+      "y_upper": -6.458658521561374
+    },
+    {
+      "event": "bear_2022",
+      "group": "H",
+      "data_min": -11.62811141259388,
+      "data_max": -6.262280130164891,
+      "y_lower": -12.057377915188198,
+      "y_upper": -5.833013627570572
+    },
+    {
+      "event": "bear_2022",
+      "group": "C",
+      "data_min": -14.27816557913484,
+      "data_max": -9.284085054988523,
+      "y_lower": -14.677692021066544,
+      "y_upper": -8.884558613056818
+    },
+    {
+      "event": "bear_2022",
+      "group": "D",
+      "data_min": -15.623224584588655,
+      "data_max": -9.340456094140055,
+      "y_lower": -16.125846063824543,
+      "y_upper": -8.837834614904168
+    }
+  ]
+}

@@ -1,0 +1,695 @@
+{
+  "captured_utc": "2026-11-17T08:11:28.509188+00:00",
+  "repository_head_before_capture": "bf5274d2582ec9539c0e55e1ff32b67d7baf2799",
+  "notion_report": "https://app.notion.com/p/41ace2558eff81458aa1f36ad447a5f2",
+  "notion_snapshot_image_count": 8,
+  "available_current_figures": 10,
+  "external_roots": {
+    "lambda_0p1": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/run_20261114",
+    "lambda_0p2": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p2",
+    "lambda_0p5": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5",
+    "lambda_1p0": "/mnt/sda/cwei1213/timediff_finrl/lambda_extension_20261116/lambda_1p0"
+  },
+  "ppo_roots": {
+    "steps1_3_20261115": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115",
+    "random_k_20261116": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116",
+    "e0_10seeds_val2018_2019_20261116": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116"
+  },
+  "large_artifact_policy": "Generated npy/npz arrays and PPO model ZIPs stay at the original local roots. Their run manifests, bank manifests and checkpoint SHA-256 inventories are tracked here. Four small TimeDiff model.pt files are included in Git.",
+  "copied_files": [
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/D_calibration_candidates.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/D_calibration_candidates.csv",
+      "size_bytes": 1181,
+      "sha256": "8462e70079b600e3d6c6f4380499c6de0f418b70351cae01d3d7b1c03fe623cc"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/D_calibration_evidence.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/D_calibration_evidence.json",
+      "size_bytes": 15190,
+      "sha256": "0cf3a85f460d5b9c3a2fa4d47d24df5194a9e7c368b137456e2eb62443581125"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/D_parameters_locked.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/D_parameters_locked.json",
+      "size_bytes": 989,
+      "sha256": "06cc7238ae90535fdeec89d276b0ee1b3fde7f415a8880e2ae4db0ad51fb38b7"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/README.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/README.md",
+      "size_bytes": 698,
+      "sha256": "485b48c627c27cc08b56c82e87cb9a4c238b454b47b1f549cc175fd1bf742b8b"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/REPORT.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/REPORT.md",
+      "size_bytes": 9843,
+      "sha256": "1e2656cc8fd5c96dcffdabbb60ee03d1a0ac36c4d3e7cc7682654d031b5321ac"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/audit.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/audit.json",
+      "size_bytes": 2933,
+      "sha256": "18ce8a64f6faca561557b946924a30eee5d9cd28b1a95e8d94fd3a8d2aa4b2ae"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/baseline_daily.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/baseline_daily.csv",
+      "size_bytes": 85696,
+      "sha256": "e131edf9504519c8f28d5b55eb0712b5a91575ff82b0d23a946e25192f4e1dd4"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/baselines.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/baselines.csv",
+      "size_bytes": 1005,
+      "sha256": "cd3a8d7749f534ec2c74cfb9d4a3bd8a1f6e48dd277bc2c692c209399ac1f7ab"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/charts.pdf",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/charts.pdf",
+      "size_bytes": 117424,
+      "sha256": "cb620e1bb9303cd9a96d8b2aa8366a5a057356b9355dd21d3ca0fab4486141a4"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/checkpoint_inventory.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/checkpoint_inventory.json",
+      "size_bytes": 781763,
+      "sha256": "39789c731e52ff9850299cfbadd882d863de7a88c47594820ca4ddbcec70bbb7"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/finalizer_source_snapshot.py",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/finalizer_source_snapshot.py",
+      "size_bytes": 28237,
+      "sha256": "fbe8a4845f69625402a2309fd9da99a590954e425fcda6c5b12eacb339d32044"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/independent_verification.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/independent_verification.json",
+      "size_bytes": 517,
+      "sha256": "f9a492cb17f8bf41214ea0e480be356cc82d72d197b96f78e783748d38ab69c8"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/learning_curves.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/learning_curves.csv",
+      "size_bytes": 534639,
+      "sha256": "0d17692bd995768f9124f3b2675a969789ba51bc327c7de42061b55645d88ae2"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/main_job_summary.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/main_job_summary.csv",
+      "size_bytes": 16000,
+      "sha256": "ad78298eddb26d0034c96216889b7b320be1afd41eef2573c3d7036f34cb3a89"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/main_jobs.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/main_jobs.json",
+      "size_bytes": 13003,
+      "sha256": "e5b31c154bf933e79284a16ad386ec4708a2167b8c560d6032ff40244ae62735"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/paired_comparisons.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/paired_comparisons.csv",
+      "size_bytes": 3633,
+      "sha256": "9885eec4dddf3ef5ff8e4ce95873ec8974969a8353c1813ca5673b33666d812c"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/plan.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/plan.json",
+      "size_bytes": 1857,
+      "sha256": "7ffd246e0950e56ff83d7b25c12cc8ff4989d893b33a9677f709850e86746054"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/pretraining_estimate.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/pretraining_estimate.json",
+      "size_bytes": 885,
+      "sha256": "5b46ec7c2654a8847525ea04efe679ab83480b9ce60460e32c81ba877288a3c4"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/selected_checkpoints.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/selected_checkpoints.csv",
+      "size_bytes": 30056,
+      "sha256": "5dabd4a36c70b093285b37ab35ccacb27b300ea0436945366ec1949d2ffd9d0e"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/source_snapshot.py",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/source_snapshot.py",
+      "size_bytes": 28228,
+      "sha256": "d8b1476c17c2b7fa8be997a08ddd7d42f1c81a344901a2c1af85eca6562755b6"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/test_behavior.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/test_behavior.csv",
+      "size_bytes": 26499,
+      "sha256": "81dcb2c83015c76ed57185b0b6d1d51b65252dbb24140829da0280eff7895be3"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/test_daily_trades.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/test_daily_trades.csv",
+      "size_bytes": 5793975,
+      "sha256": "04b76522f7f0da6ba6c776110203f4b5543ceca2a3bf69b768da5aa82ce76b64"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/test_per_seed.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/test_per_seed.csv",
+      "size_bytes": 55701,
+      "sha256": "60df36533c241780a8e861283f169eb3358ca8cfe91812266fce0c1b06b9d3e3"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/test_selection_locked.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/test_selection_locked.json",
+      "size_bytes": 118100,
+      "sha256": "e83904781b1729ce6d53c5e81d1c262d090e6bce90f700df44835458c134782c"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/test_summary.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/test_summary.csv",
+      "size_bytes": 4671,
+      "sha256": "e9d606d5bc5a7d4a871f33838757aca618e01ba96e5ad5d308aea29944594d13"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/training_complete.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/training_complete.json",
+      "size_bytes": 102,
+      "sha256": "acf867faca01edae9310c394a07a69cf3431e69d07cac72f3a76239a40cdc52c"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/banks/manifest.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/banks/manifest.json",
+      "size_bytes": 570238,
+      "sha256": "541584198118a7fd7541a09fddf527c4495af3255d574b35c8c4405069d1e738"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/integration_smoke/audit.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/integration_smoke/audit.json",
+      "size_bytes": 454,
+      "sha256": "615b02ab46b0835dab93d4338cf439779e11d8ba945bcaebdf8b57be9949736a"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/D_calibration_candidates.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/D_calibration_candidates.csv",
+      "size_bytes": 2301,
+      "sha256": "009cccb1f825a28c8afd476aabea25cfbf0a4dc6c16b8b8673c45dc3a37b6aa0"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/D_calibration_evidence.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/D_calibration_evidence.json",
+      "size_bytes": 16146,
+      "sha256": "ffa862b47d416ba23380a9f8d095ff847be196fa43195a2ddd616b31c6f27675"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/D_selected_parameters.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/D_selected_parameters.json",
+      "size_bytes": 871,
+      "sha256": "22e473e61f6904f77d961556dfb289a3f1cd46b8b22a9d6363dc8ec10a73b22d"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/README.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/README.md",
+      "size_bytes": 1885,
+      "sha256": "0bd922a9188039f17bbb0fd482c840c67e84df86a34875d42b6a690c5a63e221"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/REPORT.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/REPORT.md",
+      "size_bytes": 7966,
+      "sha256": "6baf21db974d70db9b83d2a131f6dd0109544d7c0bde335b6a16a291ab49ac38"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/adaptive_D_vs_C.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/adaptive_D_vs_C.csv",
+      "size_bytes": 1225,
+      "sha256": "e1bc95c836307d2d8210a70b6efb91c19168795a858917ff98145386a2150f1c"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/best_checkpoint_D_vs_C.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/best_checkpoint_D_vs_C.csv",
+      "size_bytes": 595,
+      "sha256": "4152d50f1af4b7ad2b7c714eea01c6a7e22c2e557483b4c7abb91b632804cc86"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/job_summary.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/job_summary.csv",
+      "size_bytes": 6824,
+      "sha256": "e5dcbd2881dcd16d8baec4439da789774c3a37e250859629627ff376e8ccf139"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/paired_group_checkpoints.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/paired_group_checkpoints.csv",
+      "size_bytes": 4850,
+      "sha256": "d75c69be6f2f604bbdf4b8a8b2385088a9fd79c611417854f1be9a28974ebbf6"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/plan.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/plan.json",
+      "size_bytes": 645,
+      "sha256": "84ea8acc62e5881c5c77d68a7a7af257cdd46095a0d4800b889ba0644d1c5e56"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/banks/manifest.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/banks/manifest.json",
+      "size_bytes": 9148,
+      "sha256": "9baa34688a3cdcea367b4dbc4ccda91f5ae046d6f3b2ea318b9fbdf2e37dcec6"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/reward_curves_20261115/REPORT.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/reward_curves_20261115/REPORT.md",
+      "size_bytes": 6952,
+      "sha256": "349b06161a6b78863f00247395f6c41ecc99b1f582b8cf9d848684257b0ca8ee"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/reward_curves_20261115/evaluation_manifest.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/reward_curves_20261115/evaluation_manifest.json",
+      "size_bytes": 235618,
+      "sha256": "d510f3b50e2cbe5bf1cf452e4e8f093b9a81a3da17149734b43a80073554b14c"
+    },
+    {
+      "tracked_path": "development/steps1_3_20261115/reward_curves_20261115/audit.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/steps1_3_20261115/reward_curves_20261115/audit.json",
+      "size_bytes": 2371,
+      "sha256": "3076915a28ff8b71611566e0bf1453bfab9e545d07495de5b8c94ac30205f452"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/D_calibration_candidates.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/D_calibration_candidates.csv",
+      "size_bytes": 2302,
+      "sha256": "a5238f4386bda3bfd9b5d0bc01ad0fa657c746f9489df74636a1d6b8b202d97e"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/D_calibration_evidence.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/D_calibration_evidence.json",
+      "size_bytes": 15257,
+      "sha256": "332e35f41ae80ce63a2f7e6f96ac22a1ab3556fe054fd3df729f80c573906ee6"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/D_selected_parameters.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/D_selected_parameters.json",
+      "size_bytes": 1010,
+      "sha256": "56e7dd86487836df13c58f3bb5aee9a49ce7d8ff9e6cdbabcdd26a2b89cab8a4"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/README.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/README.md",
+      "size_bytes": 564,
+      "sha256": "52c8451d99b625e33aecb00c953bec0ca1c1a8ca079b773f8c6cce29a5e71eaa"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/REPORT.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/REPORT.md",
+      "size_bytes": 6762,
+      "sha256": "a39145c483589cccad287aa2d53d689a4c9079f5cfdbef8889c86b10fa06c46c"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/audit.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/audit.json",
+      "size_bytes": 2847,
+      "sha256": "29981255eee4d4961b3bf4b8d7750b7ed952b132bcfd56aa4b9e894452b1d478"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/baselines.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/baselines.csv",
+      "size_bytes": 195,
+      "sha256": "57c918f74562e2df65cdec183779bb2a10e2a44a523b9c9aa7be554b50c72ce1"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/checkpoint_inventory.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/checkpoint_inventory.json",
+      "size_bytes": 159015,
+      "sha256": "8e70620bf63c2dc55f3df0742754a77350f31e2c2151634f0685bc8727cf1b7d"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/job_summary.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/job_summary.csv",
+      "size_bytes": 8358,
+      "sha256": "cb2389fc6f5b34f8ea0c0981d36769e4e631f7f027b18322f1667678170f9307"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/legacy_k0_common_evaluation.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/legacy_k0_common_evaluation.csv",
+      "size_bytes": 4171,
+      "sha256": "a18cedd3ad4d42b06152ed6cda3c48fd23105f75273aa2b8f8e489d7c21cdda3"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/plan.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/plan.json",
+      "size_bytes": 1367,
+      "sha256": "d4852c76e8730be9e1f9da1a425023bd997af06f41962bb01514d085c233daab"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/pretraining_estimate.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/pretraining_estimate.json",
+      "size_bytes": 732,
+      "sha256": "8f4f917d518809c99a73bbe02b9fbbffd05019ebf74ebff7dd13cc6edd31e4c0"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/reward_curves.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/reward_curves.csv",
+      "size_bytes": 589942,
+      "sha256": "c892d70c80e5eadf300f461d825a8c02204dca88c35528410e1791234ae160f9"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/rollout_rewards.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/rollout_rewards.csv",
+      "size_bytes": 323113,
+      "sha256": "50955a8c0fa23a0f0c25c302d4a97a0e4960b8c9686191b0c5a64bb86f813942"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/training_complete.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/training_complete.json",
+      "size_bytes": 1147,
+      "sha256": "ea2d475f8a5f50def2941f56911d1cd7bb596224b482b999e99b2c46803c8aaa"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/banks/manifest.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/banks/manifest.json",
+      "size_bytes": 692666,
+      "sha256": "df4f86f7b420a9717ac9683e828d391ad473f4852bbf24d2192b9277f7aebe47"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/real_event_backtest_20261116/REPORT.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/real_event_backtest_20261116/REPORT.md",
+      "size_bytes": 11923,
+      "sha256": "a9e9e74f8af589929605058ac768ea3411014c723e0947b1fa4fb618cb3e4171"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/real_event_backtest_20261116/performance.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/real_event_backtest_20261116/performance.csv",
+      "size_bytes": 95491,
+      "sha256": "9aa9b515f3510559bcefe3839e9eabe53332e7164f98bb1a67a8d84f118dc9b7"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/real_event_backtest_20261116/behavior.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/real_event_backtest_20261116/behavior.csv",
+      "size_bytes": 25505,
+      "sha256": "933d80fa850bc193bd6b9bba96c62e9ca76d9f40e72a7032004832b117bf639e"
+    },
+    {
+      "tracked_path": "development/random_k_20261116/real_event_backtest_20261116/audit.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/random_k_20261116/real_event_backtest_20261116/audit.json",
+      "size_bytes": 2173,
+      "sha256": "f69582e5f29246a2c6241aa4d41753796ac3e68187a0e676a0137d084c76c248"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_curves.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_curves.csv",
+      "size_bytes": 241920,
+      "sha256": "2d5d6c9bf1cad7a5de270992db8586eca7c2b7f35e9b6a213299fcfa0d0aff98"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_rewards_by_source.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_rewards_by_source.csv",
+      "size_bytes": 691340,
+      "sha256": "b57a6fb3322d3e6237deb7465ea12ac71a6dbd523a9b41559c4eb963b4785880"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_source_trends.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_source_trends.csv",
+      "size_bytes": 1725,
+      "sha256": "ddc234b5e1092ffae53c8d6e5eb800d00dabf6d263cb4cf4773c66d29607eec0"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_source_trends_per_seed.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_source_trends_per_seed.csv",
+      "size_bytes": 16714,
+      "sha256": "c4d90649927873d0df9041402f89ae1dd58a0e584e7e89c10222c1cde8a98847"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/baseline_wealth.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/baseline_wealth.csv",
+      "size_bytes": 6164,
+      "sha256": "14a578581560962cdbd895277dd6ef94885aaaf2aaa7fb531b3fa8010e1bc8c4"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/conditions.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/conditions.csv",
+      "size_bytes": 377,
+      "sha256": "a7f48eef2852cc8bf281e49d651d359aa022d2c4709fdcfdf52d28e52af2b87f"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure5_exposure_mean_sd.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure5_exposure_mean_sd.csv",
+      "size_bytes": 42009,
+      "sha256": "462d78f9374bfdd8b5cfe56b0580ecfefed7a1aa4d64451c3ad285549f2bd8b7"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure5_exposure_per_seed.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure5_exposure_per_seed.csv",
+      "size_bytes": 858808,
+      "sha256": "ce399e3ff17628747fab54adf5404ed1c45090dde587ec3eb5124ccc9034530f"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure5_exposure_period_means.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure5_exposure_period_means.csv",
+      "size_bytes": 615,
+      "sha256": "93af80ca2cfdb3b28e2a2b0326fda1d9b828754256352961c8677a2d485e4444"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/fixed_eval_changes.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/fixed_eval_changes.csv",
+      "size_bytes": 673,
+      "sha256": "0895021996784fd17585f8852d23e5bb0ac1783fd2f0fb328661083acb3d82af"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/fixed_evaluation_curves.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/fixed_evaluation_curves.csv",
+      "size_bytes": 532765,
+      "sha256": "c633d084b17a4937d48f5f881ef839e5c00ab1e3dcf947d6b4c0a80f28f760e7"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/generation_candidates.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/generation_candidates.csv",
+      "size_bytes": 2075226,
+      "sha256": "8dc4221887dc347f2137498c882813c54d08be349e2dabb8efb1f61f3a0231ca"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/generation_quality.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/generation_quality.csv",
+      "size_bytes": 2440,
+      "sha256": "299d002ed99cf3df67138a93ca2cc7d47ac665ea16fd62dbad32644da8bd30c7"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/initialization_selected.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/initialization_selected.csv",
+      "size_bytes": 89,
+      "sha256": "af072a346939004d709ace57f0ef88cfc5caba1278b39d70c5661cc33941d6b3"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/paired_effects.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/paired_effects.csv",
+      "size_bytes": 3346,
+      "sha256": "eeca2f1c36583b71f3acb93d4057d0f56973212c9b3b14d166506bb1543913b8"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/real_test_wealth.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/real_test_wealth.csv",
+      "size_bytes": 375600,
+      "sha256": "69fd660a9281fa67f6fc5ac11be866c323107c96911bd695758a80160fc12d55"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/supplementary_generation_candidates.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/supplementary_generation_candidates.csv",
+      "size_bytes": 2712728,
+      "sha256": "402ead731c9dca24ce9310b3a09eb4002426f83faadad699a75d4d470e04ec7c"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/test_returns.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/test_returns.csv",
+      "size_bytes": 3130,
+      "sha256": "2521653e1185b211a13244f0112a2076a632c0cda2c2e9673fbfc7e5f19ddd5b"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/training_trends.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/training_trends.csv",
+      "size_bytes": 1533,
+      "sha256": "d32bb68872af3aa12a42932e8e1151ce51bff4aa7388f065e4f927da5a476130"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/training_trends_per_seed.csv",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/training_trends_per_seed.csv",
+      "size_bytes": 11825,
+      "sha256": "e8657fbcb722fa3c966e60e6a7f23a950eefaa2156cd6bcce73782a66b94c81f"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/build_analysis.py",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/build_analysis.py",
+      "size_bytes": 16350,
+      "sha256": "8945e2ab2a5dc537a8015d94964bee248a370e1b65c79924bc3750b2b9e7684b"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/build_report.py",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/build_report.py",
+      "size_bytes": 25528,
+      "sha256": "8e3e7b39770f59abd18157e0cf74b99fa8018caad5d485c62315139bb486836b"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/plot_actual_training_reward.py",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/plot_actual_training_reward.py",
+      "size_bytes": 4342,
+      "sha256": "3638d4e0411a719ed6e9820ba27aa4ca2753fe657f36533a77964093cfe44452"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/plot_real_test_exposure.py",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/plot_real_test_exposure.py",
+      "size_bytes": 5796,
+      "sha256": "6a93d2517f2b066bff98b55ab83911820fd3fa23d3c95b07a0a59c0b9317c42d"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/plot_supplementary_lambdas.py",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/plot_supplementary_lambdas.py",
+      "size_bytes": 2945,
+      "sha256": "bad196c26f75fef9e3dc9cf39df7e7e68ef51afe4a0b51d47d4528f69ca445db"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/extract_training_rewards_by_source.py",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/extract_training_rewards_by_source.py",
+      "size_bytes": 7216,
+      "sha256": "e2f85e3205906e2c0d4842ce17b65cd13b60dd0e93535a569317c06d0730104b"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/plot_training_rewards_by_source.py",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/plot_training_rewards_by_source.py",
+      "size_bytes": 4408,
+      "sha256": "a3cbb7594e09fab37cc2910cbc94f1b9bbfb0314ae598821854f71835202009c"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/01_generation_scatter.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/01_generation_scatter.png",
+      "size_bytes": 564219,
+      "sha256": "5fc70c32c7dea5406e5093fdbe31927f16c354978f4327d6219893eb179fa37b"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/02_actual_training_reward_independent_y.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/02_actual_training_reward_independent_y.png",
+      "size_bytes": 1743081,
+      "sha256": "3dca4065cbdf6da2c921152f73309f59c4f6b0553fd96a683f94b47634dfac07"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/03_fixed_train_and_real_val.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/03_fixed_train_and_real_val.png",
+      "size_bytes": 410043,
+      "sha256": "e24d6ac5957f90475bbfd7a103891d9fca9f137e8245edb45b51e1818d784aa7"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/04_paired_test_effects.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/04_paired_test_effects.png",
+      "size_bytes": 176251,
+      "sha256": "d11a19111d6dad105d8e071d69ca2b06e67a32e8c6b0acf568779858690f139b"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/05_real_test_wealth.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/05_real_test_wealth.png",
+      "size_bytes": 829670,
+      "sha256": "bbb2923874763dd9b213af369a5595a5de785411f78731a329f198c58d1c6d4a"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/06_lambda_0p1_generation_scatter.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/06_lambda_0p1_generation_scatter.png",
+      "size_bytes": 605355,
+      "sha256": "272298dde6f3d4c11d43cee0f9d8851dc5b8ed9dfa0bd630f1dacebd50b16215"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/07_lambda_1p0_generation_scatter.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/07_lambda_1p0_generation_scatter.png",
+      "size_bytes": 388832,
+      "sha256": "e51b9c3eaf53194589a090cd2ecb024229f1dad31d9f231095dd576cce3bc25d"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/08_real_test_exposure.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/08_real_test_exposure.png",
+      "size_bytes": 432478,
+      "sha256": "5638c77b644342d6bd0e0954c7ba08fe67cb7326c481735f8863c79aefcfedc6"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/09_actual_training_synthetic_reward.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/09_actual_training_synthetic_reward.png",
+      "size_bytes": 1482952,
+      "sha256": "746b3fceab9fcfc104d8d721dc2c431358deee260e57581e5152ef9d6883d071"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/10_actual_training_real_reward.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/10_actual_training_real_reward.png",
+      "size_bytes": 1768045,
+      "sha256": "cf503272269e603149cc3601fba8a0879bed5467f64837574e4a5d31f08c1e17"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/analysis_summary.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/analysis_summary.json",
+      "size_bytes": 396,
+      "sha256": "7dd7bf43675684b58ab4355cd6ab46d327cf84e6f1199c3b22e0f401bba835bf"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_source_audit.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_source_audit.json",
+      "size_bytes": 1173,
+      "sha256": "bfff91c3b07294ce6295d8fd7234bc99d7acd27cf92a9641641f46dba16b46ff"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_source_inputs.sha256.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/actual_training_source_inputs.sha256.json",
+      "size_bytes": 738563,
+      "sha256": "0e1171dbed78b21f8fbedb7c46f8b5abe4ec013e597c6c47f87da0e470329b3e"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure2_independent_y_audit.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure2_independent_y_audit.json",
+      "size_bytes": 3122,
+      "sha256": "56018f34612badaefe0fb680c98705f2b76634c293ed56c6ee9581b8971d9b78"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure5_exposure_audit.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/figure5_exposure_audit.json",
+      "size_bytes": 852,
+      "sha256": "dc62efc91de65c292014be1b36c8c9610602f6cb211c40b020d50ecdf1d1198e"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/source_sha256.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/source_sha256.json",
+      "size_bytes": 49372,
+      "sha256": "5de5f392b8aee3e795464837ac4c9e20fdc8bc482a49594fe46071921a24c22b"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/supplementary_sources.sha256.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/supplementary_sources.sha256.json",
+      "size_bytes": 1181,
+      "sha256": "11d41924b692daa49cdc1c56e86c7d924a57f706ab5ae4a1caf2a16ca0ca458a"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/training_source_plot_audit.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/training_source_plot_audit.json",
+      "size_bytes": 3749,
+      "sha256": "d7512b973560410e339d9508b7adb3c267e401218fd5e410e5207522417c4eee"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/validation.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/validation.json",
+      "size_bytes": 2163,
+      "sha256": "d1f242c4ccede256ff103a5c92dede6006a937f5553fe47d6a3e33c16752a240"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/notion_page.json",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/notion_page.json",
+      "size_bytes": 222,
+      "sha256": "dda27466b7d338606be7046b308199a68448a5afb636d85b09ef374f0dc76132"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/02_actual_training_reward.png",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/02_actual_training_reward.png",
+      "size_bytes": 1743081,
+      "sha256": "3dca4065cbdf6da2c921152f73309f59c4f6b0553fd96a683f94b47634dfac07"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/NOTION_SNAPSHOT.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/version_control_20261117/notion_report_native.md",
+      "size_bytes": 24963,
+      "sha256": "cd236d29fbad7f0c795cc22819061260cda35d71a0e47dbae978c6a4f794df3e"
+    },
+    {
+      "tracked_path": "e0_10seeds_val2018_2019_20261116/notion_report_20261116/REPORT.local_draft.md",
+      "original_path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/notion_report_20261116/REPORT.md",
+      "size_bytes": 24537,
+      "sha256": "24421bcc5d3ca84d8c3a0f6f09afe2704ff4cd288c24065f38edcc748f1a4ebf"
+    }
+  ],
+  "timediff_repository_commit": "37eadd6c961fcb37c6371b7adc1a9ba635eabcde",
+  "timediff_record": "experiments/scenario_pilot_20261117"
+}

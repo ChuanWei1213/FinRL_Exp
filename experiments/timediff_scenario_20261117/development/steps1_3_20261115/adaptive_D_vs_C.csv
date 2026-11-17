@@ -1,0 +1,7 @@
+case,C_final_real2018_logreward,D_final_real2018_logreward,D_minus_C_final_mean,D_minus_C_mean_over_updates29_32,n_real_validation_episodes,switch_reasons
+crash_2020_E0_f0,0.7058791000362277,0.24537653555124164,-0.4605025644849861,-0.42345682676053187,9,"{'continue': 16, 'plateau': 8, 'maximum_repeats': 5, 'validation_regression': 3}"
+crash_2020_E1_f0,0.3266086282507097,0.41925641174075107,0.09264778349004137,-0.03731226816121241,9,"{'continue': 16, 'plateau': 9, 'maximum_repeats': 7}"
+rebound_2020_E0_f0,-0.6022032463866256,0.49155915146438833,1.0937623978510136,0.9743300474036977,9,"{'continue': 16, 'plateau': 10, 'maximum_repeats': 5, 'validation_regression': 1}"
+rebound_2020_E1_f0,0.44364487500863736,-0.6900933260861106,-1.1337382010947479,-0.8422030945013121,9,"{'continue': 16, 'plateau': 9, 'maximum_repeats': 4, 'validation_regression': 3}"
+bear_2022_E0_f0,0.07775557279887577,0.04973950765968419,-0.028016065139191488,-0.035383887992668304,9,"{'continue': 16, 'plateau': 9, 'maximum_repeats': 5, 'validation_regression': 2}"
+bear_2022_E1_f0,0.10504507320769976,-0.3941525364912701,-0.49919760969896987,-0.6336161850828574,9,"{'continue': 16, 'plateau': 9, 'maximum_repeats': 6, 'validation_regression': 1}"

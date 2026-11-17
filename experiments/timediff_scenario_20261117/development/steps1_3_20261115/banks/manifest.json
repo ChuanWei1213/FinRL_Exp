@@ -1,0 +1,182 @@
+{
+  "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation",
+  "source_manifest_sha256": "1e7bf889da05d3456750a21c4f2569f448fc0db3bb464abf050d4b29613fea7f",
+  "checkpoint_sha256": "5a8fa1b9f24959504ee5e30b12c06a6ad3e80f4da1d71e82701ca74d9a375ca7",
+  "data_sha256": "7c52d084e8bfb689d5138c97429d0b63c0707120ab9f32d330d6adb1cfcfbedc",
+  "observation_keys": [
+    "state",
+    "last_action"
+  ],
+  "obs_days": 50,
+  "episode_days": 21,
+  "k_max": 0,
+  "commission": 0.0025,
+  "reward": "100*log(net_wealth_t/net_wealth_previous)",
+  "initial_weights": "all cash; first purchase charged",
+  "normalization": "each observed HLC window divided by that asset last known close; no fitted RL scaler",
+  "source_note": "only train/validation paths read; no 2019 paths or real event evaluation",
+  "banks": {
+    "real_train": {
+      "n": 3202,
+      "sha256": "cb2209208f1f2a1d413262b08d6e91f43e7f0538ca608e99baf9cf4f170da13c",
+      "history_start": "2005-01-03",
+      "first_target": "2005-03-16",
+      "last_target": "2017-12-29",
+      "target_stride": 1,
+      "high_roundoff_snaps": 1491,
+      "low_roundoff_snaps": 1335,
+      "relative_tolerance": 1e-09
+    },
+    "real_validation": {
+      "n": 9,
+      "sha256": "b3e7a0183d87a4ffcc77d4be4f90ded31cd083c478b0d09e94693c6f92c3c753",
+      "history_start": "2018-01-02",
+      "first_target": "2018-03-15",
+      "last_target": "2018-12-12",
+      "target_stride": 21,
+      "high_roundoff_snaps": 0,
+      "low_roundoff_snaps": 0,
+      "relative_tolerance": 1e-09
+    },
+    "crash_2020_E0_f0_train": {
+      "n": 800,
+      "sha256": "cb8f731f41de513e36f6dcbbab6973b4034d8eae53685eace5a9cdcab7407fe1",
+      "source_paths_sha256": "9e235f662991bc7a1fd9eba6a596e8f40ff93c800b5ede04a5e658d8efa02396",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/crash_2020_E0_f0/train/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 274,
+      "low_roundoff_snaps": 244,
+      "relative_tolerance": 1e-09
+    },
+    "crash_2020_E0_f0_validation": {
+      "n": 200,
+      "sha256": "ee1a95c216fffd0c2ed94c8bcf8cf740bee43cd73240ca3963bbcb8f23bef0cd",
+      "source_paths_sha256": "231c4d4d83c0cfed0b2280d87e3fb16e6c7523b125c6e2915ba96547885fe37a",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/crash_2020_E0_f0/validation/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 0,
+      "low_roundoff_snaps": 0,
+      "relative_tolerance": 1e-09
+    },
+    "crash_2020_E1_f0_train": {
+      "n": 800,
+      "sha256": "6aef26d5f3ee305263ee6e94ce4cdce1530deec7c7e08daab4f9060d2deb5394",
+      "source_paths_sha256": "fa0e6a495650dbcf3885e5a7a3d773cd07b84b26a192d74b4e6f4a5de1f27434",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/crash_2020_E1_f0/train/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 272,
+      "low_roundoff_snaps": 234,
+      "relative_tolerance": 1e-09
+    },
+    "crash_2020_E1_f0_validation": {
+      "n": 200,
+      "sha256": "028cd474ee1596f84fa8cf7e9672375ad520d457a7519f25d0308efd730d3490",
+      "source_paths_sha256": "f74e399144c380ce3211fc3f37df2627bab186e5c5f401e36ac8b0fe350e85c4",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/crash_2020_E1_f0/validation/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 0,
+      "low_roundoff_snaps": 0,
+      "relative_tolerance": 1e-09
+    },
+    "rebound_2020_E0_f0_train": {
+      "n": 800,
+      "sha256": "27f602c6fc1b0e72a9aaa05396f80c5f12bba4cd5cfa6626c504b6f8c3763daa",
+      "source_paths_sha256": "64a5021dea932b383ffbccf551e748b52afb91349b8e1a3a356351c7c23ceb41",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/rebound_2020_E0_f0/train/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 278,
+      "low_roundoff_snaps": 245,
+      "relative_tolerance": 1e-09
+    },
+    "rebound_2020_E0_f0_validation": {
+      "n": 200,
+      "sha256": "90d58b136961a7feb5eb5f567ac9f281317850bb9b8ba6b388e25ff845589eb8",
+      "source_paths_sha256": "95c1dd4f5be21ce7e2b67d8e93282389a3bd652c8b72f219714f622e2f9ec9b1",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/rebound_2020_E0_f0/validation/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 0,
+      "low_roundoff_snaps": 0,
+      "relative_tolerance": 1e-09
+    },
+    "rebound_2020_E1_f0_train": {
+      "n": 800,
+      "sha256": "25c9976ac6f9bc2fc9b81af7c643b324d335d874dc0ce02617ffee995b01f6b7",
+      "source_paths_sha256": "701cbe4db48167b905f7857796681acdcdc858f4b298e938bc54b718492d7240",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/rebound_2020_E1_f0/train/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 258,
+      "low_roundoff_snaps": 246,
+      "relative_tolerance": 1e-09
+    },
+    "rebound_2020_E1_f0_validation": {
+      "n": 200,
+      "sha256": "9e8a21a16689bbde62d6dc9423bdfbc76bfa6ccf7799dec7acf1a9bb4ffb67d2",
+      "source_paths_sha256": "8d7ad86456199bdd0f23c47e675cfbf76f21f96e3d9fef53030253c19bca1ca0",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/rebound_2020_E1_f0/validation/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 0,
+      "low_roundoff_snaps": 0,
+      "relative_tolerance": 1e-09
+    },
+    "bear_2022_E0_f0_train": {
+      "n": 800,
+      "sha256": "41d54813f58d4073e0cd4a99221b5bea1fcdef1a0b38c9e2b91a1ab6936f9dde",
+      "source_paths_sha256": "190c61aedf8924f39310f4f4e241ab403cbed6c57607bc643c7b2721be3bef1a",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/bear_2022_E0_f0/train/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 278,
+      "low_roundoff_snaps": 231,
+      "relative_tolerance": 1e-09
+    },
+    "bear_2022_E0_f0_validation": {
+      "n": 200,
+      "sha256": "1b93b83b32481517f44cac02dfb38227d383f96be18dd51f7f79fabfb74aacb6",
+      "source_paths_sha256": "d09cf561d175c3e3c331a18c3f0a428573ee35480ec8a80752476166125d95f9",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/bear_2022_E0_f0/validation/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 0,
+      "low_roundoff_snaps": 0,
+      "relative_tolerance": 1e-09
+    },
+    "bear_2022_E1_f0_train": {
+      "n": 800,
+      "sha256": "fba22516d0c59baab1e749113a6312c021c336fd14f880be253e4a803cb1c4d5",
+      "source_paths_sha256": "4fc9e082b40afbbccd2c25fad904f43756bb93346d71eb010d9430c3d5f9a3f8",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/bear_2022_E1_f0/train/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 287,
+      "low_roundoff_snaps": 239,
+      "relative_tolerance": 1e-09
+    },
+    "bear_2022_E1_f0_validation": {
+      "n": 200,
+      "sha256": "a8b61622af9f902b1df6e22d6829f169ca385735e7dc4a52b4130009ae80c6f0",
+      "source_paths_sha256": "1f9bed2524b1e1528c552887e1a5a15f314626a12dfbce01bfaaaa58f089f343",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/bear_2022_E1_f0/validation/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 0,
+      "low_roundoff_snaps": 0,
+      "relative_tolerance": 1e-09
+    },
+    "H_historical_train": {
+      "n": 800,
+      "sha256": "f5647e43975dd36beaba412ff3e1d6120c23e8a3fd2ea2af559d55663e95d9fe",
+      "source_paths_sha256": "6a0a1c73b080700187229f6821cd5d16aa0e6aa4b241c32a5584593739f61c13",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/H_historical/train/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 255,
+      "low_roundoff_snaps": 228,
+      "relative_tolerance": 1e-09
+    },
+    "H_historical_validation": {
+      "n": 200,
+      "sha256": "b3ab5c5c91649c4ba337a031af61de52a5aaa232910993d8ed9a19f0da797d76",
+      "source_paths_sha256": "318a50fcf4b841f28ec9b92739f1c4b8f59b5d847c589b91a866a13e5361b082",
+      "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation/H_historical/validation/paths.npz",
+      "labels_in_observation": false,
+      "high_roundoff_snaps": 0,
+      "low_roundoff_snaps": 0,
+      "relative_tolerance": 1e-09
+    }
+  }
+}

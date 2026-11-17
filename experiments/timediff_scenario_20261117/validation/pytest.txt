@@ -1,0 +1,9 @@
+..................................                                       [100%]
+=============================== warnings summary ===============================
+unit_tests/experiments/test_timediff_scenario_pilot.py::test_gym_api_and_seeded_initial_parameters
+unit_tests/experiments/test_timediff_random_k.py::test_gym_api
+  /opt/anaconda3/envs/finrl_exp/lib/python3.10/site-packages/gymnasium/utils/env_checker.py:321: UserWarning: [33mWARN: A Box observation space maximum value is infinity. This is probably too high.[0m
+    logger.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+34 passed, 2 warnings in 10.89s

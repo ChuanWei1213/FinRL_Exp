@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "main_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "event_test_rows": 240,
+  "validation_unique_days": 503,
+  "validation_total_window_days": 504,
+  "validation_overlap_days": 1,
+  "training_bank_hashes_identical_to_previous": true,
+  "all_reported_means_std_and_paired_CIs_recomputed": true,
+  "max_CI_absolute_error_pp": 3.552713678800501e-15,
+  "artifact_hashes_and_source_snapshots_match": true,
+  "event_crosscheck_max_log_reward_error": 0.0
+}

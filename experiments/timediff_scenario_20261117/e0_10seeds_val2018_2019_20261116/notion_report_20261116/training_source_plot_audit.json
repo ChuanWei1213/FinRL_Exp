@@ -1,0 +1,160 @@
+{
+  "status": "passed",
+  "images": 2,
+  "real_subplots": 12,
+  "synthetic_subplots": 9,
+  "R_synthetic_not_applicable_panels": 3,
+  "sharey": false,
+  "source": "actual stochastic rollout episode rewards, reconstructed and audited from saved checkpoint buffers",
+  "all_seed_values_and_sd_bands_in_range": true,
+  "axis_ranges": [
+    {
+      "source": "synthetic",
+      "event": "crash_2020",
+      "group": "H",
+      "lower": -12.364996783419773,
+      "upper": -4.458395137202263
+    },
+    {
+      "source": "synthetic",
+      "event": "crash_2020",
+      "group": "C",
+      "lower": -30.400675286425297,
+      "upper": -18.673247434542166
+    },
+    {
+      "source": "synthetic",
+      "event": "crash_2020",
+      "group": "D",
+      "lower": -30.80911526748944,
+      "upper": -18.4034706657241
+    },
+    {
+      "source": "synthetic",
+      "event": "rebound_2020",
+      "group": "H",
+      "lower": -12.723177814773138,
+      "upper": -4.60406951476832
+    },
+    {
+      "source": "synthetic",
+      "event": "rebound_2020",
+      "group": "C",
+      "lower": 3.185901233570112,
+      "upper": 10.943901896060266
+    },
+    {
+      "source": "synthetic",
+      "event": "rebound_2020",
+      "group": "D",
+      "lower": 2.195856302548962,
+      "upper": 11.655782952158233
+    },
+    {
+      "source": "synthetic",
+      "event": "bear_2022",
+      "group": "H",
+      "lower": -12.955771400049631,
+      "upper": -4.327720665324407
+    },
+    {
+      "source": "synthetic",
+      "event": "bear_2022",
+      "group": "C",
+      "lower": -18.232313819526176,
+      "upper": -11.781415366693011
+    },
+    {
+      "source": "synthetic",
+      "event": "bear_2022",
+      "group": "D",
+      "lower": -18.537118385954738,
+      "upper": -11.560940141591159
+    },
+    {
+      "source": "real",
+      "event": "crash_2020",
+      "group": "R",
+      "lower": -11.209783166679761,
+      "upper": -6.709926529093116
+    },
+    {
+      "source": "real",
+      "event": "crash_2020",
+      "group": "H",
+      "lower": -12.22614572692454,
+      "upper": -6.189401327912259
+    },
+    {
+      "source": "real",
+      "event": "crash_2020",
+      "group": "C",
+      "lower": -12.204424986593132,
+      "upper": -6.310186332092876
+    },
+    {
+      "source": "real",
+      "event": "crash_2020",
+      "group": "D",
+      "lower": -14.959087733459691,
+      "upper": -4.730880568255464
+    },
+    {
+      "source": "real",
+      "event": "rebound_2020",
+      "group": "R",
+      "lower": -12.26478360480599,
+      "upper": -6.550736252584733
+    },
+    {
+      "source": "real",
+      "event": "rebound_2020",
+      "group": "H",
+      "lower": -13.081570528938032,
+      "upper": -5.71823652139872
+    },
+    {
+      "source": "real",
+      "event": "rebound_2020",
+      "group": "C",
+      "lower": -13.20158787657418,
+      "upper": -5.394562312200073
+    },
+    {
+      "source": "real",
+      "event": "rebound_2020",
+      "group": "D",
+      "lower": -16.180443027716873,
+      "upper": -3.5144058987270643
+    },
+    {
+      "source": "real",
+      "event": "bear_2022",
+      "group": "R",
+      "lower": -11.723871649692878,
+      "upper": -6.458658521561374
+    },
+    {
+      "source": "real",
+      "event": "bear_2022",
+      "group": "H",
+      "lower": -13.131597667247963,
+      "upper": -4.673781106912172
+    },
+    {
+      "source": "real",
+      "event": "bear_2022",
+      "group": "C",
+      "lower": -13.14027194884708,
+      "upper": -4.556678305324093
+    },
+    {
+      "source": "real",
+      "event": "bear_2022",
+      "group": "D",
+      "lower": -16.808785335670247,
+      "upper": -3.3370253840845554
+    }
+  ],
+  "source_csv_sha256": "b57a6fb3322d3e6237deb7465ea12ac71a6dbd523a9b41559c4eb963b4785880"
+}

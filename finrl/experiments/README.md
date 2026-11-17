@@ -283,3 +283,7 @@ plot_continuous_equity_curves(
 - `incomplete ticker grid` 或 duplicate row：同一天缺少 ticker，或 `(date, tic)` 重複。
 - 真實資料日期不足：real data 必須完整覆蓋每個 window 的 train、validation 與 test。
 - Continuous chain 不連續：選取的 windows 中間有缺口。只分析零散 windows 時，可使用 independent outputs；要產生 continuous 結果則選相鄰 windows 或直接跑全部 windows。
+
+## TimeDiff 情境實驗
+
+三個 E0 情境、TimeDiff λ=0.5、隨機插入 0–21 日與 PPO 10 seeds 的設定、結果、圖表及來源索引，見 [實驗紀錄](../../experiments/timediff_scenario_20261117/README.md)。主流程入口為 `python -m finrl.experiments.timediff_e0_multiseed`。

@@ -1,0 +1,2557 @@
+{
+  "created_utc": "2026-11-16T08:28:12.785055+00:00",
+  "main_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "cases": {
+    "crash_2020_E0_f0": {
+      "event": "crash_2020",
+      "setting": "E0",
+      "forecast_seed": 0,
+      "window_index": 0,
+      "nominal_event_start": "2020-02-13",
+      "nominal_event_end": "2020-03-16",
+      "nominal_event_days": 22,
+      "release_date": "2020-01-14",
+      "release_information": "after close; latest known prices include release date",
+      "condition_start": "2020-02-13",
+      "condition_end": "2020-03-13",
+      "condition_days": 21,
+      "actual_return": -0.1724445074299276,
+      "actual_volatility": 0.6811611316780575,
+      "minimum_return_width": 0.0021291113944017,
+      "minimum_volatility_width": 0.0806624298132369,
+      "return_lower": -0.1724445074299276,
+      "return_upper": -0.1724445074299276,
+      "volatility_lower": 0.6811611316780575,
+      "volatility_upper": 0.6811611316780575,
+      "predicted_return": -0.1724445074299276,
+      "predicted_volatility": 0.6811611316780575,
+      "return_absolute_error": 0.0,
+      "volatility_absolute_error": 0.0,
+      "return_relative_error_forecast_denominator": 0.0,
+      "volatility_relative_error_forecast_denominator": 0.0,
+      "return_direction_wrong": false,
+      "wait_lower": 21,
+      "wait_upper": 21,
+      "predicted_wait_days": 21,
+      "duration_lower": 22,
+      "duration_upper": 22,
+      "predicted_duration_days": 22,
+      "activation_start": "2020-02-13",
+      "activation_last_inclusive": "2020-03-16",
+      "activation_end_exclusive": "2020-03-17",
+      "first_update_date": "2020-03-16",
+      "allowed_buffer_start": "2020-02-06",
+      "allowed_buffer_end": "2020-03-30",
+      "timing_changes_condition_dates": false,
+      "oracle_experiment": true
+    },
+    "rebound_2020_E0_f0": {
+      "event": "rebound_2020",
+      "setting": "E0",
+      "forecast_seed": 0,
+      "window_index": 0,
+      "nominal_event_start": "2020-03-17",
+      "nominal_event_end": "2020-06-15",
+      "nominal_event_days": 63,
+      "release_date": "2020-02-14",
+      "release_information": "after close; latest known prices include release date",
+      "condition_start": "2020-03-17",
+      "condition_end": "2020-04-15",
+      "condition_days": 21,
+      "actual_return": 0.2299847902340902,
+      "actual_volatility": 0.5852960938644202,
+      "minimum_return_width": 0.0020116091180337,
+      "minimum_volatility_width": 0.1193770609978299,
+      "return_lower": 0.2299847902340902,
+      "return_upper": 0.2299847902340902,
+      "volatility_lower": 0.5852960938644202,
+      "volatility_upper": 0.5852960938644202,
+      "predicted_return": 0.2299847902340902,
+      "predicted_volatility": 0.5852960938644202,
+      "return_absolute_error": 0.0,
+      "volatility_absolute_error": 0.0,
+      "return_relative_error_forecast_denominator": 0.0,
+      "volatility_relative_error_forecast_denominator": 0.0,
+      "return_direction_wrong": false,
+      "wait_lower": 21,
+      "wait_upper": 21,
+      "predicted_wait_days": 21,
+      "duration_lower": 63,
+      "duration_upper": 63,
+      "predicted_duration_days": 63,
+      "activation_start": "2020-03-17",
+      "activation_last_inclusive": "2020-06-15",
+      "activation_end_exclusive": "2020-06-16",
+      "first_update_date": "2020-04-16",
+      "allowed_buffer_start": "2020-03-10",
+      "allowed_buffer_end": "2020-07-14",
+      "timing_changes_condition_dates": false,
+      "oracle_experiment": true
+    },
+    "bear_2022_E0_f0": {
+      "event": "bear_2022",
+      "setting": "E0",
+      "forecast_seed": 0,
+      "window_index": 0,
+      "nominal_event_start": "2021-12-30",
+      "nominal_event_end": "2022-09-30",
+      "nominal_event_days": 190,
+      "release_date": "2021-11-30",
+      "release_information": "after close; latest known prices include release date",
+      "condition_start": "2021-12-30",
+      "condition_end": "2022-01-28",
+      "condition_days": 21,
+      "actual_return": -0.061071529016647,
+      "actual_volatility": 0.1464139312267236,
+      "minimum_return_width": 0.0003988995116911,
+      "minimum_volatility_width": 0.0948955881928073,
+      "return_lower": -0.061071529016647,
+      "return_upper": -0.061071529016647,
+      "volatility_lower": 0.1464139312267236,
+      "volatility_upper": 0.1464139312267236,
+      "predicted_return": -0.061071529016647,
+      "predicted_volatility": 0.1464139312267236,
+      "return_absolute_error": 0.0,
+      "volatility_absolute_error": 0.0,
+      "return_relative_error_forecast_denominator": 0.0,
+      "volatility_relative_error_forecast_denominator": 0.0,
+      "return_direction_wrong": false,
+      "wait_lower": 21,
+      "wait_upper": 21,
+      "predicted_wait_days": 21,
+      "duration_lower": 190,
+      "duration_upper": 190,
+      "predicted_duration_days": 190,
+      "activation_start": "2021-12-30",
+      "activation_last_inclusive": "2022-09-30",
+      "activation_end_exclusive": "2022-10-03",
+      "first_update_date": "2022-01-31",
+      "allowed_buffer_start": "2021-12-22",
+      "allowed_buffer_end": "2022-12-14",
+      "timing_changes_condition_dates": false,
+      "oracle_experiment": true
+    }
+  },
+  "models": {
+    "crash_2020_R_seed01": {
+      "seed": 1,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "0b6d925180ccace78496ed712b1ef396301f3926c2ecb8155d188bdbfc4c2a45",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed01/initial_model.zip",
+        "sha256": "d0bff5d6fdc6e1ed808b44b6f2c33e6efa65f317ad6119a9955c4dc01289b7c5",
+        "update": 0,
+        "validation_score": 1.4057353625915392,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed01/checkpoint_032.zip",
+        "sha256": "dea0996639e05edaee2dfda42787ac7063176a232501935681dab0c3ce8623e0",
+        "update": 32,
+        "validation_score": 0.9860163868546786,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed01": {
+      "seed": 1,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "88f6e33af4c7b9458e1662f82a8828866a00390956ce4565da407f1528247a3f",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed01/checkpoint_029.zip",
+        "sha256": "9e539d719bd4eb020d151887dc59df6a1589aa97ef9b02671a21a55dede022de",
+        "update": 29,
+        "validation_score": 1.6390004432082848,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed01/checkpoint_032.zip",
+        "sha256": "844743df31e2419675affe42005e199c9ac8bf1688122bc6122b4fee1736577e",
+        "update": 32,
+        "validation_score": 1.4808077535117175,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed01": {
+      "seed": 1,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "3ff6c36399588cbfb70c12fcedd52e1ff663fab188824cba7a7a5847878a7daa",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed01/checkpoint_001.zip",
+        "sha256": "563b0a0458b191d458523d09480b08e8452097ed28ff0ea7c84ee585a9a54774",
+        "update": 1,
+        "validation_score": 1.4230478982587924,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed01/checkpoint_032.zip",
+        "sha256": "c7d3721bfad0b6d97cd8778205868be3936e11818809e5fa68ca6a2e5a485987",
+        "update": 32,
+        "validation_score": 0.2554127601667845,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed01": {
+      "seed": 1,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "04415dcefde7aa66f9c1c4cdd7552697bc01fe0f2358b7f463b95dcd91cd6626",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed01/checkpoint_004.zip",
+        "sha256": "872fcf6fc0a7ac16a879a454b9b899ba8ec124b2c91a476041625b111f690dc3",
+        "update": 4,
+        "validation_score": 1.4402881115376498,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed01/checkpoint_032.zip",
+        "sha256": "b090040c2cd44f0f8095bf4f1d17293654e57aded2011fca9bf9bfc4c526aca7",
+        "update": 32,
+        "validation_score": 0.4352746950572954,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed01": {
+      "seed": 1,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "af207cb614396c7ece6d319d348703906bb873c639bd7a68b72814c79bbe9dfb",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed01/checkpoint_001.zip",
+        "sha256": "7917d519e42a3c2b3ba43964823937c44e7b8c93afeb9cf0b574af6b5195ca05",
+        "update": 1,
+        "validation_score": 1.421821609318606,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed01/checkpoint_032.zip",
+        "sha256": "1f909e74c6a3c63e0ee53ee1806142297f441443e6eb1325940ad302eb438407",
+        "update": 32,
+        "validation_score": 1.1292693892299488,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed01": {
+      "seed": 1,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "e62d5e8ab355b603a8155d9089efb3631d1822aec7ef30a538401a81dc94597f",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed01/initial_model.zip",
+        "sha256": "ad1cbb1a1ee5427c8d3127f2d30564f076de15b9189771f6a1e6f1e091eaebe0",
+        "update": 0,
+        "validation_score": 1.4057353625915392,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed01/checkpoint_032.zip",
+        "sha256": "72e58a46d7c87e79ef0453685e8ff15877631cd010af61f49b7b910e21234e3d",
+        "update": 32,
+        "validation_score": 0.7908835825225284,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed01": {
+      "seed": 1,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "c89bafe7949fffdd586d2853445c32b60b40f8660979ac7e6b6c9cb05bb3a56b",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed01/checkpoint_015.zip",
+        "sha256": "38695dca7b4b8eb17d48ba401b57eda8236a30961be4e09d93291e44270f8d1c",
+        "update": 15,
+        "validation_score": 1.7919528133730331,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed01/checkpoint_032.zip",
+        "sha256": "c60b5971d89b6dbd1c794c1f51595567f70913f9806cdd4bfc4e36b6f0c9a27d",
+        "update": 32,
+        "validation_score": 1.3899177669910836,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed01": {
+      "seed": 1,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "2e8edc09425dafa852a57d3ebb8bf2a4488dc666d1fe7c85c886c7089c4d3bb3",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed01/checkpoint_030.zip",
+        "sha256": "810883da775bc21578442ecc6996ac1fd5387d21b459d761987a42bae158e70e",
+        "update": 30,
+        "validation_score": 1.451849997779392,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed01/checkpoint_032.zip",
+        "sha256": "72534b7d502c3076c2f66943e3d9c68f17e7bd835ee53690987012cbf8c8d003",
+        "update": 32,
+        "validation_score": 1.36890671094035,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed01": {
+      "seed": 1,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "d0a6eba1e9918ce8904328c6f67f964c30e8a73887f0620bbbfca174ee948cc1",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed01/checkpoint_013.zip",
+        "sha256": "26be3f83516afa3a56c170f4a8b4987e3d4f5831e1601b121ddc22338f009474",
+        "update": 13,
+        "validation_score": 1.5657943564119068,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed01/checkpoint_032.zip",
+        "sha256": "21b1c1d517a5ecfbd3ef5c608182518239a47373059b7d22d73d12ac56a11bf2",
+        "update": 32,
+        "validation_score": 1.2108570870789341,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed01": {
+      "seed": 1,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "69f4a35b9ce350fb707908c8f3040e7cd42229b84310c035706e1d041c41c0f9",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed01/checkpoint_032.zip",
+        "sha256": "ddc07eb09c21f8b2bde92538bef7d50487fa51a4e34256c5d384f6046776cbfe",
+        "update": 32,
+        "validation_score": 1.5525184994331,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed01/checkpoint_032.zip",
+        "sha256": "ddc07eb09c21f8b2bde92538bef7d50487fa51a4e34256c5d384f6046776cbfe",
+        "update": 32,
+        "validation_score": 1.5525184994331,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed01": {
+      "seed": 1,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "be648398d9a1e019d2df1d7f42770f198010b3b7bf029864f9d207d154d82bcc",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed01/checkpoint_002.zip",
+        "sha256": "6c98e240ef5fe62ec37aebae046831788ff12f8e651d6a7fd78a26200c586ac5",
+        "update": 2,
+        "validation_score": 1.4951675507209226,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed01/checkpoint_032.zip",
+        "sha256": "53a2cb13fc5fe63e046d4c08e2c1a09393275eacc89dc7cf5ab3fd4191a51fcb",
+        "update": 32,
+        "validation_score": 0.4832317199270714,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed01": {
+      "seed": 1,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "9f2335e6464c26d70b87b5785b865baa33f9db3c26cb4eef03fe114448d83780",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed01/checkpoint_003.zip",
+        "sha256": "03e6f8caead03f3324e198f404a6b1742652f7574b02438593992e266474d52e",
+        "update": 3,
+        "validation_score": 1.4226805486898073,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed01/checkpoint_032.zip",
+        "sha256": "48fd592293a4e95367e333e7bc73a152b428e5484f83b72041323f28ee16027e",
+        "update": 32,
+        "validation_score": 0.4291365377613953,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_R_seed02": {
+      "seed": 2,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "643fde3090ad62b3291439450937e13eade1b84b5299db46a9d96dac088b832c",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed02/initial_model.zip",
+        "sha256": "8cf660bd8561cbadece8877537ce4dccb46f3bec3aa67a92359decf687935400",
+        "update": 0,
+        "validation_score": 1.4277734015874166,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed02/checkpoint_032.zip",
+        "sha256": "db8898c0bd836cacbf77505a09417426640e0e11065fec57ef37f98f423cff63",
+        "update": 32,
+        "validation_score": 1.126532509145633,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed02": {
+      "seed": 2,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "269b4cfa80dfb7b04c8c66127d393da95ecdeacd1da7dbacaea26f7f6d7297eb",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed02/checkpoint_014.zip",
+        "sha256": "b07dd2e1a6661d694985b51b7ca3b25f464c4c46c02e0df4faf37b2009a8dc31",
+        "update": 14,
+        "validation_score": 1.5692407491089864,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed02/checkpoint_032.zip",
+        "sha256": "258d001a3272f20d82c38dc26d20882f6f044fbb5aadf0f7e18919a3911ec3bf",
+        "update": 32,
+        "validation_score": 0.7448713039053309,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed02": {
+      "seed": 2,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "2824ecb0785d806487047862a5030dd404c76518adb91e3bc57fe12f687497c5",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed02/checkpoint_013.zip",
+        "sha256": "56fcf320ffc044867815e29ae77037f6d7a9cbc0107ed927b55a522e88530d25",
+        "update": 13,
+        "validation_score": 1.467205781758527,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed02/checkpoint_032.zip",
+        "sha256": "246afe9305f1fb0c65ef8b14b0e4965c2ea3cfb7e11ce8a8c70e85e2347c9842",
+        "update": 32,
+        "validation_score": 1.068542833733926,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed02": {
+      "seed": 2,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "7bb57c2daed2a52277a2d10cfa6bf57fd53db66c5772382b7e7cc8f09aea1479",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed02/initial_model.zip",
+        "sha256": "d62e01079c0603bd06a46e28771bfec7fc203ceb262cc7991c3b42b780ee2e73",
+        "update": 0,
+        "validation_score": 1.4277734015874166,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed02/checkpoint_032.zip",
+        "sha256": "fc8e9efc0aa4e829cdfd92a880d9f0f49523ae1e81bf3a30506b1d964b97c7a1",
+        "update": 32,
+        "validation_score": 0.5247543171803329,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed02": {
+      "seed": 2,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "919f77ddb5d64dc1d1877180f70623e0b53d32b73df960357ea1a778a8e2cd89",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed02/checkpoint_031.zip",
+        "sha256": "ebc69bc54b3e627b0560adf05625bd80d1cc186bb486830262e0a028ed26e315",
+        "update": 31,
+        "validation_score": 1.6978374439324442,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed02/checkpoint_032.zip",
+        "sha256": "507d5588a725ed2697b715f92099439f7cfe80e51547e6d3d1a4e3c858b7e882",
+        "update": 32,
+        "validation_score": 1.6696213314333261,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed02": {
+      "seed": 2,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "51235b83d795e1853447c2898303551a40313944f8f77fd1c426656dea853dc4",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed02/initial_model.zip",
+        "sha256": "077143f9d32ed11ade89f6150d2d7fb235390f6428c5d3d4abba2a16b7fb3495",
+        "update": 0,
+        "validation_score": 1.4277734015874166,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed02/checkpoint_032.zip",
+        "sha256": "95c0bbe71c0ad55a8ac2c58f426f1aa86f1abfaefd38a636890417be8e968a04",
+        "update": 32,
+        "validation_score": 1.2195672362663348,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed02": {
+      "seed": 2,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "956bda92c1f005930c570a63ebe9a5cee3ca457afd8e05ae60be5e9646b3b8b8",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed02/checkpoint_006.zip",
+        "sha256": "14c0b81323f6653649447f28dd621f8adaf8fbdf98b1cccc5ab538485215e807",
+        "update": 6,
+        "validation_score": 1.4724427250646572,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed02/checkpoint_032.zip",
+        "sha256": "cbc259b103a92ad79bc53c466810a6429766acde7deb71df652bf1394ed8296f",
+        "update": 32,
+        "validation_score": 1.424703353547673,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed02": {
+      "seed": 2,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "0bd8266a6faee44e309eb9d1b137cdd6945de2d41111cfdd4cd224987383dee8",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed02/checkpoint_031.zip",
+        "sha256": "c7b41bc774cc7a21e0da6652eb2912f5dadb8645e33ce86dc1bf377f25b41f78",
+        "update": 31,
+        "validation_score": 1.892859452991081,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed02/checkpoint_032.zip",
+        "sha256": "975e456f479c05ee13f43ef4a17d00156572187dcf9e5bcfd89682b444ae7ed7",
+        "update": 32,
+        "validation_score": 1.882678292087897,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed02": {
+      "seed": 2,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "c85bfdd1276b65dbff95358fb61ef5b877c6dfcc3808787e699b0f335504e585",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed02/checkpoint_012.zip",
+        "sha256": "104a3beb4314f4dc29f6ef975b50c951bb00475ea06f87c578eb61da8ec4edcf",
+        "update": 12,
+        "validation_score": 1.4966076108379547,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed02/checkpoint_032.zip",
+        "sha256": "d7496eb09bf370b95d19bcb727035ec06d24570836186d752939b4361fdabcb4",
+        "update": 32,
+        "validation_score": 1.056114860598453,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed02": {
+      "seed": 2,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "46c48b93b112abf9cd3a80483642803ffcedec4c0b0cf6db1cec2536a3a70861",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed02/checkpoint_013.zip",
+        "sha256": "290c05d5583e6c2f0459b1b49701e61ac83c64511c8d7fd273d97fa5771b95ac",
+        "update": 13,
+        "validation_score": 1.5449882049718564,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed02/checkpoint_032.zip",
+        "sha256": "3f381070a99f2abb8d110d46fbf4a9150a5cd67af33eb7742a9655b8ec5cb13a",
+        "update": 32,
+        "validation_score": 0.807266241789896,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed02": {
+      "seed": 2,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "0ca39a02541a095f1296b1b8a8b7d5377eecf31f3d3f440ffc54889741f9f09d",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed02/initial_model.zip",
+        "sha256": "109417c05fbf515ec6cd353cec0b1914495eb62f8b809ccef82be7ab3f2396d2",
+        "update": 0,
+        "validation_score": 1.4277734015874166,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed02/checkpoint_032.zip",
+        "sha256": "6c2d9b42fe8b7fffddf8598ce95176727f691154c8acc3d76c947329c7d27ee8",
+        "update": 32,
+        "validation_score": 1.1405012286463367,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed02": {
+      "seed": 2,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "11bdc6b171c0bb2bcae34c6c25799b58e1f269f38d8569537009046a2e807736",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed02/initial_model.zip",
+        "sha256": "bc87bb126bbe9d4313160ac049c4418c3c09976296045fd429b71633f3a64b90",
+        "update": 0,
+        "validation_score": 1.4277734015874166,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed02/checkpoint_032.zip",
+        "sha256": "177ce8f7a0d8a9b936d348f24cfb34fad5d992ceb70a8f6e6e0e1625e9914a4b",
+        "update": 32,
+        "validation_score": 0.7322348938355576,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_R_seed03": {
+      "seed": 3,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "9b9cbbacaf30142b85f76ff3f5cb051f6f88678f9c2b38c20af09c180e74a712",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed03/initial_model.zip",
+        "sha256": "10289884ef48bdba2bf4503acd72486142428ce4b5a9a4b5993b14f348c07928",
+        "update": 0,
+        "validation_score": 1.4080497349600762,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed03/checkpoint_032.zip",
+        "sha256": "24897ca6a6ab5d87c3c49afd3f551bd9a6683467ebe4231b2994bdd082fb9721",
+        "update": 32,
+        "validation_score": 0.9119464354191974,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed03": {
+      "seed": 3,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "2db3101efd61baed58649d6daaee62b9392fbe749b25d4f590a8d6502684d7a7",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed03/checkpoint_004.zip",
+        "sha256": "0c8f3d1616f5d167f1f3aef6addc32d21b707cc480216db74e34595b5cf25fa0",
+        "update": 4,
+        "validation_score": 1.4091355953866123,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed03/checkpoint_032.zip",
+        "sha256": "b9228d1a2ba89fb1fa97337d2bba0d378e792fe29a24ea555ad2da34ae70ae1c",
+        "update": 32,
+        "validation_score": 1.0526793038634532,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed03": {
+      "seed": 3,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "98b2005d851d8e21dd49251380d7d076ddad0c2f6bb628ba219f46dd258080cf",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed03/checkpoint_001.zip",
+        "sha256": "a07a692be9bc12d8bc0487db337147cd71bcc44aa083c38c4a09d534be85c035",
+        "update": 1,
+        "validation_score": 1.4249991953569603,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed03/checkpoint_032.zip",
+        "sha256": "75d286dc58a735575cacfcbc7566b27cf8afb9e12964a1e8d8aecb8165d29351",
+        "update": 32,
+        "validation_score": 0.4825432466175603,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed03": {
+      "seed": 3,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "c9280cdbc7749c3103cd7a4b482341ea7911c93ce48cfaedf2c007aada4628f5",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed03/checkpoint_001.zip",
+        "sha256": "4930a9d82215fe2f7853ee198294007807b45c99b001d6e2c88e2801959aeff2",
+        "update": 1,
+        "validation_score": 1.4210353181644038,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed03/checkpoint_032.zip",
+        "sha256": "7e4cb0a20e501c35589f9e59db0dda24d263ababa7b075d1b985ef66c2289e88",
+        "update": 32,
+        "validation_score": 0.5362699189806212,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed03": {
+      "seed": 3,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "764b750f2f2eacf7c609cf1aac8c9e4aecb05b47eb4480a03667e0bc0e2ad118",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed03/checkpoint_001.zip",
+        "sha256": "d2fa95c47b3111c3118541266f76adff81037d89af1e8071a14fa8cbdcd57193",
+        "update": 1,
+        "validation_score": 1.4478018394910455,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed03/checkpoint_032.zip",
+        "sha256": "0e40ce5f0d4b8b2e068e89a46bd236b46417c3ccb8ece542c54a42818a212bc4",
+        "update": 32,
+        "validation_score": 1.052626895297424,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed03": {
+      "seed": 3,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "e4be9fcb4186667271ce65307690a0f9eb525f230f1576772f31fac19825df60",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed03/checkpoint_030.zip",
+        "sha256": "bb0f8af63487eb51c333073d8398d2a2844dd18655c9c3ddfc0cd1ddc4a922fe",
+        "update": 30,
+        "validation_score": 1.612401759093996,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed03/checkpoint_032.zip",
+        "sha256": "4cf7351b7166372a77c0c0a35e0f50437ca88a268b2f672f5686be988a8af7d6",
+        "update": 32,
+        "validation_score": 1.4957018662373054,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed03": {
+      "seed": 3,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "e733201de188974c8fcf1acc1b9ad0ab69faf441cb2a9cd844178fed81f0f8b0",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed03/checkpoint_027.zip",
+        "sha256": "fa6a95b74e04723a462acacf91ef7aa829225fd06d9e28520ee5f62735125c77",
+        "update": 27,
+        "validation_score": 2.1946944080762307,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed03/checkpoint_032.zip",
+        "sha256": "1957a4a28b731e00bd4a34e084f729181678a7203fc00b00f68f941779d7115b",
+        "update": 32,
+        "validation_score": 2.0079632136776544,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed03": {
+      "seed": 3,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "1be0395630ba8714a06d4d31c3797fb50464bd80e700c25243510d60aab989f5",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed03/checkpoint_032.zip",
+        "sha256": "c5890b9990e22fedef54f6d0cd7b16d848eeecbad97dcc63bbead0d1fba6eac3",
+        "update": 32,
+        "validation_score": 1.8290298110669447,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed03/checkpoint_032.zip",
+        "sha256": "c5890b9990e22fedef54f6d0cd7b16d848eeecbad97dcc63bbead0d1fba6eac3",
+        "update": 32,
+        "validation_score": 1.8290298110669447,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed03": {
+      "seed": 3,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "f7dc3d9aae917e8f64861cc5be718817fc3a1e4d6f8fe8bd89acb76b858f306b",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed03/checkpoint_026.zip",
+        "sha256": "aeb059de1a546f9395eebdb7e2dba12af66e8de8022c19d5d4e4ccfe57ee95e0",
+        "update": 26,
+        "validation_score": 1.5862477289802535,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed03/checkpoint_032.zip",
+        "sha256": "c5d58b58d0ba08ddef8dd10b624859f4708316e76184bfa3e566df42a73c8393",
+        "update": 32,
+        "validation_score": 1.4471013172213893,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed03": {
+      "seed": 3,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "a02cd8751297cf76630f06f229aae036bd39944b6d0f699a9d5ac948fc0cfcfa",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed03/initial_model.zip",
+        "sha256": "c5b01adb090bb78487f1ad93b21d46308dc59ae91420d3f97bea07a851534691",
+        "update": 0,
+        "validation_score": 1.4080497349600762,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed03/checkpoint_032.zip",
+        "sha256": "45ba643baa2e285a9eaf5e2065f02e8e602f16b37091b4fabf4a6f27215cbb53",
+        "update": 32,
+        "validation_score": 1.1381153280542673,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed03": {
+      "seed": 3,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "643e601f96c3486cb8e6471440d106d233b59f2977ae28e9feac3d265f844c72",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed03/initial_model.zip",
+        "sha256": "58c0fb0de13435658298bef7290e504599953cd92cc5d3c80872b59e0d88569a",
+        "update": 0,
+        "validation_score": 1.4080497349600762,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed03/checkpoint_032.zip",
+        "sha256": "65177a0f553606f46d4b2113e8fc15769ff2ab3564bb5c6032924d58d0f3fdc9",
+        "update": 32,
+        "validation_score": 0.6612728221224928,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed03": {
+      "seed": 3,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "e2c5b63a98a69e68e3c6ef7b82916b04c37d990eb51fa3e4dd219e4d7ca38299",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed03/initial_model.zip",
+        "sha256": "91bd58da0fdf0208c08e52b49df1bc93d98e52382949fd643ac4ba9c845a4dc7",
+        "update": 0,
+        "validation_score": 1.4080497349600762,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed03/checkpoint_032.zip",
+        "sha256": "6cdcfd136c08ada6af14e74ea9a69c0fcdee3b053bb38ed2247323241e747ad4",
+        "update": 32,
+        "validation_score": 1.0533034166244832,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_R_seed04": {
+      "seed": 4,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "d51e9560e36ca05ca94dbe572dcd38674b24ab3bd45f23745d19762210bf79a4",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed04/checkpoint_001.zip",
+        "sha256": "4380eb7a007a2be668245389356c4b2f4b5750ea0ca33f876d8ae7416c7e5527",
+        "update": 1,
+        "validation_score": 1.423094832107589,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed04/checkpoint_032.zip",
+        "sha256": "d48b884541ffc98f10caf4a3bab6236d1426eba9e9f1528392d38237fcfd849d",
+        "update": 32,
+        "validation_score": 0.8512459125369601,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed04": {
+      "seed": 4,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "5930222268916e3e5f93a8119287d022d3f03334ab80734b8d0039ecdf9df9fa",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed04/initial_model.zip",
+        "sha256": "333fdf43001ee60048197c01e00748429a178508feb3c77385359daeb6db4007",
+        "update": 0,
+        "validation_score": 1.4199080536320234,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed04/checkpoint_032.zip",
+        "sha256": "b652fdb7f54f2dc093b4fd7f975f7702dc3d4c163eb2a2719772c3ccfc9ed93a",
+        "update": 32,
+        "validation_score": 0.5463835560960532,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed04": {
+      "seed": 4,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "6a61e2961f1d3f758b9fb82e5e7f66afb36af9f87cd202b8b5c077ee9cb34551",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed04/checkpoint_001.zip",
+        "sha256": "690d5ed371da264505a23097031f9ef97e3751d7bc407d53c28f5d8c23729d13",
+        "update": 1,
+        "validation_score": 1.4589271068813507,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed04/checkpoint_032.zip",
+        "sha256": "b5186deb86061cce611dcd95915c94e9e81fabdad6ba87a095b72cb9bbc693eb",
+        "update": 32,
+        "validation_score": 0.10837700652142185,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed04": {
+      "seed": 4,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "fed7dac7c9ad7ad63a2fc9b316f39d3b0e9e4d34a5a08a4e191015636f00b14c",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed04/checkpoint_001.zip",
+        "sha256": "20a20e4b98a69239c054f923cb01d8e724ef5d697552fd1751f69776afdb81d2",
+        "update": 1,
+        "validation_score": 1.4450083582625226,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed04/checkpoint_032.zip",
+        "sha256": "8039cc95fc848e9897ab6f3466bc238bf6e4867e670083ca3c7eccdbb85c1d63",
+        "update": 32,
+        "validation_score": 0.2366908487307056,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed04": {
+      "seed": 4,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "0bac812f366df492c3fb6eb36ddd2d31777b6aff956c674463cb882636775036",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed04/checkpoint_032.zip",
+        "sha256": "5cc88b569bc92a4de4e82723c76324fef5247971d0e6faf374c6f732e8ddd8f6",
+        "update": 32,
+        "validation_score": 1.5180889562882076,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed04/checkpoint_032.zip",
+        "sha256": "5cc88b569bc92a4de4e82723c76324fef5247971d0e6faf374c6f732e8ddd8f6",
+        "update": 32,
+        "validation_score": 1.5180889562882076,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed04": {
+      "seed": 4,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "c508c74a6d28b0295ff7752b1ecdd42ace6d67cddf205c06bc553c4dc24b3541",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed04/checkpoint_015.zip",
+        "sha256": "27f8779c68c35ccd244fcc11afebf5dfe3712ad5657324ed53c18b77889a9716",
+        "update": 15,
+        "validation_score": 1.550934274455205,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed04/checkpoint_032.zip",
+        "sha256": "db9f70916c34122279f44eef65ae0c5ed4df75861298a23b2e5966fc26cb0395",
+        "update": 32,
+        "validation_score": 0.8854644417245877,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed04": {
+      "seed": 4,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "432c03904c7311505ac0a60bbdc0cc35ee0f5377a092ffb7198fc3ca8f28aa8c",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed04/checkpoint_032.zip",
+        "sha256": "d448ca3b77ab3af0454f9e420d0effcb4f1fd7f05ece68329547885d0ae19f08",
+        "update": 32,
+        "validation_score": 2.2260704999467715,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed04/checkpoint_032.zip",
+        "sha256": "d448ca3b77ab3af0454f9e420d0effcb4f1fd7f05ece68329547885d0ae19f08",
+        "update": 32,
+        "validation_score": 2.2260704999467715,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed04": {
+      "seed": 4,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "99005475f55b8147afea6656580f56ba7986c5e0ed84b2bad0a5c7b0a978eaec",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed04/checkpoint_024.zip",
+        "sha256": "265e57ef40df94c7c6a076deab1d78db891b9239e8381f1faffbad1887927a60",
+        "update": 24,
+        "validation_score": 1.7379061866937384,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed04/checkpoint_032.zip",
+        "sha256": "f66d794e323d3b2d298c3fa2993e763d9989e81d466aa138cd0ef452d991a767",
+        "update": 32,
+        "validation_score": 1.606227433072517,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed04": {
+      "seed": 4,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "cf274acdd31816a8448bf0e0a1b4c44b5a1122c678d712a18ca8d350c2029a07",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed04/checkpoint_032.zip",
+        "sha256": "f39f9cf8da7c972f49e2d5b6e9e1427b903ac57ed091b6a55a1b50817c3abd9c",
+        "update": 32,
+        "validation_score": 2.0163364874861203,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed04/checkpoint_032.zip",
+        "sha256": "f39f9cf8da7c972f49e2d5b6e9e1427b903ac57ed091b6a55a1b50817c3abd9c",
+        "update": 32,
+        "validation_score": 2.0163364874861203,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed04": {
+      "seed": 4,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "a774a93045da6dd49ae5e7c321b94223e9d7dc36de81aca5c3bc3700eb268fcc",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed04/checkpoint_030.zip",
+        "sha256": "e05e1d835387acb2e594570a5a88865c35fbb9d0a15e7f55e3e0fa16bebdb41f",
+        "update": 30,
+        "validation_score": 1.8013349609205098,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed04/checkpoint_032.zip",
+        "sha256": "857b9a8c4206e9f2e40794a01e7bfc5efab2fb42f24fa680ae727e0126ffbce2",
+        "update": 32,
+        "validation_score": 1.775715758143012,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed04": {
+      "seed": 4,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "0050ee3d61749fcabb305f519b2636c3dd89743ec75191816fe9905994a0983c",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed04/initial_model.zip",
+        "sha256": "393171eda3ec24adf880ef6b63dd97b93cad192055bacf65155cd19975665b12",
+        "update": 0,
+        "validation_score": 1.4199080536320234,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed04/checkpoint_032.zip",
+        "sha256": "1536c6038bf73bd000bb12f341db4591b04785ee16d465d390b3e01b0e212ad3",
+        "update": 32,
+        "validation_score": 0.22874690645076576,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed04": {
+      "seed": 4,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "3d2a3a80c322b3d405a1abc6ddd092fe023e084d1d84f28c196b2a9fd49e852a",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed04/checkpoint_002.zip",
+        "sha256": "6eae49a42f30498e4cccc1ac1b9550aeef995710296c2bb4ec8b37e9e5ff6b41",
+        "update": 2,
+        "validation_score": 1.4457859929552994,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed04/checkpoint_032.zip",
+        "sha256": "fde7a1bccbdf45a4238fdd03696e7b82246f9f558de37125a1e3ab4c681a16dd",
+        "update": 32,
+        "validation_score": 1.1182036591445583,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_R_seed05": {
+      "seed": 5,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "67d655d2607d25d035902c024dcc34ec2aa77baedac3aae8a21388e3e46574ed",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed05/checkpoint_032.zip",
+        "sha256": "82e68067a70b90c28bb45a2303b06a2718ffe7392960575635ad8e5114acf1a3",
+        "update": 32,
+        "validation_score": 1.8160992794876645,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed05/checkpoint_032.zip",
+        "sha256": "82e68067a70b90c28bb45a2303b06a2718ffe7392960575635ad8e5114acf1a3",
+        "update": 32,
+        "validation_score": 1.8160992794876645,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed05": {
+      "seed": 5,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "dd3c42f57ccf835d8f7dbc5f505356a95f840a1ccf97436feab63835d50ee8e1",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed05/checkpoint_015.zip",
+        "sha256": "bd39bf7c530abaf6b4e19ff7edd95c29825242d47c221354bdc1ee01d994828e",
+        "update": 15,
+        "validation_score": 1.4859435149458209,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed05/checkpoint_032.zip",
+        "sha256": "8c09162fa915739d00339597b6229813320ba31cb8b9503baf32318ce3d095e9",
+        "update": 32,
+        "validation_score": 1.3361522015043443,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed05": {
+      "seed": 5,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "bbb4ed30b943c79834632b3f38d3d5e73576a63fc18a5018ad9edced9feb876d",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed05/checkpoint_001.zip",
+        "sha256": "322e98dd6746c428e800b7760a59d69bfb05091edbab79b5ca45453b5571a2c6",
+        "update": 1,
+        "validation_score": 1.470514870896371,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed05/checkpoint_032.zip",
+        "sha256": "5a6b76b3993d7ddba068bd43554fea2af90cad145bcb8b6d10861577c55912b0",
+        "update": 32,
+        "validation_score": 0.7495099226373138,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed05": {
+      "seed": 5,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "107825e4c4d6bc48133ff1f292d06833cb0fcb00d7c11076eeef89faf6f1f747",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed05/initial_model.zip",
+        "sha256": "dfae4ad8954c984b129c63dd2953c8ec93e8a2ec0218b9c879f955b4b4bc8d99",
+        "update": 0,
+        "validation_score": 1.4172326817818586,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed05/checkpoint_032.zip",
+        "sha256": "356709be543c8d21ccd5b158a44135c37a2efc4b49df0b61e2140eb98736f627",
+        "update": 32,
+        "validation_score": 0.8337584171603153,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed05": {
+      "seed": 5,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "28d817b32d67f7b87897ce6b0c583336ed72ee9901b225e62e2569e7fa6e828a",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed05/initial_model.zip",
+        "sha256": "1716a564c721aa1576f09ca5f242e5f4b66fb3b6568761b59de175918610d1f5",
+        "update": 0,
+        "validation_score": 1.4172326817818586,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed05/checkpoint_032.zip",
+        "sha256": "4beaa27f16c878d4b4dd947e6f83983d298cbb94011ca955234ca8ae3575fe66",
+        "update": 32,
+        "validation_score": 0.3502443925463363,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed05": {
+      "seed": 5,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "a16476f7985a02b113300f5b1a1401f1af289d53489144c8aa75b0863c85e771",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed05/checkpoint_004.zip",
+        "sha256": "e832d221fc857c159af9aff29056d72819e4c3c3cae00599d2d19ff1e0deb56a",
+        "update": 4,
+        "validation_score": 1.4557377930668807,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed05/checkpoint_032.zip",
+        "sha256": "86b95a6759a4a4573c1d6100e807bdba2693f655b7ac70ffb0e652f37fc24aa4",
+        "update": 32,
+        "validation_score": 0.6424440321146899,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed05": {
+      "seed": 5,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "5d010bf428c3f2c2481d108ce7efab35fb87aa95ce265a98760316711b162c44",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed05/checkpoint_031.zip",
+        "sha256": "c96abdf4008427d338ca72c6c0ff69160523ba3cf1d49365c81eef51bbe202ce",
+        "update": 31,
+        "validation_score": 1.795344986896982,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed05/checkpoint_032.zip",
+        "sha256": "1e080b2fccbb17393e7112d0220ec8faefd41d608e2ad10e9ca09457707f5048",
+        "update": 32,
+        "validation_score": 1.7891702771772715,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed05": {
+      "seed": 5,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "2ae0111e5cd1006170cd0eb7f89eeb9375273554e28a742a21f7c3c20c2d4d16",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed05/checkpoint_025.zip",
+        "sha256": "90959039b62a18623d6544da22e1c34e2dae5c60be4fcb8e9cef125d0e5f1b32",
+        "update": 25,
+        "validation_score": 1.6015372001132617,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed05/checkpoint_032.zip",
+        "sha256": "7aebd7e58d4f9ebf91392bc4c830433a15379fc845d4991274ce5bf0aee36c9b",
+        "update": 32,
+        "validation_score": 1.2897553019076688,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed05": {
+      "seed": 5,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "560d276b726b2599af84f39416e58a96e898baeb840b7003ea14ee5e2e7be012",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed05/checkpoint_010.zip",
+        "sha256": "bbaa077bf3f8ef63eb7343beb7b05bd9408b8aa415b0ce34a00a6ef1b0953678",
+        "update": 10,
+        "validation_score": 1.515192990720805,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed05/checkpoint_032.zip",
+        "sha256": "582fcb56b99e26acaa6dd0890c5a23ec9522a1802fa00c2e232922d4cba4e6db",
+        "update": 32,
+        "validation_score": 0.4303514599755145,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed05": {
+      "seed": 5,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "c3f40288b75e06df375b17d74fb3c5331e2253fa32a1517f9e4698db941ad74e",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed05/initial_model.zip",
+        "sha256": "6b1b6c4d01c81e489b8403fb8cfaa15221757552c4593e17874d22c5f1354b73",
+        "update": 0,
+        "validation_score": 1.4172326817818586,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed05/checkpoint_032.zip",
+        "sha256": "3787eef7d7aa9f30fbfe480a2efd50f245ac076b7029dca233cba05fb5221725",
+        "update": 32,
+        "validation_score": 0.923213000853422,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed05": {
+      "seed": 5,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "cd94b60c03e889a699d69265edc10d6c598952c1d11075b63c2641b977c8ae88",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed05/initial_model.zip",
+        "sha256": "aa4c56713dcf8350bbe082e3e3f8876ceb9a764d52a014e8048d7f9b3c78d48a",
+        "update": 0,
+        "validation_score": 1.4172326817818586,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed05/checkpoint_032.zip",
+        "sha256": "909461c99045e19294f339284dedd6eea29938a941f10ff582a4f05c621f0935",
+        "update": 32,
+        "validation_score": 0.14586446924742538,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed05": {
+      "seed": 5,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "1cc76bb794b8f933a80639fdece53a5f636e3f4811aa62b7306238c8a5a484f8",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed05/checkpoint_001.zip",
+        "sha256": "8499597822728582493c00f5ad2ec41f94d652f129433aebfac7911d8aba1215",
+        "update": 1,
+        "validation_score": 1.4587086120421446,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed05/checkpoint_032.zip",
+        "sha256": "c95e6fb8340fbd1ca36989f311a7706b59fcbd615adfe14fc6ecd01772cef734",
+        "update": 32,
+        "validation_score": 0.13875723898227013,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_R_seed06": {
+      "seed": 6,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "39d3de42ad11da2d400f7edbec432aa77bfa9c0e1d7ebded038c3b1a05809762",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed06/checkpoint_001.zip",
+        "sha256": "2a8081b5122185171a9e2012f0da64f939cbc33af29bfc7171ff0d293a98fbac",
+        "update": 1,
+        "validation_score": 1.433991742407285,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed06/checkpoint_032.zip",
+        "sha256": "83b8321305b228d0a8e13f9eaedaff60e4be48c1f8a6734fb335cdae350c60d0",
+        "update": 32,
+        "validation_score": 0.7737240122037944,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed06": {
+      "seed": 6,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "22bbafdd26472e9e1200cc8a2113cbcfe29f32a6bafa6f96e134bc424c4a37ab",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed06/initial_model.zip",
+        "sha256": "7ea326bfc9d38298cd897929bf147222bb3863bfa0a3787f3e8e5880a5abf099",
+        "update": 0,
+        "validation_score": 1.4253697804085361,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed06/checkpoint_032.zip",
+        "sha256": "310822b07776f684083afd52f9e54bf5e019038647c3d4c0b9a15e6ea1cc361f",
+        "update": 32,
+        "validation_score": 0.803268567826744,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed06": {
+      "seed": 6,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "d97a454a91f93059ce732928eaa8f6726f7e7963413c623e7c448d1b78cb3244",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed06/initial_model.zip",
+        "sha256": "bd286a2585150a2a56fe16f1358220387651f4cc01754562916a6ed65f8816ea",
+        "update": 0,
+        "validation_score": 1.4253697804085361,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed06/checkpoint_032.zip",
+        "sha256": "32bc5f7c48cd9b90902bb3f9297a95b87417b1fb66556ed50b3ff037afa16d03",
+        "update": 32,
+        "validation_score": 0.737614901037085,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed06": {
+      "seed": 6,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "7e7fc35722d502fe1778e68cfac06502e422224b9d0850e94e8f358e5024d7b7",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed06/checkpoint_014.zip",
+        "sha256": "65620e2641af42e75d870c9bbd83ef9d5111d8bbb1b86587917bc20946184081",
+        "update": 14,
+        "validation_score": 1.6014101333830995,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed06/checkpoint_032.zip",
+        "sha256": "e88f64518a76d247a7c905ba768c152749b1a42fcbf33ffbc4a62d427bb0d56a",
+        "update": 32,
+        "validation_score": 0.6910882196565987,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed06": {
+      "seed": 6,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "570dd1099f1887c93e714eae7de3a7962b3b27b726871f43044875bb0dd71ade",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed06/initial_model.zip",
+        "sha256": "39cd84ff5c4c020fa256d45fbcd7baf12f6037b337e57a3877f1f640be976f2d",
+        "update": 0,
+        "validation_score": 1.4253697804085361,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed06/checkpoint_032.zip",
+        "sha256": "4e73af77f549b559d51acd1391da8ef1b1e0654c84f246b9e7954c3a93b211be",
+        "update": 32,
+        "validation_score": 0.830062972415741,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed06": {
+      "seed": 6,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "3a3ecdfdd1cc3dfa616e436e3aeac14ed0eed0ffc448e5a6f39fd97d09169c19",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed06/initial_model.zip",
+        "sha256": "86bdffc00d0e932c3f4db44b5b377b3eb2e9abcf83a3dd9bc19404bc535974ef",
+        "update": 0,
+        "validation_score": 1.4253697804085361,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed06/checkpoint_032.zip",
+        "sha256": "6ba5b52bb428643f75842bf892ea9f529c89f552e03737237281173addcf9f25",
+        "update": 32,
+        "validation_score": 0.5325921885943887,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed06": {
+      "seed": 6,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "33b520eebb273e9a2f78dc845693bc97add285bef7da65e48de835b582fe4914",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed06/checkpoint_032.zip",
+        "sha256": "b70c5932268f22bfbdd11416788fd7891df19ab134d684d2d0e3f83dd248a20e",
+        "update": 32,
+        "validation_score": 1.5417079562891158,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed06/checkpoint_032.zip",
+        "sha256": "b70c5932268f22bfbdd11416788fd7891df19ab134d684d2d0e3f83dd248a20e",
+        "update": 32,
+        "validation_score": 1.5417079562891158,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed06": {
+      "seed": 6,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "cfcfc7616c37643562a590aa4d9e6a5858a034fefbf9e41304d7a5e88fdb75d4",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed06/checkpoint_030.zip",
+        "sha256": "034e679a9c2b2aa0eafe10a391ca1c608af752e156ebe7846edf62e90abdecc5",
+        "update": 30,
+        "validation_score": 1.5431403136363695,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed06/checkpoint_032.zip",
+        "sha256": "cbcb8c334ec73ea50e0a19a42c0bb8e08373e2e3fb98be86d7b962dcde50f0a4",
+        "update": 32,
+        "validation_score": 1.4675074346201706,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed06": {
+      "seed": 6,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "fe4e0d806e83b78e3e58db593732afb3b06117be32e9c8c81e1e1e799bc077a7",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed06/checkpoint_032.zip",
+        "sha256": "d2f298ce3a7046914c604f72ac5db6682c671d9d1aa3e3a4216149cffdf260ef",
+        "update": 32,
+        "validation_score": 1.817150851073161,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed06/checkpoint_032.zip",
+        "sha256": "d2f298ce3a7046914c604f72ac5db6682c671d9d1aa3e3a4216149cffdf260ef",
+        "update": 32,
+        "validation_score": 1.817150851073161,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed06": {
+      "seed": 6,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "9baec2a9d87e8080e9932dff795cfb5e7972872a0b4285824543af7e9ad6baca",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed06/checkpoint_003.zip",
+        "sha256": "00135fe6aa6f7ae721b18e779525afa6d2d8bc768a0884f44b9b2cb1229a7ad4",
+        "update": 3,
+        "validation_score": 1.4499883738166475,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed06/checkpoint_032.zip",
+        "sha256": "21f459217004c8142488d4e8a34c5037399525f79165bf7939e595c9c2e87696",
+        "update": 32,
+        "validation_score": 0.7207274411433512,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed06": {
+      "seed": 6,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "425a1b86f382d09960c80d1ce7f9fb7c9149a5d44d00d0123502f83f59f27560",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed06/checkpoint_002.zip",
+        "sha256": "063f75e6b3a01d2e10c5641567c2749f4de45f7a0b46436431a11fafe39c4415",
+        "update": 2,
+        "validation_score": 1.4377217103424182,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed06/checkpoint_032.zip",
+        "sha256": "86196ec837776998290d8f88d6207d907a65b491bdeaa34ca919a76450ae36d0",
+        "update": 32,
+        "validation_score": 0.9500210676428229,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed06": {
+      "seed": 6,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "624cee22d4c10197bf53200f65d9faf07a9c23132a9e346bf3dab92a104bd73b",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed06/checkpoint_017.zip",
+        "sha256": "b155de20f61ae8c022502579d594b2c8e6be313d22c7628f6538cf8523c57596",
+        "update": 17,
+        "validation_score": 1.7982910380144423,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed06/checkpoint_032.zip",
+        "sha256": "2c5ef1cde844f2f5bb6607934357adb0c7c97133f3912a6519ed60a8f45ae8ef",
+        "update": 32,
+        "validation_score": 1.5032899880715727,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_R_seed07": {
+      "seed": 7,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "bdbe894610b3b88e423be2719876960ae08641be2168f7e199d415e190582c57",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed07/checkpoint_027.zip",
+        "sha256": "94e3b73e90a8d4d773b66b4dc146b661f2c92118924324526d1ef4d4432c0e95",
+        "update": 27,
+        "validation_score": 2.1572300411089262,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed07/checkpoint_032.zip",
+        "sha256": "47d1cf49c05cfb819b62c603fc81a9484ff0e7c3d5331f32d0eb02add078703b",
+        "update": 32,
+        "validation_score": 2.1424940671559853,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed07": {
+      "seed": 7,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "65906fe1a5a77e1cab1aa9c8cd487f1ce433fd425407d159116ef3749d2ae39e",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed07/checkpoint_023.zip",
+        "sha256": "7b48290a5ae84243baf6586aaa48bba2e075434834e22e5b779c5c4c63c36c91",
+        "update": 23,
+        "validation_score": 1.6582390785970904,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed07/checkpoint_032.zip",
+        "sha256": "b2e02dc51527a9315a48619cc193fa4ffad283cff2c1caa3b839517a0b7ef070",
+        "update": 32,
+        "validation_score": 1.654498665987701,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed07": {
+      "seed": 7,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "fcf00a70d8fef9ee3fee8bacceff7ee680f9eeb8ad344414704f828a26f7da3c",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed07/initial_model.zip",
+        "sha256": "f979bd334fcec9090ef13240171233b4f641c6b49874b20fa3e87afce1df0129",
+        "update": 0,
+        "validation_score": 1.4181065596315259,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed07/checkpoint_032.zip",
+        "sha256": "0d720ffcec4c791a65a1e479ae68a3adfd16bc02ab85b0275512c046a5a51732",
+        "update": 32,
+        "validation_score": 0.5006365676932405,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed07": {
+      "seed": 7,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "8f3a80b6b3e09af5414b25f57947b6ecade2e505b230b216b2b0593f09060345",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed07/initial_model.zip",
+        "sha256": "2c0613e0eafe76fc3b472e4c7a46ecaaa5c1847688e253c77d67a036ff66ab45",
+        "update": 0,
+        "validation_score": 1.4181065596315259,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed07/checkpoint_032.zip",
+        "sha256": "707c88c407916c3f9f2f1a5f13967abc1c7964ad5a52358a2b01b9bb32258d66",
+        "update": 32,
+        "validation_score": 0.28863294669863715,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed07": {
+      "seed": 7,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "3cd57a140d016dff85796167075338e71c4989ac1c3c07d766707921c95a05c8",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed07/checkpoint_010.zip",
+        "sha256": "a2ef2e0df2baf039453d0ffe722f9532c580b37a6c57e736dbe3854e32743a52",
+        "update": 10,
+        "validation_score": 1.4584896186333476,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed07/checkpoint_032.zip",
+        "sha256": "f6dcb7630b7882461c1b8989d82d01e5260f17f6c9f7568132e00f1513754841",
+        "update": 32,
+        "validation_score": 1.078349169381316,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed07": {
+      "seed": 7,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "90d20499d6df4a9e19c35ded3348332439b2d0aa6bf2236685dd03a03da2fb76",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed07/checkpoint_017.zip",
+        "sha256": "5224f6a8df158f84f486cde9849d0f8088fd0b204b1c90b05a87c19e04c40671",
+        "update": 17,
+        "validation_score": 1.491728254368759,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed07/checkpoint_032.zip",
+        "sha256": "88080bc49be010498a7b42a329c024fcfd294fa87608ae65f42839faef3d0253",
+        "update": 32,
+        "validation_score": 1.0815828552178177,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed07": {
+      "seed": 7,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "0c08135c406cff1098f52e34615f2043786d40e8828572d94a93b30392cfab3c",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed07/checkpoint_032.zip",
+        "sha256": "52833889020811accf645fac2d761406f77f6e68d9a3919fa21ea02b6933d60f",
+        "update": 32,
+        "validation_score": 1.9216496709440793,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed07/checkpoint_032.zip",
+        "sha256": "52833889020811accf645fac2d761406f77f6e68d9a3919fa21ea02b6933d60f",
+        "update": 32,
+        "validation_score": 1.9216496709440793,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed07": {
+      "seed": 7,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "bb0af641b6913e6f74df8070e9c2e6b5fa0ed1250ee878abca71f0d729c6e764",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed07/checkpoint_032.zip",
+        "sha256": "ae21bcd7c08d6a9b0b38cd6890a459f5ed73caf348ab6c5698f870118b5dbaf3",
+        "update": 32,
+        "validation_score": 2.0430765475501382,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed07/checkpoint_032.zip",
+        "sha256": "ae21bcd7c08d6a9b0b38cd6890a459f5ed73caf348ab6c5698f870118b5dbaf3",
+        "update": 32,
+        "validation_score": 2.0430765475501382,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed07": {
+      "seed": 7,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "c56eea911308f113e425696d2005c9ea48ac86a5a3a3c4260fc49191169e5f78",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed07/initial_model.zip",
+        "sha256": "3d6ead7fce9e0ecdcebcdf768d6a7b4a39635a1083e57bda31c8e8485f683e98",
+        "update": 0,
+        "validation_score": 1.4181065596315259,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed07/checkpoint_032.zip",
+        "sha256": "65a38facfa2a93b30512a7199c3fae406c1f995694011a1fb75c5b2877be628b",
+        "update": 32,
+        "validation_score": 0.9589004097332609,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed07": {
+      "seed": 7,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "d2da065da87a11722ac56006bd7d151cc32dca878c66f58d9fd9d86b82e5db30",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed07/checkpoint_003.zip",
+        "sha256": "cb9a3c9a51afed75fc492b1423dfa96b46fde542ab2958c93bf30feff7f71b95",
+        "update": 3,
+        "validation_score": 1.4780533230952813,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed07/checkpoint_032.zip",
+        "sha256": "02f5330946cce70dadddcf9bca2e82c381a27f2580444cfc2f46e28a8db0b2a2",
+        "update": 32,
+        "validation_score": 1.373079226561462,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed07": {
+      "seed": 7,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "bf1430f3a2b3a090ad4ba5bab051ef32ca90366264c82cb0ea2055cdc75d3f30",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed07/initial_model.zip",
+        "sha256": "036b5b296a183543f43532bdc4f79043ce1553d90df78f5148d944d28cc61f41",
+        "update": 0,
+        "validation_score": 1.4181065596315259,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed07/checkpoint_032.zip",
+        "sha256": "ff861c581ef5f79761025ab1ef6238b442eb36100d86ab8fe6c76cce4057d411",
+        "update": 32,
+        "validation_score": 0.791548317765352,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed07": {
+      "seed": 7,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "2aa2c2d34b2e5ac2a98ae46a13d8b19b8906921b1d8bbdf3c4300e32b011d542",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed07/initial_model.zip",
+        "sha256": "d98ebbdb1f8a17b313f80df0123452bf96f0f05c95c598509d524b8974cd965a",
+        "update": 0,
+        "validation_score": 1.4181065596315259,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed07/checkpoint_032.zip",
+        "sha256": "9f23661b1aebea8eef17d5db9f71d131c9aa4aadd36be4ed1709566586f939ae",
+        "update": 32,
+        "validation_score": 0.47283971169162053,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_R_seed08": {
+      "seed": 8,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "506bfca1b523c4a44093fa38364ad3740fe7b54c4e2e7390fccfdcafc1316a2a",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed08/checkpoint_026.zip",
+        "sha256": "ca41bb1720bced5b5cd63f71eb8166c1cbe9259e9f5ce88e04c2e3537e4aee97",
+        "update": 26,
+        "validation_score": 1.5865384844471973,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed08/checkpoint_032.zip",
+        "sha256": "9051b0313f97105cd61fd4c0a5567d00eae6248b492a0b633c8213b41d2d669c",
+        "update": 32,
+        "validation_score": 1.5287562622603688,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed08": {
+      "seed": 8,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "6d6348fffec720ceb406f1cd00b657afedeeb74a94ce483797afc5555a13d1fd",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed08/checkpoint_027.zip",
+        "sha256": "d9dc69846f9b668166b3f25bd8afecfb69073481b045e156e55bdc399447f681",
+        "update": 27,
+        "validation_score": 1.6473799890787701,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed08/checkpoint_032.zip",
+        "sha256": "b7b003492ac9eb2f3dccab8c8a760aed48959372582ac54e8b3b144c372ca3cb",
+        "update": 32,
+        "validation_score": 1.528623537778597,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed08": {
+      "seed": 8,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "d0f5c3ff195b3aecf1fef60e1a585a69df7835b2e916a96bc7a4be2c909df345",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed08/initial_model.zip",
+        "sha256": "4324352e3754b28bc1bdac5b813efa9bbea4eeb6ab2308fb6747fb9c9d7a339c",
+        "update": 0,
+        "validation_score": 1.4202131906288997,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed08/checkpoint_032.zip",
+        "sha256": "c2c4e458d8fdb7d10cfea89cd0fceb683e0ac667b2a47b43f9b00240c51f8141",
+        "update": 32,
+        "validation_score": 0.3535582617368531,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed08": {
+      "seed": 8,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "4d233d99261e2933b54393b048a7c63c5e65395ba911561329bef3679f2622df",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed08/initial_model.zip",
+        "sha256": "e46721fd98e91d8ef086e46b8be84fab50015ee1c8c0c9cc032a0c583b2a4c99",
+        "update": 0,
+        "validation_score": 1.4202131906288997,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed08/checkpoint_032.zip",
+        "sha256": "3351e61ef378bfd432ddb46191a05ba687999c3c15a30c0d7620d1a9439d81be",
+        "update": 32,
+        "validation_score": 0.4576723363355997,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed08": {
+      "seed": 8,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "c2a13013e981e8acee97a05260ae92d038d5d95fcadc3fb1a14eb2eb44ca1929",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed08/checkpoint_002.zip",
+        "sha256": "d3ca8afd1e8b2bf30a9b8021a01ad97c023c2cc2cac7c065ddf1e0f6a83fde32",
+        "update": 2,
+        "validation_score": 1.4463268572492904,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed08/checkpoint_032.zip",
+        "sha256": "d3deb6b8cc734a553c85f24be4c47581da2b6c88872e85ea5a5da44e9ea4cdbf",
+        "update": 32,
+        "validation_score": 0.9488835976861317,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed08": {
+      "seed": 8,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "01325f4e8e9e6f6c1afd8cb3ce3b9941bbe0f8e2cb4de6cfc0d293041bbdcaee",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed08/checkpoint_003.zip",
+        "sha256": "f5c6eac535f91afa3a4369427e226e140dd735c7c9988f8b8375625d1e278ff6",
+        "update": 3,
+        "validation_score": 1.4878488078949426,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed08/checkpoint_032.zip",
+        "sha256": "faf70add4c972f8dc0b9b528dca1199309996a98b225371c9b1526fd39424b1e",
+        "update": 32,
+        "validation_score": 1.2437662052710425,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed08": {
+      "seed": 8,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "6d85e8df8aa32c7bae3480ad28f7e4390d003e677c202eb44ccc27aa99b6d49a",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed08/checkpoint_030.zip",
+        "sha256": "000fc97c4e27721dd19b0dada9e226233df7f50970079ac0a7ee34ab0d60ca02",
+        "update": 30,
+        "validation_score": 1.9485293269373878,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed08/checkpoint_032.zip",
+        "sha256": "ac9c0f6d617c44843904c2133ff0c69bf1b853a66164adfd99171ddd505227cf",
+        "update": 32,
+        "validation_score": 1.7694309367622196,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed08": {
+      "seed": 8,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "3b6b78a0a10b98748cc2e5cf44a7c56898aec0b2c6256b5d81720505032f96b8",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed08/checkpoint_029.zip",
+        "sha256": "a1977409077977ed253483869823bd11e738a6d6c38d5b142313a559660d6151",
+        "update": 29,
+        "validation_score": 2.3537397765631396,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed08/checkpoint_032.zip",
+        "sha256": "cfb263178107111f71dd62781ba055847ca6ad3d77b95ee3a928f3d33884d100",
+        "update": 32,
+        "validation_score": 2.193655536034694,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed08": {
+      "seed": 8,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "c6bc7deb5cba142bb392148e557889a63af2e61d96d7902cf14384c1fd66c8e7",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed08/checkpoint_009.zip",
+        "sha256": "c58dfe3e3139165925a9c782d744399559331fede12c14b2a36188d4b57629b1",
+        "update": 9,
+        "validation_score": 1.4453302346084353,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed08/checkpoint_032.zip",
+        "sha256": "3ec3b178916d6c29277ffde7a8fb193ea156cea8490ec26c9c6b356cb1f53809",
+        "update": 32,
+        "validation_score": 0.9568307852009762,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed08": {
+      "seed": 8,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "d48073cc77f5767f80a5a3bb8a3fff647af36e63c18d322cbc189274fa3d2b9b",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed08/checkpoint_031.zip",
+        "sha256": "094ac86dd07134421f4464a265b3285decb8a9b355d83264221f9a34fb447dbc",
+        "update": 31,
+        "validation_score": 1.5679734317170049,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed08/checkpoint_032.zip",
+        "sha256": "5ce8765965ec33844f8acd870a9c02cff11e40a5baf63980d179eaa5e02faaef",
+        "update": 32,
+        "validation_score": 1.3996495874714474,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed08": {
+      "seed": 8,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "1a6b75d30aa1fef72de9faa73adb950f70b60b02636a2c5858b35f9a426f8ee5",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed08/initial_model.zip",
+        "sha256": "871fdf7b55977b887ae71ae130e6989453abf76aa5a6b86a74b2847dfbad8b3b",
+        "update": 0,
+        "validation_score": 1.4202131906288997,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed08/checkpoint_032.zip",
+        "sha256": "b6d06070d04f9b364c3b6abcd80dc4a6d6f3bdb17df3afe893477d9f9b49f1e5",
+        "update": 32,
+        "validation_score": 0.6261536669399776,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed08": {
+      "seed": 8,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "0e92014ee6d1ca5be530ed7b06254393370dbe4ac201d76f365aa8b200fea813",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed08/initial_model.zip",
+        "sha256": "6c4bc189ffaf450a63475e1da81e2483e6a8daadc11c8ead8acf921864309463",
+        "update": 0,
+        "validation_score": 1.4202131906288997,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed08/checkpoint_032.zip",
+        "sha256": "68f90d06df7f7d2f3d3a86bd4e4c97128d6fddcb4fcb65cf952742fa8ac915f3",
+        "update": 32,
+        "validation_score": 0.4401450928264638,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_R_seed09": {
+      "seed": 9,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "b4dafe903841372cdb9385ec7ad22a8c51e51894f3f4ae4df4debe02af59f2c3",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed09/checkpoint_031.zip",
+        "sha256": "7929dd7bb899ebaab546ec188da82b82047aad0e77996abf0373721535d62c72",
+        "update": 31,
+        "validation_score": 1.8883262389096658,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed09/checkpoint_032.zip",
+        "sha256": "d7c2a3735e74c86c4d64c22c14a233a564cefbf14897a131bb3c0a3b5b862866",
+        "update": 32,
+        "validation_score": 1.8588818687511501,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed09": {
+      "seed": 9,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "a00901a8d11b3411f8e81b8b830734b3ccdc4b8169df165c551cf7053b7b8815",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed09/checkpoint_032.zip",
+        "sha256": "173a8468aad78615fe9fbbe9d6d57f2a346fba26348d26668564f5133116bb8d",
+        "update": 32,
+        "validation_score": 1.7589569648456518,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed09/checkpoint_032.zip",
+        "sha256": "173a8468aad78615fe9fbbe9d6d57f2a346fba26348d26668564f5133116bb8d",
+        "update": 32,
+        "validation_score": 1.7589569648456518,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed09": {
+      "seed": 9,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "a15c34c0dd42cb480fe19b79400772f7c8c731663e4544b77a6082354bce7046",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed09/initial_model.zip",
+        "sha256": "f436cd93263fb4ab5af753b3e644f41b1973682ef88b73653ea98de901bfb194",
+        "update": 0,
+        "validation_score": 1.4177556857851938,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed09/checkpoint_032.zip",
+        "sha256": "90fe114b07adf3c4f5301c3ca6389ec88fe313ffcbc044bda12b200ff3aa277e",
+        "update": 32,
+        "validation_score": 0.6382699466076356,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed09": {
+      "seed": 9,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "9d51a1d2792ce8a2a3bdc969214b7acc463ca84b211f6942fdbff8e2a67894a2",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed09/checkpoint_001.zip",
+        "sha256": "e9eaf8f908d9f3689840e8498d04050903bee93350a45f7e3131289be13a08c6",
+        "update": 1,
+        "validation_score": 1.4224431584587958,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed09/checkpoint_032.zip",
+        "sha256": "3d3458066d15e42d345a2a8740351c7bb669c6799ea9662794fda505aa0f1bf3",
+        "update": 32,
+        "validation_score": 1.325713955982425,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed09": {
+      "seed": 9,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "0deacb13ad1efa82802681b5e7a36b292565e61c1bda78d46a4b119aa577b86b",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed09/checkpoint_001.zip",
+        "sha256": "0e01f8b86001ebc10cc33609f72a374337539ac620057cf67d61f73c5561d700",
+        "update": 1,
+        "validation_score": 1.4279175390316856,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed09/checkpoint_032.zip",
+        "sha256": "8ed573163e763f16046da928ab3c1b77791acd2eab01294d0ab2837ad1f55b58",
+        "update": 32,
+        "validation_score": 0.520335087843803,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed09": {
+      "seed": 9,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "92c1a8f1dc1365393abb3af1465de48a50306e63cdedaffc39445bfeedfac359",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed09/checkpoint_022.zip",
+        "sha256": "ae17f83202852bdcd3754a7eb47708436db0dcad6920217d06ddfd1eafce8a26",
+        "update": 22,
+        "validation_score": 1.4700774660595444,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed09/checkpoint_032.zip",
+        "sha256": "1a47314018770a712cfe852b827604caf6a7d652e0d4da385a9cc3f66dfcffc6",
+        "update": 32,
+        "validation_score": 1.1373735133582172,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed09": {
+      "seed": 9,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "9b2056c0e38fd102541ac996552adce3928fb5e8b2930c7718d1f08d9f70cab5",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed09/checkpoint_032.zip",
+        "sha256": "448b179107db3ac56b75f9b5e79127543c5f8bbaeb84a54556327a1f6493e8de",
+        "update": 32,
+        "validation_score": 2.1814222408534185,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed09/checkpoint_032.zip",
+        "sha256": "448b179107db3ac56b75f9b5e79127543c5f8bbaeb84a54556327a1f6493e8de",
+        "update": 32,
+        "validation_score": 2.1814222408534185,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed09": {
+      "seed": 9,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "68a922450578beca92dc4cc79e8300c0b610af6ecfd1dd6acd931dae62ed17ee",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed09/checkpoint_022.zip",
+        "sha256": "634d0f9c4da7dc96a4df3d4140b8b8d589f159aa4df4651046ec42ef56178d50",
+        "update": 22,
+        "validation_score": 1.6645166312099304,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed09/checkpoint_032.zip",
+        "sha256": "f623ecec0550641c8a3f1cdeccb1594f2172449656b726097fed3f5119807824",
+        "update": 32,
+        "validation_score": 1.096809980366807,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed09": {
+      "seed": 9,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "65dbe14ebfbad4dcfba2970b617b4d2a85015bef3e4df1dc5e4bb5e401b9e03b",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed09/checkpoint_031.zip",
+        "sha256": "2f3128a239ff2dd795028125e14a771a8e4d802e69ba016771c419bd930431ea",
+        "update": 31,
+        "validation_score": 1.4638125587449053,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed09/checkpoint_032.zip",
+        "sha256": "262f25c580953a8937a93083f36a034a0515b987adb8c6975ae814f24783b352",
+        "update": 32,
+        "validation_score": 1.4491156856889553,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed09": {
+      "seed": 9,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "ab897ccd8aa39d6cf6d829f3f096fe8ca824485343f256b265787f45b0caf18b",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed09/initial_model.zip",
+        "sha256": "812536c4283dd723fa3288ca88cd067960ac7bfac4c503913a36635420af9953",
+        "update": 0,
+        "validation_score": 1.4177556857851938,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed09/checkpoint_032.zip",
+        "sha256": "00a9b704aff22692099d06b1adc238999f9fead5ad371c1d6cb55c4829c4fcd7",
+        "update": 32,
+        "validation_score": 0.9161147912605729,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed09": {
+      "seed": 9,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "0325b3db21db03708a8f6414a05b0cac888d6dd1a7888ff601c3fb6994684c61",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed09/initial_model.zip",
+        "sha256": "7664c40146fb9536e4a0e953125243094004abc8ddfa527d3048874309d579a5",
+        "update": 0,
+        "validation_score": 1.4177556857851938,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed09/checkpoint_032.zip",
+        "sha256": "1d23b2b9e0e65d7b1c48a77aa5af3fc81ff3029180527709d25b3185f619744b",
+        "update": 32,
+        "validation_score": 0.900115709611813,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed09": {
+      "seed": 9,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "ffa67fe2252343b49762e3cb9cc1e206761d0b9806c1f578cb506c77b02f1d15",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed09/checkpoint_001.zip",
+        "sha256": "007de49b238e663aa6a52f8a03f238c28c59b784a5f73fe6accf87da88fec0a3",
+        "update": 1,
+        "validation_score": 1.422916014353329,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed09/checkpoint_032.zip",
+        "sha256": "8b5dd7d6504ca9a79888402b76326767441515d274edf997b8257882ebcada67",
+        "update": 32,
+        "validation_score": 0.9849490745744407,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_R_seed10": {
+      "seed": 10,
+      "case": "crash_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "234430638d8f4ce567b9196e5c40e8cc95244d4649cc5d49e27ff9f8bddb6521",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed10/checkpoint_024.zip",
+        "sha256": "151721823102a98ebac819e2e5b8dad4e354019bd9733220acbc08190d9c8ac2",
+        "update": 24,
+        "validation_score": 1.5255442139129929,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_R_seed10/checkpoint_032.zip",
+        "sha256": "15d37c072332f506edb6994e0fe48089aacad37514b961f01c960130f9b09e53",
+        "update": 32,
+        "validation_score": 1.3146447065653104,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_H_seed10": {
+      "seed": 10,
+      "case": "crash_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "34fd8da908fbf3190931bc916b9cb1d105f230346dc3ca2d36a3230454ffe0b3",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed10/checkpoint_004.zip",
+        "sha256": "32bc6f825ddf8fed1949159b41b24259d65c9bd0636d3a6e7f1c6fe98ab36244",
+        "update": 4,
+        "validation_score": 1.514457215925536,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_H_seed10/checkpoint_032.zip",
+        "sha256": "d45c1e3a50d0a4d8e2d8005b0def63338b5259c52eaaa5d5bcf42fe70670c32a",
+        "update": 32,
+        "validation_score": 1.1226290180983822,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_C_seed10": {
+      "seed": 10,
+      "case": "crash_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "0ee0776c2070095fb1774c228ea803ffad546cc0dc2a0d2de73acf8d9321ae25",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed10/checkpoint_025.zip",
+        "sha256": "6171ea7fbcc7d50e19494f2741b43c324b293609c1b3aee889255afd531d23d6",
+        "update": 25,
+        "validation_score": 1.6469084065096073,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_C_seed10/checkpoint_032.zip",
+        "sha256": "d8d1f071aa2af663fd5110a97359652691d58a8e431124cdc47afd92f8d3ca27",
+        "update": 32,
+        "validation_score": 1.2209014602144783,
+        "initialization_selected": false
+      }
+    },
+    "crash_2020_E0_f0_D_seed10": {
+      "seed": 10,
+      "case": "crash_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "58d97fec7fa06f7a9e93742182f3e0f114a22d73871d3beeeac4b1c56e834c5d",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed10/checkpoint_001.zip",
+        "sha256": "f63defd1d4041624806dcdc21e315fe6dcf7d45dd01383d98cab7b805aaf8f7c",
+        "update": 1,
+        "validation_score": 1.4347053881343994,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/crash_2020_E0_f0_D_seed10/checkpoint_032.zip",
+        "sha256": "9f3ea17835941d3d19f563f36b45c3c8726a243781943035569d184f7935b15b",
+        "update": 32,
+        "validation_score": 0.6707503934475144,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_R_seed10": {
+      "seed": 10,
+      "case": "rebound_2020_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "50881691fa2ae70b9fe09e4764e72a766c0697d2d56fe764a1e49d2fcd9ba6f9",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed10/checkpoint_002.zip",
+        "sha256": "898f3e52cf7e30236d878e93a2d3a85111422729e68cfce1a01147fa0cc43e8d",
+        "update": 2,
+        "validation_score": 1.4242150622440726,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_R_seed10/checkpoint_032.zip",
+        "sha256": "7c12aac5151d2b2815e6f58a5edd2e94cb528887e4fcc095843daf13ac1f4a6f",
+        "update": 32,
+        "validation_score": 1.2148286808327977,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_H_seed10": {
+      "seed": 10,
+      "case": "rebound_2020_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "66c5489fd4359dd2939e5a0d4342de47ece338cf6752cdbe74e5350324e448dd",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed10/initial_model.zip",
+        "sha256": "7d5e8e3b56577b695039e6efbd99c1b985c6582e6cdbebd7e892e5990d7fd9c2",
+        "update": 0,
+        "validation_score": 1.4156760028909974,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_H_seed10/checkpoint_032.zip",
+        "sha256": "fa26a9350f9d20c6d36e327dd1ac9c50f2ce2bcc9eff6f19a57edfd30bd1cc03",
+        "update": 32,
+        "validation_score": 1.3680925677262514,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_C_seed10": {
+      "seed": 10,
+      "case": "rebound_2020_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "16a3f468cb7354754a9406e6d87af40df2fa2d33d2de6464d7b6f5a3c51939bc",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed10/checkpoint_031.zip",
+        "sha256": "d1c6a5f12610e693ec4960d377a08a3efdd95da5bbbe263e479a92d9556dc87f",
+        "update": 31,
+        "validation_score": 1.7889081972310372,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_C_seed10/checkpoint_032.zip",
+        "sha256": "35f2036562cd87015716e62b1348a2cf412e5d668f13ce4118134227dd7801db",
+        "update": 32,
+        "validation_score": 1.7477004421167166,
+        "initialization_selected": false
+      }
+    },
+    "rebound_2020_E0_f0_D_seed10": {
+      "seed": 10,
+      "case": "rebound_2020_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "e86f3cd1e1833b4d8335c1a6b3e6422e2768176bd6ad0d1529a2b071c5ede1ba",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed10/checkpoint_032.zip",
+        "sha256": "0368c0ad21f44cdd341fc9fabe0e2d1f902d64dce75e7e65ebdeb43011743e47",
+        "update": 32,
+        "validation_score": 1.8223417652423433,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/rebound_2020_E0_f0_D_seed10/checkpoint_032.zip",
+        "sha256": "0368c0ad21f44cdd341fc9fabe0e2d1f902d64dce75e7e65ebdeb43011743e47",
+        "update": 32,
+        "validation_score": 1.8223417652423433,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_R_seed10": {
+      "seed": 10,
+      "case": "bear_2022_E0_f0",
+      "group": "R",
+      "validation_returns_sha256": "82316d04a3f61eb3ed0746f44cc4821bb2933c1aeff037bad9e3d89e09790792",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed10/checkpoint_018.zip",
+        "sha256": "68079b2f877c9d0f17ab0d69dcd99c4c4100e2710fd01116bfc5ce40fa269306",
+        "update": 18,
+        "validation_score": 1.5501522403485073,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_R_seed10/checkpoint_032.zip",
+        "sha256": "d0aac587758aa46f17dcca077458fd1cae009fc5528a9f962e45723de21e4a68",
+        "update": 32,
+        "validation_score": 1.1764615491561328,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_H_seed10": {
+      "seed": 10,
+      "case": "bear_2022_E0_f0",
+      "group": "H",
+      "validation_returns_sha256": "aa6bab8f892d4b66985f666d9c2bc96ecd150cb577bc3e7483b76a9aa2de4bf3",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed10/initial_model.zip",
+        "sha256": "724f593c3f032d7f7c95ab04735ebc1f4daf1aec4a5d7b40e0f60c877334e69a",
+        "update": 0,
+        "validation_score": 1.4156760028909974,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_H_seed10/checkpoint_032.zip",
+        "sha256": "ee0a87f13cfb04bc7e1edbcaf3f03a8917b9da88b67ac575a4d89f7094cf257f",
+        "update": 32,
+        "validation_score": 1.2670814239842711,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_C_seed10": {
+      "seed": 10,
+      "case": "bear_2022_E0_f0",
+      "group": "C",
+      "validation_returns_sha256": "c1c1bd3332a419dfb837459c8265e0292fd72cf1b85682ad370bde60bde3d6a6",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed10/initial_model.zip",
+        "sha256": "8706b9ba22cefc0147c553d680f32ff5923f64e50fdf21f9e10a515a25a6678c",
+        "update": 0,
+        "validation_score": 1.4156760028909974,
+        "initialization_selected": true
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_C_seed10/checkpoint_032.zip",
+        "sha256": "5762a539c9d7d8fecd0532264b1bbf1111436577bc70d414b937c45e0c75798b",
+        "update": 32,
+        "validation_score": 1.049538798169224,
+        "initialization_selected": false
+      }
+    },
+    "bear_2022_E0_f0_D_seed10": {
+      "seed": 10,
+      "case": "bear_2022_E0_f0",
+      "group": "D",
+      "validation_returns_sha256": "3affcf0faf461048b8d40e83cef075dd2871668caa6d002315b6333e97016ef7",
+      "best_validation": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed10/checkpoint_010.zip",
+        "sha256": "84562d12e48a566d2c6451b4ac1b1b36ded870cd32b2195784ec5355dac2c1e2",
+        "update": 10,
+        "validation_score": 1.4810371151909223,
+        "initialization_selected": false
+      },
+      "final32": {
+        "path": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/jobs/bear_2022_E0_f0_D_seed10/checkpoint_032.zip",
+        "sha256": "b87059821fbcc15cff8529812152535cb83485d024f78c1087db52b7da3ee718",
+        "update": 32,
+        "validation_score": 1.2328330072258966,
+        "initialization_selected": false
+      }
+    }
+  },
+  "rule": "earliest argmax of2018-2019 real validation21-day suffix mean; final32 sensitivity",
+  "test": "actual first21 trading days, deterministic, cash start, initial purchase charged",
+  "test_evaluation_started": false,
+  "train_module_sha256": "d8b1476c17c2b7fa8be997a08ddd7d42f1c81a344901a2c1af85eca6562755b6",
+  "bank_manifest_sha256": "541584198118a7fd7541a09fddf527c4495af3255d574b35c8c4405069d1e738",
+  "data": "/home/cwei1213/TimeDiff/datasets/dow10/prices_2004.csv",
+  "data_sha256": "7c52d084e8bfb689d5138c97429d0b63c0707120ab9f32d330d6adb1cfcfbedc",
+  "forecasts_sha256": "dc642e42703ceb3d095d6358ecfdf62a6405ffb226f74584a0b8e025835b8794",
+  "backtest_engine_sha256": "d41465f0488f63bead3987f82399a6dcf1f4d94ac380873c5689152519d76860"
+}

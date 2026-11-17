@@ -175,4 +175,8 @@ results/ppo_synthetic_vs_real/*
 # results/ppo_portfolio_intrinsic_reward_ablation/*
 # !results/ppo_portfolio_intrinsic_reward_ablation/train_cache/
 # !results/ppo_portfolio_intrinsic_reward_ablation/train_cache/**
+
+# Reviewed TimeDiff scenario experiment records; large checkpoints stay external.
+!experiments/timediff_scenario_20261117/**/*.csv
+!experiments/timediff_scenario_20261117/**/*.png
 ### FILE TOO LARGE ###

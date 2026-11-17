@@ -1,0 +1,13 @@
+{
+  "main_jobs": 120,
+  "rollout_rows": 3840,
+  "test_rows": 240,
+  "selected_initializations": 36,
+  "improved_training_seeds": 114,
+  "generation_candidates": 18000,
+  "generation_retained": 3600,
+  "weighted_generation_hit_rate": 0.5643888888888889,
+  "single_seed_upward_step_fraction_min": 0.4870967741935484,
+  "single_seed_upward_step_fraction_max": 0.5387096774193548,
+  "sources": 267
+}

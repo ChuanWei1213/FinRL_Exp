@@ -1,0 +1,27 @@
+{
+  "created_utc": "2026-11-15T09:50:55.705334+00:00",
+  "scope": "steps1-3 only",
+  "source": "/home/cwei1213/TimeDiff/outputs/dow10/conditional/scenario_pilot/loss_ablation_20261115/lambda_0p5/generation",
+  "seed": 0,
+  "initial_updates": 32,
+  "calibration_updates": 8,
+  "n_envs": 16,
+  "n_steps": 504,
+  "batch_size": 504,
+  "n_epochs": 10,
+  "workers": 2,
+  "device": "cpu",
+  "repeats": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "pool_sizes_if_overfit": [
+    16,
+    32,
+    64
+  ],
+  "validation_only": "real and synthetic 2018; no 2019 or event scores",
+  "code_sha256": "0580f99c39249fbe558831881b7cac52b2a6466edf9bf67eceff92dec93ac539"
+}

@@ -1,0 +1,5 @@
+split,baseline,full,suffix
+validation,cash,0.0,0.0
+validation,daily_equal_stock,1.331615602756837,0.9837791560168484
+test,cash,0.0,0.0
+test,daily_equal_stock,2.173186257599445,1.1698996019262562

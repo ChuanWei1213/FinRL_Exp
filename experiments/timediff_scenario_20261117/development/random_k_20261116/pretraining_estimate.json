@@ -1,0 +1,44 @@
+{
+  "announced_before_training": true,
+  "date_taipei": "2026-11-16",
+  "estimated_training_and_evaluation_minutes": [
+    15,
+    30
+  ],
+  "upper_if_larger_pool_minutes": [
+    30,
+    45
+  ],
+  "estimated_implementation_minutes": [
+    15,
+    25
+  ],
+  "old_seconds_per_primary_model": 98.75,
+  "new_smoke_training_seconds_per_update": 3.1583,
+  "new_smoke_validation_seconds_per_update": 0.3278,
+  "workers": 8,
+  "threads_per_worker": 2,
+  "cpu_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "cpu_cap_fraction": 0.75,
+  "gpu_used": false,
+  "gpu_reason": "existing CUDA13 torch incompatible with installed driver570"
+}

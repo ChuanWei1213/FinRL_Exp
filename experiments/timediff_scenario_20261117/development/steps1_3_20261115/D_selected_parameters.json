@@ -1,0 +1,19 @@
+{
+  "environment_pool_size": 16,
+  "active_parallel_environments": 16,
+  "minimum_repeats": 2,
+  "maximum_repeats": 2,
+  "improvement_threshold": 0.057570754160597176,
+  "regression_threshold": 0.09285618412102453,
+  "plateau_patience": 2,
+  "threshold_units": "sum of 100*log(net wealth ratios) over a 21-day episode",
+  "threshold_estimation": "median / 90th percentile of paired real-2018 validation update standard errors",
+  "best_fixed_repeat": 2,
+  "best_raw_pool": 16,
+  "larger_pool_triggered": true,
+  "calibration_interactions_per_candidate": 64512,
+  "selection_score": "mean paired real-2018 validation gain over updates 5-8 versus C at the same step",
+  "pooled_case_score": 0.1380178444029097,
+  "formal_parameters_locked": false,
+  "limitation": "single development seed, few non-overlapping real-2018 episodes; no event performance or 2019 evaluation"
+}

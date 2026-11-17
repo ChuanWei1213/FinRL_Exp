@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "daily_rows": 5040,
+  "models": 240,
+  "actual_exposure_matches_sum_of_10_stock_weights": true,
+  "period_means_match_test_metrics": true,
+  "initial_exposure_all_cash": true,
+  "date_windows_and_group_coverage_match_figure5": true,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "metric": "end_stock_exposure; cash=1-stock",
+  "standard_deviation": "sample SD across seeds, not a market confidence interval; band not clipped at 100%",
+  "max_sd_band": 1.018805988176515,
+  "sources_sha256": {
+    "test_daily_trades.csv": "04b76522f7f0da6ba6c776110203f4b5543ceca2a3bf69b768da5aa82ce76b64",
+    "baseline_daily.csv": "e131edf9504519c8f28d5b55eb0712b5a91575ff82b0d23a946e25192f4e1dd4",
+    "test_per_seed.csv": "60df36533c241780a8e861283f169eb3358ca8cfe91812266fce0c1b06b9d3e3"
+  }
+}

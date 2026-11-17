@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "models": 120,
+  "checkpoints": 3840,
+  "saved_episode_entries_verified": 384000,
+  "source_means_rows": 7680,
+  "method": "Recover exact source from deterministic per-slot episode completion chronology, verified against every saved buffer and final RNG/env state.",
+  "reward_definition": "actual stochastic episode r over k+21 days; classify by source of final21; synthetic source episodes include a real k-day prefix",
+  "window": "source subsets of the same latest100 completed episodes used in Figure2, not100 per source",
+  "n_epochs_or_rollouts_reexecuted": 0,
+  "all_source_weighted_means_reconstruct_figure2": true,
+  "max_absolute_reconstruction_error": 3.552713678800501e-15,
+  "R_synthetic": "not applicable; not replaced with zero",
+  "checks": [
+    "every checkpoint num_timesteps/n_envs/n_steps",
+    "all saved episode k and length in exact slot completion order",
+    "cumulative real/synthetic and k histogram counts",
+    "last_episode_starts",
+    "final env day/k/source/completion counts",
+    "all16 final independent k RNG states",
+    "original mixed full/suffix reward",
+    "source-count weighted reconstruction"
+  ]
+}

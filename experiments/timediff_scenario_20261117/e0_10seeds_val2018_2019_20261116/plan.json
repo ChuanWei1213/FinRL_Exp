@@ -1,0 +1,81 @@
+{
+  "created_utc": "2026-11-16T07:35:06.217620+00:00",
+  "cases": [
+    "crash_2020_E0_f0",
+    "rebound_2020_E0_f0",
+    "bear_2022_E0_f0"
+  ],
+  "main_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "calibration_seed": 0,
+  "train_target_years": [
+    2005,
+    2017
+  ],
+  "validation_target_dates": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "test": "corresponding actual first21 trading days; cash start; onlyE0; no full-event static tests",
+  "groups": [
+    "R",
+    "H",
+    "C",
+    "D"
+  ],
+  "main_jobs": 120,
+  "main_updates": 32,
+  "interactions_per_main_job": 258048,
+  "pilot_updates": 8,
+  "k_max": 21,
+  "n_envs": 16,
+  "n_steps": 504,
+  "ppo_batch_size": 504,
+  "ppo_n_epochs": 10,
+  "workers": 8,
+  "threads_per_worker": 2,
+  "cpu_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "cpu_cap_fraction": 0.75,
+  "device": "cpu",
+  "backend": "BatchVecEnv",
+  "backend_validation": "matched reference accounts through reset/pool changes",
+  "fee": 0.0025,
+  "generator_lambda": 0.5,
+  "synthetic_generation_seeds": "fixed existing paths shared across PPO seeds",
+  "best_checkpoint_rule": "earliest maximum real validation suffix reward, including initialization",
+  "secondary_checkpoint_rule": "final update32 sensitivity fixed before test",
+  "uncertainty": "10 PPO seeds on the same three event paths; not10 independent markets or generator samples",
+  "prior_seed0_event_results_previously_inspected": true,
+  "module_sha256": "d8b1476c17c2b7fa8be997a08ddd7d42f1c81a344901a2c1af85eca6562755b6",
+  "random_k_dependency_sha256": "515095a747dcec806e32cd83bb2aafde1cd4a602067b41620be6d6acf76a97f0",
+  "original_helpers_sha256": "0580f99c39249fbe558831881b7cac52b2a6466edf9bf67eceff92dec93ac539"
+}

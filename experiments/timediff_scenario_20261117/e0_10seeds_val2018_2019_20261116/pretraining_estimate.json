@@ -1,0 +1,53 @@
+{
+  "announced_before_main_training": true,
+  "client_date": "2026-11-16",
+  "estimated_main_calibration_test_minutes": [
+    55,
+    70
+  ],
+  "initial_estimate_minutes": [
+    45,
+    75
+  ],
+  "primary_models": 120,
+  "main_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "excluded_calibration_seed": 0,
+  "chosen_workers": 8,
+  "chosen_torch_threads": 2,
+  "cpu_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "cpu_cap_fraction": 0.75,
+  "throughput_profile": "/mnt/sda/cwei1213/timediff_finrl/e0_10seeds_val2018_2019_20261116/development/batch_cpu_profile/results.json",
+  "expected_training_interactions": 30965760,
+  "gpu_used": false,
+  "gpu_reason": "existing CUDA13 torch incompatible with driver570; no driver/package changes"
+}

@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-11-16T07:37:42.580990+00:00",
+  "selection_seed": 0,
+  "main_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "validation_target_bounds": [
+    "2018-01-01",
+    "2019-12-31"
+  ],
+  "environment_pool_size": 16,
+  "minimum_repeats": 2,
+  "maximum_repeats": 4,
+  "improvement_threshold": 0.040891176706078246,
+  "regression_threshold": 0.059319824443458215,
+  "plateau_patience": 2,
+  "best_fixed_repeat": 4,
+  "best_raw_pool": 16,
+  "larger_pool_triggered": true,
+  "pooled_gain_vs_C": -0.0011609792191822979,
+  "selection_metric": "mean paired21-day suffix reward over updates5..8; average cases before validation-target SE",
+  "locked_before_main_seeds": true,
+  "event_test_used_for_calibration": false,
+  "validation_SE_is_selection_heuristic": "24 target windows; final two overlap one day; no market-independence claim",
+  "pool_switch": "finish in-flight episodes; next natural reset, at most41 further steps per env"
+}

@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "module_sha256": "d8b1476c17c2b7fa8be997a08ddd7d42f1c81a344901a2c1af85eca6562755b6",
+  "nonzero_seed_reaches_PPO_and_initial_weights": true,
+  "different_seed_different_initialization": true,
+  "policy_optimizer_env_rng_resume_bit_identical": true,
+  "mid_episode_and_pool_transition_checked": true,
+  "development_seeds": [
+    11,
+    12
+  ],
+  "excluded_from_main_statistics": true,
+  "elapsed_seconds": 27.729145192541182
+}
