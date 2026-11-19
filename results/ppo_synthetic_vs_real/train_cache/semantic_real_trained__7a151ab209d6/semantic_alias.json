@@ -1,0 +1,76 @@
+{
+  "created_at_utc": "2026-08-21T05:54:40.023841+00:00",
+  "schema": "semantic_training_cache_alias_v1",
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "eval_freq": 20000,
+    "group_kind": "real_trained",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 0,
+    "tickers": [
+      "AAPL",
+      "AMGN",
+      "CRM",
+      "CSCO",
+      "IBM",
+      "INTC",
+      "MSFT",
+      "NKE",
+      "VZ",
+      "WMT"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2022-04-04",
+      "2024-04-08"
+    ],
+    "training_data_fingerprint": "2e2c5f90066c377e5a0e8f7dd61b0a21bee5c16ebabdc535c9f5bf35dce34db8",
+    "validation": [
+      "2024-04-08",
+      "2024-10-07"
+    ]
+  },
+  "semantic_cache_key": "7a151ab209d61cac5042f1ca575def812523f92b52540ca27cd9863ba7096ee1",
+  "target_status": "real_trained_e3add3a6__no_fee__seed_0__9d79da32be9a/status.json"
+}

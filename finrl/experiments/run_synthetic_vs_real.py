@@ -11,11 +11,18 @@ from finrl.experiments.synthetic_vs_real import load_experiment_config
 from finrl.experiments.synthetic_vs_real import run_experiment_suite
 
 
+def positive_int(value: str) -> int:
+    parsed = int(value)
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("must be a positive integer")
+    return parsed
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Train and evaluate real-only, synthetic-only, and balanced "
-            "real+synthetic PPO policies across chronological time windows."
+            "Train and evaluate a configured PPO study across chronological "
+            "time windows."
         )
     )
     parser.add_argument(
@@ -24,10 +31,31 @@ def build_parser() -> argparse.ArgumentParser:
         help="JSON experiment config, relative to the project root by default.",
     )
     parser.add_argument(
+        "--study",
+        choices=("standard", "path-count"),
+        default="standard",
+        help="Experiment matrix defined in the config (default: standard).",
+    )
+    parser.add_argument(
         "--mode",
         choices=("smoke", "full"),
         default="smoke",
         help="Training budget defined in the config (default: smoke).",
+    )
+    parser.add_argument(
+        "--stage",
+        choices=("all", "train", "evaluate"),
+        default="all",
+        help=(
+            "Run the complete train/evaluate pipeline, training only, or "
+            "evaluation from completed training artifacts (default: all)."
+        ),
+    )
+    parser.add_argument(
+        "--workers",
+        type=positive_int,
+        default=1,
+        help="Parallel PPO training processes, each limited to one CPU (default: 1).",
     )
     parser.add_argument(
         "--window",
@@ -44,15 +72,42 @@ def build_parser() -> argparse.ArgumentParser:
             "Defaults to active_ticker_groups in the config."
         ),
     )
+    dataset_selection = parser.add_mutually_exclusive_group()
+    dataset_selection.add_argument(
+        "--include-dataset",
+        action="append",
+        dest="include_datasets",
+        metavar="DATASET",
+        help=(
+            "Train only this synthetic variant or source model; repeat to include "
+            "multiple datasets. Real-only remains included."
+        ),
+    )
+    dataset_selection.add_argument(
+        "--exclude-dataset",
+        action="append",
+        dest="exclude_datasets",
+        metavar="DATASET",
+        help=(
+            "Exclude this synthetic variant or source model; repeat to exclude "
+            "multiple datasets. Real-only remains included."
+        ),
+    )
     parser.add_argument(
         "--no-cache",
         action="store_true",
-        help="Write uncached runs below the experiment result directory.",
+        help=(
+            "Disable both training and evaluation caches; training artifacts "
+            "are written below the experiment result directory."
+        ),
     )
     parser.add_argument(
         "--force-retrain",
         action="store_true",
-        help="Ignore compatible training cache entries and retrain.",
+        help=(
+            "Retrain in all/train stages and rebuild evaluation outputs; in "
+            "evaluate stage, keep models but force reevaluation."
+        ),
     )
     parser.add_argument(
         "--quiet",
@@ -72,23 +127,34 @@ def main(argv: list[str] | None = None) -> int:
     suite = run_experiment_suite(
         project_root=project_root,
         config=config,
+        study=args.study,
         mode=args.mode,
         split_names=args.windows,
         ticker_group_names=args.ticker_groups,
+        include_datasets=args.include_datasets,
+        exclude_datasets=args.exclude_datasets,
         use_cache=not args.no_cache,
         force_retrain=args.force_retrain,
         show_progress=not args.quiet,
+        stage=args.stage,
+        workers=args.workers,
     )
+    cases = suite.window_results or suite.training_cases
     summary = {
-        "manifest": str(suite.manifest_path),
-        "suite_root": str(suite.suite_root),
+        "study": args.study,
+        "dataset_selection": suite.dataset_selection,
+        "stage": suite.stage,
+        "workers": args.workers,
+        "manifest": str(suite.manifest_path) if suite.manifest_path else None,
+        "suite_root": str(suite.suite_root) if suite.suite_root else None,
+        "fingerprint_statistics": suite.fingerprint_statistics,
         "cases": [
             {
                 "window_id": result.split.name,
                 "ticker_group": result.ticker_group,
                 "tickers": list(result.tickers),
             }
-            for result in suite.window_results
+            for result in cases
         ],
         "test_rows": len(suite.test_metrics),
         "continuous_metric_rows": len(suite.continuous_metrics),

@@ -1,0 +1,81 @@
+{
+  "created_at_utc": "2026-08-21T05:53:39.016563+00:00",
+  "schema": "semantic_training_cache_alias_v1",
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0025,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "episode_source_sampling": {
+      "real": 0.5,
+      "synthetic": 0.5,
+      "within_synthetic": "uniform_by_path"
+    },
+    "eval_freq": 20000,
+    "group_kind": "real_synthetic",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 0,
+    "tickers": [
+      "AAPL",
+      "AMGN",
+      "CRM",
+      "CSCO",
+      "IBM",
+      "INTC",
+      "MSFT",
+      "NKE",
+      "VZ",
+      "WMT"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2021-04-06",
+      "2023-04-05"
+    ],
+    "training_data_fingerprint": "86e1be12d27fa57a4e69a21f5d9e3b6ec5feb5f0c42a1e023b57aff420eddb16",
+    "validation": [
+      "2023-04-05",
+      "2023-10-05"
+    ]
+  },
+  "semantic_cache_key": "a81e96c3bba5c89a4686fa9497012878a889bc054e03b33c6b71ecc7a7df2da8",
+  "target_status": "real_synthetic_armd_returns_reconstructed_adjusted_hlc_55321377__with_fee__seed_0__18bc982a8c82/status.json"
+}

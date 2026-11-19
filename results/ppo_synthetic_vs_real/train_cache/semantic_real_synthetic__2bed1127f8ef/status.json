@@ -1,0 +1,124 @@
+{
+  "best_model_path": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/semantic_real_synthetic__2bed1127f8ef/best_model",
+  "best_real_validation_reward": 0.060038415383848735,
+  "best_timestep": 200000,
+  "cache_dir": "/Users/chuanwei/Files/Projects/nycu_fintech/FinRL_Exp/results/ppo_synthetic_vs_real/train_cache/semantic_real_synthetic__2bed1127f8ef",
+  "cache_hit": false,
+  "cache_key": "2bed1127f8efac5b3ebffe213b5a5cbeadb2488f190cee94d7244d9985f3a110",
+  "cache_schema": "ppo_eiie_training_cache_v4",
+  "commission": 0.0025,
+  "commission_name": "with_fee",
+  "completed": true,
+  "episode_source_sampling": {
+    "real": 0.5,
+    "synthetic": 0.5,
+    "within_synthetic": "uniform_by_path"
+  },
+  "experiment_id": "8805eb5a97a3",
+  "group": "real_synthetic::timediff__500_paths__first_10_paths",
+  "model_name": "timediff__500_paths__first_10_paths",
+  "run_id": "real_synthetic_timediff__500_paths__first_10_paths_7907c7f8__with_fee__seed_0",
+  "run_mode": "full",
+  "runtime_fingerprint": "fa1d1574f63747206f34ce5b47f1ef326ba22c115dc6ab70c79a4ebd133ce6f0",
+  "runtime_provenance": {
+    "device": "cpu",
+    "library_versions": {
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "stable_baselines3": "2.9.0",
+      "torch": "2.13.0"
+    },
+    "python": "3.10.20",
+    "torch_num_interop_threads": 1,
+    "torch_num_threads": 1
+  },
+  "seed": 0,
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0025,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "episode_source_sampling": {
+      "real": 0.5,
+      "synthetic": 0.5,
+      "within_synthetic": "uniform_by_path"
+    },
+    "eval_freq": 20000,
+    "group_kind": "real_synthetic",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 0,
+    "tickers": [
+      "AAPL",
+      "AMGN",
+      "CRM",
+      "CSCO",
+      "IBM",
+      "INTC",
+      "MSFT",
+      "NKE",
+      "VZ",
+      "WMT"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2019-07-05",
+      "2021-07-06"
+    ],
+    "training_data_fingerprint": "2cfb2458ca066070d4ecfe34da5d85276b7c63f3b7f18b6bd7b1e3c1e1de7c4e",
+    "validation": [
+      "2021-07-06",
+      "2022-01-03"
+    ]
+  },
+  "semantic_cache_key": "2bed1127f8efac5b3ebffe213b5a5cbeadb2488f190cee94d7244d9985f3a110",
+  "study": "path-count",
+  "synthetic_path_count": 10,
+  "synthetic_source_model": "timediff__500_paths",
+  "ticker_group": "chosen_10",
+  "total_timesteps": 200000,
+  "training_cache_equivalent_model": null,
+  "training_cache_match_type": "trained",
+  "training_cache_source_group": "real_synthetic::timediff__500_paths__first_10_paths",
+  "training_cache_source_run_id": "real_synthetic_timediff__500_paths__first_10_paths_7907c7f8__with_fee__seed_0",
+  "training_data_fingerprint": "2cfb2458ca066070d4ecfe34da5d85276b7c63f3b7f18b6bd7b1e3c1e1de7c4e",
+  "training_data_fingerprint_schema": "market_source_topology_v2",
+  "window_id": "wf_504_126_63_006__test_20220103_20220401"
+}

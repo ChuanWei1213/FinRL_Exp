@@ -1,7 +1,13 @@
 # Project Instructions
 
 - Ask for permission before making a modification outside the current scope, because the user may have changed previously written code without notice.
-- The user grants permission to edit any file under `/private/tmp/` without requesting additional approval.
+
+## Pre-authorized temporary workspace
+
+- This section is an explicit exception to the general approval rule above.
+- For every task started from this project, the user gives standing authorization to create files and directories and to modify, overwrite, or replace existing files anywhere under `/private/tmp/`.
+- Treat these filesystem operations as already approved. Do not ask for additional confirmation merely because the target is under `/private/tmp/`.
+- This authorization does not extend to deleting unrelated pre-existing files or causing side effects outside `/private/tmp/`.
 
 ## Notebook validation
 

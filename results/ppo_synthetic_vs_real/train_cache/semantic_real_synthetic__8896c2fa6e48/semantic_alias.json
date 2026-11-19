@@ -1,0 +1,81 @@
+{
+  "created_at_utc": "2026-08-21T05:54:28.444334+00:00",
+  "schema": "semantic_training_cache_alias_v1",
+  "semantic_cache_config": {
+    "algorithm": "PPO",
+    "commission": 0.0,
+    "environment": {
+      "action_scale": 5.0,
+      "action_space_mode": "symmetric",
+      "features": [
+        "close",
+        "high",
+        "low"
+      ],
+      "initial_amount": 100000,
+      "normalize_df": null,
+      "return_last_action": true,
+      "reward_scaling": 100,
+      "time_window": 50
+    },
+    "episode_source_sampling": {
+      "real": 0.5,
+      "synthetic": 0.5,
+      "within_synthetic": "uniform_by_path"
+    },
+    "eval_freq": 20000,
+    "group_kind": "real_synthetic",
+    "max_synthetic_validation_paths": 3,
+    "max_train_evaluation_paths": 3,
+    "policy": "MultiInputPolicy",
+    "ppo": {
+      "batch_size": 256,
+      "ent_coef": 0.0,
+      "gae_lambda": 0.95,
+      "gamma": 0.99,
+      "learning_rate": 0.0003,
+      "n_epochs": 10,
+      "n_steps": 2048,
+      "policy_kwargs": {
+        "features_extractor_class": "EIIEExtractor",
+        "features_extractor_kwargs": {
+          "conv_final": 20,
+          "conv_mid": 2,
+          "k_size": 3
+        },
+        "log_std_init": -2.0
+      }
+    },
+    "price_columns": [
+      "close",
+      "high",
+      "low"
+    ],
+    "seed": 0,
+    "tickers": [
+      "AAPL",
+      "AMGN",
+      "CRM",
+      "CSCO",
+      "IBM",
+      "INTC",
+      "MSFT",
+      "NKE",
+      "VZ",
+      "WMT"
+    ],
+    "time_window": 50,
+    "total_timesteps": 200000,
+    "train": [
+      "2022-01-03",
+      "2024-01-05"
+    ],
+    "training_data_fingerprint": "f9afd6c336df150650861a2b0a62a642f0ad5b5a6955f45128598549a2439a52",
+    "validation": [
+      "2024-01-05",
+      "2024-07-09"
+    ]
+  },
+  "semantic_cache_key": "8896c2fa6e48210fddf179317be77f25796686f486e57113b7b3331a1ca536f0",
+  "target_status": "real_synthetic_nsdiff__50_paths_c63fbd5a__no_fee__seed_0__66d649352cc9/status.json"
+}
