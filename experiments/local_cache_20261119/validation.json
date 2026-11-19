@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "archive_sha256_verified": 465,
+  "zip_crc_and_model_structure_verified": 186,
+  "json_parsed": 93,
+  "csv_parsed": 186,
+  "csv_data_rows": 1116,
+  "remote_active_cache_files_preserved": 465,
+  "remote_notebook_cells_preserved": 27,
+  "notebook_change": "kernelspec.display_name only",
+  "editor_interpreter_exists": true,
+  "known_broken_symlinks": [
+    {
+      "path": "analysis/scenario_mix_v1_summary.ipynb",
+      "target": "scenario_mix/scenario_mix_v1_summary.ipynb",
+      "target_exists": false
+    }
+  ]
+}

@@ -179,4 +179,7 @@ results/ppo_synthetic_vs_real/*
 # Reviewed TimeDiff scenario experiment records; large checkpoints stay external.
 !experiments/timediff_scenario_20261117/**/*.csv
 !experiments/timediff_scenario_20261117/**/*.png
+# Local training-cache snapshot, preserved separately from remote cache variants.
+!experiments/local_cache_20261119/**/*.csv
+!experiments/local_cache_20261119/**/*.zip
 ### FILE TOO LARGE ###
